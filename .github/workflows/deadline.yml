@@ -1,0 +1,50 @@
+name: In Time Submission
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+   runs-on: ubuntu-latest
+   steps:
+    - uses: actions/checkout@v3
+    - name: Install jq
+      uses: dcarbone/install-jq-action@v2.1.0
+    - name: Check if the commit is in time
+      env:
+        TEAM_TOKEN: ${{ secrets.TEAM_TOKEN }}
+      run: |
+        branch=${{ github.head_ref || github.ref_name }} 
+        group=${{ github.event.repository.name }}
+        # get last 3 characters of the group name
+        group=${group: -3}
+        echo $branch of group $group
+        valid_branches=("main" "introduction" "rpg" "rts")
+        if [[ ! " ${valid_branches[@]} " =~ " ${branch} " ]]; then
+            echo "Invalid branch, please use one of the following: ${valid_branches[@]}"
+            exit 1
+        fi
+        if [ $branch == "main" ]; then
+            echo "Main branch"
+            exit 0
+        fi
+        current_date=$(date +%s)
+        plain_date=$(curl -s https://api.github.com/repos/rug-oop/CDN/contents/${TEAM_TOKEN}/$branch.txt -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq -r .content | base64 -d)
+        echo "The deadline is for $branch for group $group is $plain_date"
+        soft_due_date=$(date -d "$plain_date" +%s)
+        hard_due_date=$(date -d "$plain_date + 1 day" +%s)
+        # if after the deadline, but before the cut-off deadline
+        # label the PR as late
+        if [ $current_date -gt $soft_due_date ] && [ $current_date -lt $hard_due_date ]; then
+            echo "The deadline has passed, but you can still submit"
+            curl -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -d '{"labels": ["late"]}' "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels"
+            exit 0
+        fi
+        
+        if [ $current_date -gt $hard_due_date ]; then
+            echo "The deadline has passed"
+            exit 1
+        fi
