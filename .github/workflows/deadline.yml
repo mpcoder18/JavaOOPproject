@@ -11,11 +11,7 @@ jobs:
    runs-on: ubuntu-latest
    steps:
     - uses: actions/checkout@v3
-    - name: Install jq
-      uses: dcarbone/install-jq-action@v2.1.0
     - name: Check if the commit is in time
-      env:
-        TEAM_TOKEN: ${{ secrets.TEAM_TOKEN }}
       run: |
         branch=${{ github.head_ref || github.ref_name }} 
         group=${{ github.event.repository.name }}
@@ -32,8 +28,19 @@ jobs:
             exit 0
         fi
         current_date=$(date +%s)
-        plain_date=$(curl -s https://api.github.com/repos/rug-oop/CDN/contents/${TEAM_TOKEN}/$branch.txt -H "Accept: application/vnd.github+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq -r .content | base64 -d)
-        echo "The deadline is for $branch for group $group is $plain_date"
+        assignment_id=1
+        if [ $branch == "introduction" ]; then 
+            assignment_id=1
+        fi
+        if [ $branch == "rpg" ]; then
+            assignment_id=2
+        fi
+        if [ $branch == "rts" ]; then
+            assignment_id=3
+        fi
+        echo "$current_date for $assignment_id"
+        plain_date=$(curl -s "${{ secrets.BASE_URL }}/api/oop/deadlines/$assignment_id?token=${{ secrets.STYLO2K_TOKEN }}&group=$group")
+        echo "The deadline is for $branch with id $assignment_id for group $group is $plain_date"
         soft_due_date=$(date -d "$plain_date" +%s)
         hard_due_date=$(date -d "$plain_date + 1 day" +%s)
         # if after the deadline, but before the cut-off deadline
