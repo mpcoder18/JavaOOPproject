@@ -75,6 +75,19 @@ What is the output of this program? Explain why.
 
 ___
 
-Answer:
+Answer: The output should be
+```
+Bert
+Gerry
+Bert
+James
+```
+In the main method, person1 and person2 are created and initialized with the names "John" and "Bob" respectively.
+However, personModifier has 2 methods, that are called in the main method, that call the setter method of the Person object.
+In this case, personModifier.modifyPerson1(person1) will set the name of the argument (person1) to "Bert" and return the person1 object, and
+personModifier.modifyPerson2(person2) will set the name to Gerry, but creates a new person named "James" that is then returned.
+In this case, modifiedPerson1 contains the person1 object, and both are named "Bert", whilst modifiedPerson2 contains the newly
+created person named "James", while person2 has had its named changed to "Gerry". Hence with the printName method called we get the
+previously mentioned output.
 
 ___
