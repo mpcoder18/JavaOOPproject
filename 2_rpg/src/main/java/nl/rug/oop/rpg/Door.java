@@ -3,15 +3,17 @@ package nl.rug.oop.rpg;
 /**
  * Class to represent a door.
  */
-public class Door implements Inspectable {
+public class Door implements Inspectable, Interactable {
     private String description;
+    private Room connectingRoom;
 
     /**
      * Constructor to create a new door.
      * @param description Description of the new door
      */
-    public Door(String description) {
+    public Door(String description, Room connectingRoom) {
         this.description = description;
+        this.connectingRoom = connectingRoom;
     }
 
     /**
@@ -19,5 +21,9 @@ public class Door implements Inspectable {
      */
     public void inspect() {
         System.out.println(description);
+    }
+
+    public void interact(Player player) {
+        player.setCurrentRoom(this.connectingRoom);
     }
 }

@@ -11,21 +11,20 @@ public class Main {
      * @param args Arguments from the input
      */
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         Room startRoom = new Room("A rather dusty room full of computers.");
+        Room room1 = new Room("A dark room.");
+        Room room2 = new Room("A blue room.");
+        startRoom.addDoor(new Door("A red door.", room1));
+        startRoom.addDoor(new Door("A black door.", room2));
+        room1.addDoor(new Door("Door to head back to the start area", startRoom));
+        room2.addDoor(new Door("A yellow door", room1));
+        startRoom.addNPC(new NPC("Test NPC"));
         Player player = new Player("John", startRoom);
 
-        while(true) {
-            System.out.println("What do you want to do?");
-            System.out.println("  (0) Look around");
-            switch (sc.nextInt()) {
-                case 0:
-                    player.getCurrentRoom().inspect();
-                    break;
-                default:
-                    System.out.println("Invalid option");
+        Game game = new Game(player, scanner);
+        game.run();
 
-            }
-        }
+
     }
 }

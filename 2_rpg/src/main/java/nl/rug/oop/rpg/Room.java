@@ -9,6 +9,7 @@ import java.util.List;
 public class Room implements Inspectable {
     private String description;
     private List<Door> doors;
+    private List<NPC> npcs;
 
     /**
      * Constructor to create a new room.
@@ -17,6 +18,7 @@ public class Room implements Inspectable {
     public Room(String description) {
         this.description = description;
         this.doors = new ArrayList<>();
+        this.npcs = new ArrayList<>();
     }
 
     /**
@@ -32,5 +34,41 @@ public class Room implements Inspectable {
      */
     public void addDoor(Door door) {
         doors.add(door);
+    }
+
+    /**
+     * Getter methopd to get the list of doors in the room.
+     * @return the list of doors int the room
+     */
+    public List<Door> getDoors() {
+        return doors;
+    }
+
+    /**
+     * Method to list the doors in the room.
+     */
+    public void lookForWayOut() {
+        System.out.println("You look around for doors. You see:");
+        for (int i = 0; i < doors.size(); i++) {
+            System.out.print("  (" + i + ") ");
+            doors.get(i).inspect();
+        }
+    }
+
+    public void addNPC(NPC npc) {
+        npcs.add(npc);
+    }
+
+    public List<NPC> getNpcs() {
+        return npcs;
+    }
+
+    public void listCompany() {
+        System.out.println("You look if there’s someone here.");
+        System.out.println("You see: ");
+        for (int i = 0; i < npcs.size(); i++) {
+            System.out.print("  (" + i + ") ");
+            npcs.get(i).inspect();
+        }
     }
 }
