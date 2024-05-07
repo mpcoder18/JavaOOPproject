@@ -63,6 +63,9 @@ public class Room implements Inspectable {
         return npcs;
     }
 
+    /**
+     * Method to list the NPCs in the room.
+     */
     public void listCompany() {
         System.out.println("You look if there’s someone here.");
         System.out.println("You see: ");

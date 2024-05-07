@@ -1,5 +1,8 @@
 package nl.rug.oop.rpg;
 
+/**
+ * Interface for objects that can be interacted with.
+ */
 public interface Interactable {
-    public void interact(Player player);
+    void interact(Player player);
 }
