@@ -1,4 +1,8 @@
-package nl.rug.oop.rpg;
+package nl.rug.oop.rpg.environment;
+
+import lombok.Getter;
+import nl.rug.oop.rpg.interfaces.Inspectable;
+import nl.rug.oop.rpg.entities.NPC;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +11,16 @@ import java.util.List;
  * Class to represent a room.
  */
 public class Room implements Inspectable {
-    private String description;
+    private final String description;
+    /**
+     * -- GETTER --
+     *  Getter methopd to get the list of doors in the room.
+     *
+     * @return the list of doors int the room
+     */
+    @Getter
     private List<Door> doors;
+    @Getter
     private List<NPC> npcs;
 
     /**
@@ -37,14 +49,6 @@ public class Room implements Inspectable {
     }
 
     /**
-     * Getter methopd to get the list of doors in the room.
-     * @return the list of doors int the room
-     */
-    public List<Door> getDoors() {
-        return doors;
-    }
-
-    /**
      * Method to list the doors in the room.
      */
     public void lookForWayOut() {
@@ -57,10 +61,6 @@ public class Room implements Inspectable {
 
     public void addNPC(NPC npc) {
         npcs.add(npc);
-    }
-
-    public List<NPC> getNpcs() {
-        return npcs;
     }
 
     /**

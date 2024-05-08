@@ -1,9 +1,15 @@
-package nl.rug.oop.rpg;
+package nl.rug.oop.rpg.entities;
+
+import lombok.Getter;
+import lombok.Setter;
+import nl.rug.oop.rpg.interfaces.Inspectable;
+import nl.rug.oop.rpg.interfaces.Interactable;
+import nl.rug.oop.rpg.player.Player;
 
 /**
  * Class to represent NPCs.
  */
-public class NPC implements Inspectable, Interactable {
+public abstract class NPC implements Inspectable, Interactable {
     /**
      * Description of the NPC.
      */
@@ -11,10 +17,13 @@ public class NPC implements Inspectable, Interactable {
     /**
      * Damage the NPC can deal.
      */
+    @Getter
     protected int damage;
     /**
      * Health of the NPC.
      */
+    @Setter
+    @Getter
     protected int health;
 
     /**
@@ -42,17 +51,5 @@ public class NPC implements Inspectable, Interactable {
      */
     public void interact(Player player) {
         System.out.println("The creature is asleep so you can’t interact with it.");
-    }
-
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
-    public int getDamage() {
-        return damage;
     }
 }

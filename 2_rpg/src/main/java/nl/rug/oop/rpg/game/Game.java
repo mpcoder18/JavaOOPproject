@@ -1,4 +1,9 @@
-package nl.rug.oop.rpg;
+package nl.rug.oop.rpg.game;
+
+import nl.rug.oop.rpg.entities.Enemy;
+import nl.rug.oop.rpg.entities.NPC;
+import nl.rug.oop.rpg.environment.Door;
+import nl.rug.oop.rpg.player.Player;
 
 import java.util.List;
 import java.util.Scanner;

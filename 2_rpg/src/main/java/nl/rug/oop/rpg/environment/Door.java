@@ -1,11 +1,15 @@
-package nl.rug.oop.rpg;
+package nl.rug.oop.rpg.environment;
+
+import nl.rug.oop.rpg.interfaces.Inspectable;
+import nl.rug.oop.rpg.interfaces.Interactable;
+import nl.rug.oop.rpg.player.Player;
 
 /**
  * Class to represent a door.
  */
 public class Door implements Inspectable, Interactable {
-    private String description;
-    private Room connectingRoom;
+    private final String description;
+    private final Room connectingRoom;
 
     /**
      * Constructor to create a new door.
