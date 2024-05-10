@@ -15,6 +15,10 @@ public class Enemy extends NPC implements Attackable {
         this.game = game;
     }
 
+    /**
+     * Method to attack a player.
+     * @param attackable entity to attack (Casted to Player)
+     */
     public void attack(Attackable attackable) {
         Player player = (Player) attackable;
         player.setHealth(player.getHealth() - this.damage);

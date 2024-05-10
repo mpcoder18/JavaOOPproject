@@ -1,8 +1,10 @@
 package nl.rug.oop.rpg.entities;
 
-
 import nl.rug.oop.rpg.player.Player;
 
+/**
+ * Class that represents a healer NPC.
+ */
 public class Healer extends NPC {
     /**
      * Constructor to create a new NPC.
@@ -16,6 +18,6 @@ public class Healer extends NPC {
     }
 
     public void giveHealth(Player player, int health){
-         player.setHealth(player.getHealth() + health);
+        player.setHealth(player.getHealth() + health);
     }
 }

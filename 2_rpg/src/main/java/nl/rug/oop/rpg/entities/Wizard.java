@@ -2,6 +2,9 @@ package nl.rug.oop.rpg.entities;
 
 import nl.rug.oop.rpg.player.Player;
 
+/**
+ * Class that represents a wizard NPC.
+ */
 public class Wizard extends NPC {
     /**
      * Constructor to create a new NPC.

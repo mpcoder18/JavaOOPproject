@@ -12,8 +12,8 @@ import java.util.Scanner;
  * Class that contains the main game loop.
  */
 public class Game {
-    private Player player;
-    private Scanner scanner;
+    private final Player player;
+    private final Scanner scanner;
 
     /**
      * Constructor for the Game class.

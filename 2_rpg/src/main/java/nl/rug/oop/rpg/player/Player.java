@@ -14,7 +14,7 @@ import java.util.List;
  * Class to represent a player.
  */
 public class Player implements Attackable {
-    private String name;
+    private final String name;
     @Setter
     @Getter
     private Room currentRoom;
@@ -55,6 +55,10 @@ public class Player implements Attackable {
         this.inventory = new ArrayList<>();
     }
 
+    /**
+     * Method to attack an attackable entity.
+     * @param attackable entity to attack (Casted to Enemy)
+     */
     public void attack(Attackable attackable) {
         Enemy enemy = (Enemy) attackable;
         enemy.setHealth(enemy.getHealth() - this.damage);

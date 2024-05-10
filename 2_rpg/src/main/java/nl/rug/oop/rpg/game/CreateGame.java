@@ -7,11 +7,17 @@ import nl.rug.oop.rpg.player.Player;
 
 import java.util.Scanner;
 
+/**
+ * Class that creates the game.
+ */
 public class CreateGame {
     public CreateGame() {
 
     }
 
+    /**
+     * Method to run the game.
+     */
     public static void run() {
         Scanner scanner = new Scanner(System.in);
         Room startRoom = new Room("The entrance of the dungeon.");

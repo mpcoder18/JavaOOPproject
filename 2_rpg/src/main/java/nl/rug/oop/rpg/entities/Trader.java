@@ -7,6 +7,9 @@ import nl.rug.oop.rpg.player.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to represent a trader.
+ */
 public class Trader extends NPC {
     @Getter
     private List<Item> inventory = new ArrayList<>();
@@ -22,11 +25,21 @@ public class Trader extends NPC {
         super(description, damage, health);
     }
 
+    /**
+     * Method to buy an item from the player.
+     * @param player Player that sells the item
+     * @param item Item that the player sells
+     */
     public void buyItem(Player player, Item item) {
         player.getInventory().remove(item);
         player.setMoney(player.getMoney() + item.getValue());
     }
 
+    /**
+     * Method to sell an item to the player.
+     * @param player Player that buys the item
+     * @param item Item that the player buys
+     */
     public void sellItem(Player player, Item item) {
         inventory.remove(item);
         player.getInventory().add(item);
