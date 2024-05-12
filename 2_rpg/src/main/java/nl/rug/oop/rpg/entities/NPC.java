@@ -9,6 +9,7 @@ import nl.rug.oop.rpg.player.Player;
 /**
  * Class to represent NPCs.
  */
+@Getter
 public abstract class NPC implements Inspectable, Interactable {
     /**
      * Description of the NPC.
@@ -17,13 +18,11 @@ public abstract class NPC implements Inspectable, Interactable {
     /**
      * Damage the NPC can deal.
      */
-    @Getter
     protected int damage;
     /**
      * Health of the NPC.
      */
     @Setter
-    @Getter
     protected int health;
 
     /**

@@ -62,7 +62,7 @@ public class Player implements Attackable {
     public void attack(Attackable attackable) {
         Enemy enemy = (Enemy) attackable;
         enemy.setHealth(enemy.getHealth() - this.damage);
-        System.out.println("You attack the enemy and deal " + this.damage + " damage");
+        System.out.println("You attack the enemy and deal " + this.damage + " damage. The enemy has " + enemy.getHealth() + " health left.");
     }
 
 }

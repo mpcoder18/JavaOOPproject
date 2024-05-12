@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * Class to represent a trader.
  */
+@Getter
 public class Trader extends NPC {
-    @Getter
     private List<Item> inventory = new ArrayList<>();
 
     /**
