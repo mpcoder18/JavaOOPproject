@@ -1,5 +1,6 @@
 package nl.rug.oop.rpg.game;
 
+import nl.rug.oop.rpg.ChoiceMenu;
 import nl.rug.oop.rpg.entities.Enemy;
 import nl.rug.oop.rpg.entities.NPC;
 import nl.rug.oop.rpg.environment.Door;
@@ -29,53 +30,44 @@ public class Game {
      * Method to run the main game loop.
      */
     public void run() {
+        System.out.println("Welcome to the game!");
+        ChoiceMenu choiceMenu = new ChoiceMenu("What do you want to do? (-1 to do nothing)");
+        choiceMenu.addChoice(0, () -> player.getCurrentRoom().inspect(), "Look around");
+        choiceMenu.addChoice(1, this::chooseDoor, "Look for a way out");
+        choiceMenu.addChoice(2, this::interactWithNPC, "Look for company");
+        choiceMenu.addChoice(3, this::quitGame, "Quit game");
         while (true) {
-            System.out.println("What do you want to do?");
-            System.out.println("  (0) Look around");
-            System.out.println("  (1) Look for a way out");
-            System.out.println("  (2) Look for company");
-            switch (scanner.nextInt()) {
-                case 0:
-                    player.getCurrentRoom().inspect();
-                    break;
-                case 1:
-                    chooseDoor();
-                    break;
-                case 2:
-                    interactWithNPC();
-                    break;
-                default:
-                    System.out.println("Invalid option");
-            }
+            choiceMenu.run(scanner);
         }
     }
 
     private void chooseDoor() {
-        player.getCurrentRoom().lookForWayOut();
-        System.out.println("Which door do you take? (-1 : stay here)");
-        int option = scanner.nextInt();
+        ChoiceMenu choiceMenu = new ChoiceMenu("Which door do you want to take? (-1 to stay here)");
         List<Door> doors = player.getCurrentRoom().getDoors();
-        if (option < -1 || option > doors.size()) {
-            System.out.println("Invalid option");
-        } else if (option != -1) {
-            doors.get(option).interact(player);
+        int counter = 0;
+        for (Door door : doors) {
+            choiceMenu.addChoice(counter++, () -> door.interact(player), door.getDescription());
         }
+        choiceMenu.addChoice(-1, () -> {}, "Stay here");
+        choiceMenu.run(scanner);
     }
 
     private void interactWithNPC() {
-        player.getCurrentRoom().listCompany();
-        System.out.println("Which creature do you want to interact with? (-1 : none)");
-        int option = scanner.nextInt();
-        List<NPC> npcs = player.getCurrentRoom().getNpcs();
-        if (option < -1 || option > npcs.size() - 1) {
-            System.out.println("Invalid option");
-        } else if (option != -1) {
-            npcs.get(option).interact(player);
+        int counter = 0;
+        ChoiceMenu choiceMenu = new ChoiceMenu("Which creature do you want to interact with? (-1 to go back)");
+        for (NPC npc : player.getCurrentRoom().getNpcs()) {
+            choiceMenu.addChoice(counter++, () -> npc.interact(player), npc.getDescription());
         }
+        choiceMenu.run(scanner);
     }
 
     public void gameOver() {
         System.out.println("Game over");
+        System.exit(0);
+    }
+
+    private void quitGame() {
+        System.out.println("Goodbye!");
         System.exit(0);
     }
 
