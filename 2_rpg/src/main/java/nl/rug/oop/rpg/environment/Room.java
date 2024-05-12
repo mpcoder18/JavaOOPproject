@@ -48,30 +48,7 @@ public class Room implements Inspectable {
         doors.add(door);
     }
 
-    /**
-     * Method to list the doors in the room.
-     */
-    public void lookForWayOut() {
-        System.out.println("You look around for doors. You see:");
-        for (int i = 0; i < doors.size(); i++) {
-            System.out.print("  (" + i + ") ");
-            doors.get(i).inspect();
-        }
-    }
-
     public void addNPC(NPC npc) {
         npcs.add(npc);
-    }
-
-    /**
-     * Method to list the NPCs in the room.
-     */
-    public void listCompany() {
-        System.out.println("You look if there’s someone here.");
-        System.out.println("You see: ");
-        for (int i = 0; i < npcs.size(); i++) {
-            System.out.print("  (" + i + ") ");
-            npcs.get(i).inspect();
-        }
     }
 }

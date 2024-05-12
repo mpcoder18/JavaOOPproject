@@ -15,8 +15,9 @@ public class ChoiceMenu {
 
     public void run(Scanner scanner) {
         System.out.println(prompt);
-        for (int i = 0; i < descriptions.size(); i++) {
-            System.out.println("  (" + i + ") " + descriptions.get(i));
+        int counter = 0;
+        for (String description : descriptions) {
+            System.out.println("  (" + counter++ + ") " + description);
         }
         int choice = scanner.nextInt();
         if (choices.containsKey(choice)) {
