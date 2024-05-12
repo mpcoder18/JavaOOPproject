@@ -14,7 +14,7 @@ public class Room implements Inspectable {
     private final String description;
     /**
      * -- GETTER --
-     *  Getter methopd to get the list of doors in the room.
+     * Getter methopd to get the list of doors in the room.
      *
      * @return the list of doors int the room
      */
@@ -25,6 +25,7 @@ public class Room implements Inspectable {
 
     /**
      * Constructor to create a new room.
+     *
      * @param description Description of the new room
      */
     public Room(String description) {
@@ -42,6 +43,7 @@ public class Room implements Inspectable {
 
     /**
      * Method to add a door to a room.
+     *
      * @param door Door to add to the room
      */
     public void addDoor(Door door) {

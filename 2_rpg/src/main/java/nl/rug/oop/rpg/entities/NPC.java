@@ -27,9 +27,10 @@ public abstract class NPC implements Inspectable, Interactable {
 
     /**
      * Constructor to create a new NPC.
+     *
      * @param description Description of the NPC
-     * @param damage Damage the NPC can deal
-     * @param health Health of the NPC
+     * @param damage      Damage the NPC can deal
+     * @param health      Health of the NPC
      */
     public NPC(String description, int damage, int health) {
         this.description = description;
@@ -46,6 +47,7 @@ public abstract class NPC implements Inspectable, Interactable {
 
     /**
      * Method to interact with an NPC.
+     *
      * @param player Player that interacts with the NPC
      */
     public void interact(Player player) {

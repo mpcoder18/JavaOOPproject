@@ -41,10 +41,11 @@ public class Player implements Attackable {
 
     /**
      * Constructor to create a new player.
-     * @param name Name of the player
+     *
+     * @param name        Name of the player
      * @param currentRoom Current room in which the player is standing
-     * @param health Health of the player
-     * @param damage Damage that the player can deal
+     * @param health      Health of the player
+     * @param damage      Damage that the player can deal
      */
     public Player(String name, Room currentRoom, int health, int damage) {
         this.name = name;
@@ -57,6 +58,7 @@ public class Player implements Attackable {
 
     /**
      * Method to attack an attackable entity.
+     *
      * @param attackable entity to attack (Casted to Enemy)
      */
     public void attack(Attackable attackable) {

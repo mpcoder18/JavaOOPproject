@@ -34,11 +34,11 @@ public class CreateGame {
 
         Game game = new Game(player, scanner);
 
-        startRoom.addNPC(new Enemy(game,"Spider", 3, 20));
-        startRoom.addNPC(new Enemy(game,"Goblin", 5, 30));
-        room1.addNPC(new Enemy(game,"Orc", 10, 50));
-        room1.addNPC(new Enemy(game,"Skeleton", 7, 40));
-        room2.addNPC(new Enemy(game,"Dragon", 20, 100));
+        startRoom.addNPC(new Enemy(game, "Spider", 3, 20));
+        startRoom.addNPC(new Enemy(game, "Goblin", 5, 30));
+        room1.addNPC(new Enemy(game, "Orc", 10, 50));
+        room1.addNPC(new Enemy(game, "Skeleton", 7, 40));
+        room2.addNPC(new Enemy(game, "Dragon", 20, 100));
 
         game.run();
     }

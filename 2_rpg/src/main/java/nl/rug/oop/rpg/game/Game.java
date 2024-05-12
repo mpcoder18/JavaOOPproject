@@ -18,7 +18,8 @@ public class Game {
 
     /**
      * Constructor for the Game class.
-     * @param player Player of the game
+     *
+     * @param player  Player of the game
      * @param scanner Scanner to get input from the terminal
      */
     public Game(Player player, Scanner scanner) {
@@ -48,7 +49,8 @@ public class Game {
         for (Door door : doors) {
             choiceMenu.addChoice(counter++, () -> door.interact(player), door.getDescription());
         }
-        choiceMenu.addChoice(-1, () -> {}, "Stay here");
+        choiceMenu.addChoice(-1, () -> {
+        }, "Stay here");
         choiceMenu.run(scanner);
     }
 

@@ -18,6 +18,7 @@ public class Enemy extends NPC implements Attackable {
 
     /**
      * Method to attack a player.
+     *
      * @param attackable entity to attack (Casted to Player)
      */
     public void attack(Attackable attackable) {

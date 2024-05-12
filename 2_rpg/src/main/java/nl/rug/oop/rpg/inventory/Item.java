@@ -13,9 +13,10 @@ public abstract class Item {
 
     /**
      * Constructor to create a new item.
-     * @param name Name of the item
+     *
+     * @param name        Name of the item
      * @param description Description of the item
-     * @param value Value of the item in gold
+     * @param value       Value of the item in gold
      */
     public Item(String name, String description, int value) {
         this.name = name;

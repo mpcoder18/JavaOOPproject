@@ -17,7 +17,7 @@ public class Healer extends NPC {
         super(description, damage, health);
     }
 
-    public void giveHealth(Player player, int health){
+    public void giveHealth(Player player, int health) {
         player.setHealth(player.getHealth() + health);
     }
 }

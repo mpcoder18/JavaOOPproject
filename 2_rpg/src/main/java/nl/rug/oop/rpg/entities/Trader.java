@@ -27,8 +27,9 @@ public class Trader extends NPC {
 
     /**
      * Method to buy an item from the player.
+     *
      * @param player Player that sells the item
-     * @param item Item that the player sells
+     * @param item   Item that the player sells
      */
     public void buyItem(Player player, Item item) {
         player.getInventory().remove(item);
@@ -37,8 +38,9 @@ public class Trader extends NPC {
 
     /**
      * Method to sell an item to the player.
+     *
      * @param player Player that buys the item
-     * @param item Item that the player buys
+     * @param item   Item that the player buys
      */
     public void sellItem(Player player, Item item) {
         inventory.remove(item);

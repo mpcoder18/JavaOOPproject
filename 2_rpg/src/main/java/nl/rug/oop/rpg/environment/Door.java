@@ -15,7 +15,8 @@ public class Door implements Inspectable, Interactable {
 
     /**
      * Constructor to create a new door.
-     * @param description Description of the new door
+     *
+     * @param description    Description of the new door
      * @param connectingRoom Room to which the door connects
      */
     public Door(String description, Room connectingRoom) {
