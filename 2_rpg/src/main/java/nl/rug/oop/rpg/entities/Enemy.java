@@ -24,7 +24,8 @@ public class Enemy extends NPC implements Attackable {
     public void attack(Attackable attackable) {
         Player player = (Player) attackable;
         player.setHealth(player.getHealth() - this.damage);
-        System.out.println("The enemy attack and deals " + this.damage + " damage. You have " + player.getHealth() + " health left.");
+        System.out.println("The enemy attack and deals " + this.damage + " damage.");
+        System.out.println("You have " + player.getHealth() + " health left.");
     }
 
     @Override

@@ -1,12 +1,14 @@
 package nl.rug.oop.rpg.inventory.items;
 
+import lombok.Getter;
 import nl.rug.oop.rpg.inventory.Item;
 
 /**
  * Class that represents a sword item.
  */
+@Getter
 public class Sword extends Item {
-    private int damage;
+    private final int damage;
 
     /**
      * Constructor to create a new sword.

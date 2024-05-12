@@ -5,16 +5,31 @@ import nl.rug.oop.rpg.game.Game;
 import nl.rug.oop.rpg.interfaces.Interactable;
 import nl.rug.oop.rpg.player.Player;
 
+/**
+ * Class to represent a locked door.
+ */
 public class LockedDoor extends Door implements Interactable {
     private boolean locked;
-    Game game;
+    private final Game game;
 
+    /**
+     * Constructor to create a new locked door.
+     *
+     * @param game        Game in which the door is
+     * @param description Description of the door
+     * @param room        Room to which the door connects
+     */
     public LockedDoor(Game game, String description, Room room) {
         super(description, room);
         locked = true;
         this.game = game;
     }
 
+    /**
+     * Method to interact with the door.
+     *
+     * @param player Player interacting with the door
+     */
     public void interact(Player player) {
         if (locked) {
             if (player.getInventory().stream().anyMatch(item -> item.getName().equals("key"))) {

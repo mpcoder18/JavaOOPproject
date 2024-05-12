@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Getter
 public class Trader extends NPC {
-    private List<Item> inventory = new ArrayList<>();
+    private final List<Item> inventory = new ArrayList<>();
 
     /**
      * Constructor to create a new NPC.
