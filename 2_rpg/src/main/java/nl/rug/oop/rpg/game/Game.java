@@ -1,5 +1,6 @@
 package nl.rug.oop.rpg.game;
 
+import lombok.Getter;
 import nl.rug.oop.rpg.ChoiceMenu;
 import nl.rug.oop.rpg.entities.Enemy;
 import nl.rug.oop.rpg.entities.NPC;
@@ -14,6 +15,7 @@ import java.util.Scanner;
  */
 public class Game {
     private final Player player;
+    @Getter
     private final Scanner scanner;
 
     /**

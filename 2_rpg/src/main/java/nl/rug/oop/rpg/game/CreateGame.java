@@ -2,7 +2,9 @@ package nl.rug.oop.rpg.game;
 
 import nl.rug.oop.rpg.entities.*;
 import nl.rug.oop.rpg.environment.Door;
+import nl.rug.oop.rpg.environment.LockedDoor;
 import nl.rug.oop.rpg.environment.Room;
+import nl.rug.oop.rpg.inventory.Item;
 import nl.rug.oop.rpg.player.Player;
 
 import java.util.Scanner;
@@ -23,6 +25,7 @@ public class CreateGame {
         Room startRoom = new Room("The entrance of the dungeon.");
         Room room1 = new Room("A dark room.");
         Room room2 = new Room("A blue room.");
+        Room room3 = new Room("A room with a chest.");
         startRoom.addDoor(new Door("A red door.", room1));
         startRoom.addDoor(new Door("A black door.", room2));
         room1.addDoor(new Door("Door to head back to the start area", startRoom));
@@ -34,11 +37,14 @@ public class CreateGame {
 
         Game game = new Game(player, scanner);
 
+        startRoom.addDoor(new LockedDoor(game, "A locked door", room3));
         startRoom.addNPC(new Enemy(game, "Spider", 3, 20));
         startRoom.addNPC(new Enemy(game, "Goblin", 5, 30));
         room1.addNPC(new Enemy(game, "Orc", 10, 50));
         room1.addNPC(new Enemy(game, "Skeleton", 7, 40));
         room2.addNPC(new Enemy(game, "Dragon", 20, 100));
+
+        player.addItem(new Item("key", "A door with a lock", 100));
 
         game.run();
     }

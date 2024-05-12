@@ -6,7 +6,7 @@ import lombok.Getter;
  * Class to represent an item.
  */
 @Getter
-public abstract class Item {
+public class Item {
     private final String name;
     private final String description;
     private final int value;

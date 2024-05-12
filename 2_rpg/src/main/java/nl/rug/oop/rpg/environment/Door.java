@@ -1,6 +1,7 @@
 package nl.rug.oop.rpg.environment;
 
 import lombok.Getter;
+import lombok.Setter;
 import nl.rug.oop.rpg.interfaces.Inspectable;
 import nl.rug.oop.rpg.interfaces.Interactable;
 import nl.rug.oop.rpg.player.Player;
@@ -8,9 +9,10 @@ import nl.rug.oop.rpg.player.Player;
 /**
  * Class to represent a door.
  */
+@Getter
 public class Door implements Inspectable, Interactable {
-    @Getter
-    private final String description;
+    @Setter
+    private String description;
     private final Room connectingRoom;
 
     /**

@@ -67,4 +67,7 @@ public class Player implements Attackable {
         System.out.println("You attack the enemy and deal " + this.damage + " damage. The enemy has " + enemy.getHealth() + " health left.");
     }
 
+    public void addItem(Item item) {
+        this.inventory.add(item);
+    }
 }
