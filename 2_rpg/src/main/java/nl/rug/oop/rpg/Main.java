@@ -12,7 +12,6 @@ public class Main {
      * @param args Arguments from the input
      */
     public static void main(String[] args) {
-        CreateGame createGame = new CreateGame();
         CreateGame.run();
     }
 }
