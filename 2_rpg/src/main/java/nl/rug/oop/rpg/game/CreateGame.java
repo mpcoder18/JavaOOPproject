@@ -1,8 +1,6 @@
 package nl.rug.oop.rpg.game;
 
-import nl.rug.oop.rpg.entities.*;
 import nl.rug.oop.rpg.environment.*;
-import nl.rug.oop.rpg.inventory.items.Key;
 import nl.rug.oop.rpg.player.Player;
 
 import java.util.Scanner;
@@ -28,7 +26,7 @@ public class CreateGame {
         Player player = new Player("John", startRoom, 100);
         Game game = new Game(player, scanner, roomList);
         GenerateDungeon dungeon = new GenerateDungeon(game);
-        roomList = dungeon.generateDungeon(startRoom, 10);
+        roomList = dungeon.generateDungeon(startRoom, 3);
         game.setRooms(roomList);
         game.run();
     }

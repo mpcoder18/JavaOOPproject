@@ -33,6 +33,9 @@ public class Room implements Inspectable, Serializable {
         this.npcs = new ArrayList<>();
     }
 
+    /**
+     * Constructor to create a new empty room.
+     */
     public Room() {
         this.description = "Empty room";
         this.doors = new ArrayList<>();

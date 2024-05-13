@@ -125,8 +125,7 @@ public class Game implements Serializable {
         for (Door door : doors) {
             choiceMenu.addChoice(counter++, () -> door.interact(player), door.getDescription());
         }
-        choiceMenu.addChoice(-1, () -> {
-        }, "Stay here");
+        choiceMenu.addChoice(counter, () -> {}, "Stay here");
         choiceMenu.run(scanner);
     }
 
