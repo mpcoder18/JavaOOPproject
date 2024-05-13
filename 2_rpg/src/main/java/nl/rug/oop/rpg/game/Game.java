@@ -9,6 +9,9 @@ import nl.rug.oop.rpg.environment.Door;
 import nl.rug.oop.rpg.environment.Room;
 import nl.rug.oop.rpg.player.Player;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Scanner;
@@ -51,7 +54,9 @@ public class Game implements Serializable {
         choiceMenu.addChoice(2, this::interactWithNPC, "Look for company");
         choiceMenu.addChoice(3, this::quickSave, "Quick save");
         choiceMenu.addChoice(4, this::quickLoad, "Quick load");
-        choiceMenu.addChoice(5, this::quitGame, "Quit game");
+        choiceMenu.addChoice(5, this::save, "Save");
+        choiceMenu.addChoice(6, this::load, "Load");
+        choiceMenu.addChoice(7, this::quitGame, "Quit game");
         while (true) {
             choiceMenu.run(scanner);
         }
@@ -70,6 +75,49 @@ public class Game implements Serializable {
 
     private void quickSave() {
         saveManager.quickSave(this);
+    }
+
+    private void save() {
+        File saveFolder = new File("savedgames");
+        if (!saveFolder.exists()) {
+            saveFolder.mkdirs();
+        }
+
+        System.out.println("what will be the name of the saved game?");
+        scanner.nextLine();
+        String inputString = scanner.nextLine();
+
+        File saveFile = new File(saveFolder, inputString + ".save");
+        System.out.println("Saving game to " + saveFile.getAbsolutePath());
+        // hier wordt dus gekeken of de game al bestaat
+        if(saveFile.exists()){
+            saveFile.delete();
+        }
+        saveManager.saveTo(saveFile, this);
+    }
+
+    private void load() {
+        File saveFolder = new File("savedgames");
+        File[] savedgames = saveFolder.listFiles();
+
+        int counter = 1;
+        for(File file : savedgames){
+            System.out.println(counter + ". " + file.getName());
+            counter++;
+        }
+
+        System.out.print("Save: ");
+        int save = scanner.nextInt();
+
+        File file = savedgames[save-1];
+        Game loadedGame = saveManager.loadFrom(file);
+        if (loadedGame == null) {
+            System.out.println("No save file found.");
+            return;
+        }
+        loadedGame.scanner = scanner;
+        loadedGame.saveManager = saveManager;
+        loadedGame.run();
     }
 
     private void chooseDoor() {
