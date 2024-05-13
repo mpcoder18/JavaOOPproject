@@ -4,6 +4,7 @@ import lombok.Getter;
 import nl.rug.oop.rpg.ChoiceMenu;
 import nl.rug.oop.rpg.entities.NPC;
 import nl.rug.oop.rpg.environment.Door;
+import nl.rug.oop.rpg.environment.Room;
 import nl.rug.oop.rpg.player.Player;
 
 import java.util.List;
@@ -16,6 +17,8 @@ public class Game {
     private final Player player;
     @Getter
     private final Scanner scanner;
+    @Getter
+    private List<Room> rooms;
 
     /**
      * Constructor for the Game class.
@@ -23,9 +26,10 @@ public class Game {
      * @param player  Player of the game
      * @param scanner Scanner to get input from the terminal
      */
-    public Game(Player player, Scanner scanner) {
+    public Game(Player player, Scanner scanner, List<Room> rooms) {
         this.player = player;
         this.scanner = scanner;
+        this.rooms = rooms;
     }
 
     /**

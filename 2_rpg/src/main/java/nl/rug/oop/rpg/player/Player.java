@@ -21,8 +21,8 @@ public class Player implements Attackable {
     /**
      * Health of the player.
      */
-    @Setter
     @Getter
+    @Setter
     protected int health;
     /**
      * Damage that the player can deal.
@@ -66,6 +66,12 @@ public class Player implements Attackable {
         enemy.setHealth(enemy.getHealth() - this.damage);
         System.out.println("You attack the enemy and deal " + this.damage + " damage.");
         System.out.println("The enemy has " + enemy.getHealth() + " health left.");
+    }
+
+    public void receiveDamage(int damage) {
+        this.health -= damage;
+        System.out.println("You receive " + damage + " damage.");
+        System.out.println("You have " + this.health + " health left.");
     }
 
     public void addItem(Item item) {
