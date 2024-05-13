@@ -40,7 +40,7 @@ public class CreateGame {
         startRoom.addNPC(new Wizard("A boring wizard", 100, 100));
         startRoom.addNPC(new Healer("A medic", 1, 10000));
         room1.addNPC(new Trader("A suspicious trader.", 100, 100));
-        Player player = new Player("John", startRoom, 100, 10);
+        Player player = new Player("John", startRoom, 100);
 
         Game game = new Game(player, scanner, roomList);
 
@@ -52,7 +52,7 @@ public class CreateGame {
         room1.addNPC(new Enemy(game, "Skeleton", 7, 40));
         room2.addNPC(new Enemy(game, "Dragon", 20, 100));
 
-        player.addItem(new Key("key", "Used to unlock doors", 100));
+        player.addItem(new Key("Used to unlock doors", 100));
 
         game.run();
     }

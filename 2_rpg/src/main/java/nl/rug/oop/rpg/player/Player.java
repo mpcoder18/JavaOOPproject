@@ -6,6 +6,8 @@ import nl.rug.oop.rpg.inventory.Item;
 import nl.rug.oop.rpg.interfaces.Attackable;
 import nl.rug.oop.rpg.entities.Enemy;
 import nl.rug.oop.rpg.environment.Room;
+import nl.rug.oop.rpg.inventory.items.Armor;
+import nl.rug.oop.rpg.inventory.items.Sword;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +26,9 @@ public class Player implements Attackable {
     @Getter
     @Setter
     protected int health;
-    /**
-     * Damage that the player can deal.
-     */
-    @Getter
-    @Setter
-    protected int damage;
+
+    protected Sword sword;
+    protected Armor armor;
 
     @Getter
     @Setter
@@ -45,14 +44,14 @@ public class Player implements Attackable {
      * @param name        Name of the player
      * @param currentRoom Current room in which the player is standing
      * @param health      Health of the player
-     * @param damage      Damage that the player can deal
      */
-    public Player(String name, Room currentRoom, int health, int damage) {
+    public Player(String name, Room currentRoom, int health) {
         this.name = name;
         this.currentRoom = currentRoom;
         this.health = health;
-        this.damage = damage;
         this.money = 0;
+        this.sword = new Sword("Fists", "Your fists", -1, 1);
+        this.armor = new Armor();
         this.inventory = new ArrayList<>();
     }
 
@@ -63,12 +62,15 @@ public class Player implements Attackable {
      */
     public void attack(Attackable attackable) {
         Enemy enemy = (Enemy) attackable;
-        enemy.setHealth(enemy.getHealth() - this.damage);
-        System.out.println("You attack the enemy and deal " + this.damage + " damage.");
-        System.out.println("The enemy has " + enemy.getHealth() + " health left.");
+        enemy.receiveDamage(this.sword.getDamage());
     }
 
     public void receiveDamage(int damage) {
+        if (this.armor.getDefense() >= damage) {
+            System.out.println("You receive no damage.");
+            return;
+        }
+        damage -= this.armor.getDefense();
         this.health -= damage;
         System.out.println("You receive " + damage + " damage.");
         System.out.println("You have " + this.health + " health left.");
@@ -76,5 +78,14 @@ public class Player implements Attackable {
 
     public void addItem(Item item) {
         this.inventory.add(item);
+    }
+
+    public boolean hasItem(String itemName) {
+        for (Item item : inventory) {
+            if (item.getName().equals(itemName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

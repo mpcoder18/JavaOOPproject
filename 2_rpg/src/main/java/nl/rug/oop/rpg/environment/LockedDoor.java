@@ -32,7 +32,7 @@ public class LockedDoor extends Door implements Interactable {
      */
     public void interact(Player player) {
         if (locked) {
-            if (player.getInventory().stream().anyMatch(item -> item.getName().equals("key"))) {
+            if (player.hasItem("Key")) {
                 ChoiceMenu choiceMenu = new ChoiceMenu("Unlock the door?");
                 choiceMenu.addChoice(0, () -> {
                     locked = false;

@@ -1,6 +1,9 @@
 package nl.rug.oop.rpg.entities;
 
+import nl.rug.oop.rpg.inventory.items.Sword;
 import nl.rug.oop.rpg.player.Player;
+
+import java.util.Random;
 
 /**
  * Class that represents a wizard NPC.
@@ -17,7 +20,15 @@ public class Wizard extends NPC {
         super(description, damage, health);
     }
 
-    public void buff(Player player, int damage) {
-        player.setDamage(player.getDamage() + damage);
+    public void enchantItem(Player player, Sword sword) {
+        if (player.getMoney() < 10) {
+            System.out.println("You do not have enough money to enchant your sword.");
+            return;
+        }
+        Random random = new Random();
+        int damage = random.nextInt(5) + 1;
+        sword.setDamage(sword.getDamage() + damage);
+        player.setMoney(player.getMoney() - 10);
+        System.out.println("You have enchanted your sword with " + damage + " damage.");
     }
 }
