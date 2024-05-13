@@ -5,10 +5,15 @@ import nl.rug.oop.rpg.interfaces.Attackable;
 import nl.rug.oop.rpg.game.Game;
 import nl.rug.oop.rpg.player.Player;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Class to represent enemies.
  */
-public class Enemy extends NPC implements Attackable {
+public class Enemy extends NPC implements Attackable, Serializable {
+    @Serial
+    private static final long serialVersionUID = 935159107779L;
     private final Game game;
 
     public Enemy(Game game, String description, int damage, int health) {

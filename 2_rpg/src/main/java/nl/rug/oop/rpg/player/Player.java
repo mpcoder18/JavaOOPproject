@@ -9,6 +9,7 @@ import nl.rug.oop.rpg.environment.Room;
 import nl.rug.oop.rpg.inventory.items.Armor;
 import nl.rug.oop.rpg.inventory.items.Sword;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 @Setter
 @Getter
 public class Player implements Attackable, Serializable {
+    @Serial
     private static final long serialVersionUID = 930359107779L;
     private final String name;
     private Room currentRoom;

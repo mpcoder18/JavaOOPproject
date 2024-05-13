@@ -8,9 +8,14 @@ import nl.rug.oop.rpg.inventory.items.armor.Chestplate;
 import nl.rug.oop.rpg.inventory.items.armor.Helmet;
 import nl.rug.oop.rpg.inventory.items.armor.Leggins;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class Armor {
+public class Armor implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 220359107779L;
     private Helmet helmet;
     private Chestplate chestplate;
     private Leggins leggins;

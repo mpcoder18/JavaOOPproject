@@ -2,10 +2,15 @@ package nl.rug.oop.rpg.entities;
 
 import nl.rug.oop.rpg.player.Player;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Class that represents a healer NPC.
  */
-public class Healer extends NPC {
+public class Healer extends NPC implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 930359103379L;
     /**
      * Constructor to create a new NPC.
      *

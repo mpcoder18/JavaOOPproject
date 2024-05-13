@@ -4,12 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.rpg.inventory.Item;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Class that represents a sword item.
  */
 @Getter
 @Setter
-public class Sword extends Item {
+public class Sword extends Item implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 932259107779L;
     private int damage;
 
     /**

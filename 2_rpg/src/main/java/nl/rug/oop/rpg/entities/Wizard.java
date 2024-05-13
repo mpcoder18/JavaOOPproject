@@ -5,12 +5,16 @@ import nl.rug.oop.rpg.game.Game;
 import nl.rug.oop.rpg.inventory.items.Sword;
 import nl.rug.oop.rpg.player.Player;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Random;
 
 /**
  * Class that represents a wizard NPC.
  */
-public class Wizard extends NPC {
+public class Wizard extends NPC implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 930359109899L;
     private Game game;
     /**
      * Constructor to create a new NPC.

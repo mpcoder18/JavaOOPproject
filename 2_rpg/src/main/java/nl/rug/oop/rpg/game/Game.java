@@ -1,24 +1,31 @@
 package nl.rug.oop.rpg.game;
 
 import lombok.Getter;
+import lombok.Setter;
 import nl.rug.oop.rpg.ChoiceMenu;
+import nl.rug.oop.rpg.SaveManager;
 import nl.rug.oop.rpg.entities.NPC;
 import nl.rug.oop.rpg.environment.Door;
 import nl.rug.oop.rpg.environment.Room;
 import nl.rug.oop.rpg.player.Player;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Scanner;
 
 /**
  * Class that contains the main game loop.
  */
-public class Game {
+public class Game implements Serializable {
+    private static final long serialVersionUID = 1324293489028L;
+    @Setter
     private final Player player;
     @Getter
-    private final Scanner scanner;
+    private transient Scanner scanner;
     @Getter
+    @Setter
     private List<Room> rooms;
+    private transient SaveManager saveManager;
 
     /**
      * Constructor for the Game class.
@@ -30,6 +37,7 @@ public class Game {
         this.player = player;
         this.scanner = scanner;
         this.rooms = rooms;
+        saveManager = new SaveManager();
     }
 
     /**
@@ -41,10 +49,27 @@ public class Game {
         choiceMenu.addChoice(0, () -> player.getCurrentRoom().inspect(), "Look around");
         choiceMenu.addChoice(1, this::chooseDoor, "Look for a way out");
         choiceMenu.addChoice(2, this::interactWithNPC, "Look for company");
-        choiceMenu.addChoice(3, this::quitGame, "Quit game");
+        choiceMenu.addChoice(3, this::quickSave, "Quick save");
+        choiceMenu.addChoice(4, this::quickLoad, "Quick load");
+        choiceMenu.addChoice(5, this::quitGame, "Quit game");
         while (true) {
             choiceMenu.run(scanner);
         }
+    }
+
+    private void quickLoad() {
+        Game loadedGame = saveManager.quickLoad();
+        if (loadedGame == null) {
+            System.out.println("No save file found.");
+            return;
+        }
+        loadedGame.scanner = scanner;
+        loadedGame.saveManager = saveManager;
+        loadedGame.run();
+    }
+
+    private void quickSave() {
+        saveManager.quickSave(this);
     }
 
     private void chooseDoor() {
@@ -81,6 +106,4 @@ public class Game {
     public void removeNPC(NPC npc) {
         player.getCurrentRoom().getNpcs().remove(npc);
     }
-
-    public void
 }

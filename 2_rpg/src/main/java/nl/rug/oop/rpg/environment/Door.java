@@ -6,11 +6,14 @@ import nl.rug.oop.rpg.interfaces.Inspectable;
 import nl.rug.oop.rpg.interfaces.Interactable;
 import nl.rug.oop.rpg.player.Player;
 
+import java.io.Serializable;
+
 /**
  * Class to represent a door.
  */
 @Getter
-public class Door implements Inspectable, Interactable {
+public class Door implements Inspectable, Interactable, Serializable {
+    private static final long serialVersionUID = 939259107779L;
     @Setter
     private String description;
     private final Room connectingRoom;

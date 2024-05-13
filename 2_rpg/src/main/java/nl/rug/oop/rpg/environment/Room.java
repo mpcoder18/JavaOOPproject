@@ -4,13 +4,18 @@ import lombok.Getter;
 import nl.rug.oop.rpg.interfaces.Inspectable;
 import nl.rug.oop.rpg.entities.NPC;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Class to represent a room.
  */
-public class Room implements Inspectable {
+public class Room implements Inspectable, Serializable {
+    @Serial
+    private static final long serialVersionUID = 930351107779L;
+    @Getter
     private final String description;
     /**
      * -- GETTER --

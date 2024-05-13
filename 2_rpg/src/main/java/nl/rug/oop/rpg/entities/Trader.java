@@ -4,6 +4,8 @@ import lombok.Getter;
 import nl.rug.oop.rpg.inventory.Item;
 import nl.rug.oop.rpg.player.Player;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +13,9 @@ import java.util.List;
  * Class to represent a trader.
  */
 @Getter
-public class Trader extends NPC {
+public class Trader extends NPC implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 9303594457779L;
     private final List<Item> inventory = new ArrayList<>();
 
     /**

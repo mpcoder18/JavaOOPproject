@@ -6,11 +6,16 @@ import nl.rug.oop.rpg.interfaces.Inspectable;
 import nl.rug.oop.rpg.interfaces.Interactable;
 import nl.rug.oop.rpg.player.Player;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Class to represent NPCs.
  */
 @Getter
-public abstract class NPC implements Inspectable, Interactable {
+public abstract class NPC implements Inspectable, Interactable, Serializable {
+    @Serial
+    private static final long serialVersionUID = 830359107779L;
     /**
      * Description of the NPC.
      */

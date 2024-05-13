@@ -5,10 +5,15 @@ import nl.rug.oop.rpg.game.Game;
 import nl.rug.oop.rpg.interfaces.Interactable;
 import nl.rug.oop.rpg.player.Player;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Class to represent a locked door.
  */
-public class LockedDoor extends Door implements Interactable {
+public class LockedDoor extends Door implements Interactable, Serializable {
+    @Serial
+    private static final long serialVersionUID = 930359107444L;
     private boolean locked;
     private final Game game;
 
