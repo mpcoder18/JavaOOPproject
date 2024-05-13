@@ -35,7 +35,14 @@ Justify your answer in at least 250 words. Please explain the consequences, bene
 
 ___
 
-Answer:
+Answer: The biggest benefit of making a field private is that the field is protected from outside the class. With a public access modifier the access level is: inside a class, inside the package and outside the package, So basically everywhere. When you are using private fields it is impossible to alter the field of a class without using the methods that are public in that class. For example if you have a password field, you don’t want that field to be public because then everyone can have access to your password. Another example could be your bank account. From the bank’s perspective you don’t want anyone else to be able to change their balance. Finally, in our case, we don’t want anyone to alter the description of the room.
+Furthermore, using private fields in combination with getters and setters also improves the flexibility. You could for instance make more additions to the getter and setter methods like a print statement.
+Lastly, the getters and setter methods also  provides more testabiltity. You can easily isolate the methods in a different class to ensure that the methods work as intended.
+
+On the other hand a case where a public field could be beneficial are constants. In this case you do not have to make the constant in every class. This would lead to more simplistic code.
+
+The benefits of making private fields with getters and setters heavily outweigh the benefits of using public fields. Therefore we prefer to use the class using the private field in combination with getters and setters.
+
 
 ___
 
