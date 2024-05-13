@@ -36,7 +36,7 @@ public class ChoiceMenu {
         if (choices.containsKey(choice)) {
             choices.get(choice).run();
         } else if (choice == -1) {
-            return;
+            System.out.println("You do nothing.");
         } else {
             System.out.println("Invalid choice");
         }

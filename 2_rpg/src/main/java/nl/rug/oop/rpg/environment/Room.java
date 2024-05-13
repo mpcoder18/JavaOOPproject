@@ -52,9 +52,13 @@ public class Room implements Inspectable, Serializable {
      * @param door Door to add to the room
      */
     public void addDoor(Door door) {
-        doors.add(door);
+        if (!doors.contains(door)) {
+            doors.add(door);
+            if (door.getConnectingRoom() != null) {
+                door.getConnectingRoom().addDoor(door);
+            }
+        }
     }
-
     public void addNPC(NPC npc) {
         npcs.add(npc);
     }
