@@ -66,6 +66,11 @@ public class Player implements Attackable, Serializable {
         enemy.receiveDamage(this.sword.getDamage());
     }
 
+    /**
+     * Method to receive damage.
+     *
+     * @param damage amount of damage to receive
+     */
     public void receiveDamage(int damage) {
         if (this.armor.getDefense() >= damage) {
             System.out.println("You receive no damage.");
@@ -81,6 +86,12 @@ public class Player implements Attackable, Serializable {
         this.inventory.add(item);
     }
 
+    /**
+     * Method to check if the player has an item.
+     *
+     * @param itemName name of the item to check
+     * @return true if the player has the item, false otherwise
+     */
     public boolean hasItem(String itemName) {
         for (Item item : inventory) {
             if (item.getName().equals(itemName)) {

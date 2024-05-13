@@ -10,8 +10,6 @@ import nl.rug.oop.rpg.environment.Room;
 import nl.rug.oop.rpg.player.Player;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Scanner;
@@ -21,7 +19,6 @@ import java.util.Scanner;
  */
 public class Game implements Serializable {
     private static final long serialVersionUID = 1324293489028L;
-    @Setter
     private final Player player;
     @Getter
     private transient Scanner scanner;
@@ -35,6 +32,7 @@ public class Game implements Serializable {
      *
      * @param player  Player of the game
      * @param scanner Scanner to get input from the terminal
+     * @param rooms List of rooms in the game
      */
     public Game(Player player, Scanner scanner, List<Room> rooms) {
         this.player = player;
@@ -90,7 +88,7 @@ public class Game implements Serializable {
         File saveFile = new File(saveFolder, inputString + ".save");
         System.out.println("Saving game to " + saveFile.getAbsolutePath());
         // hier wordt dus gekeken of de game al bestaat
-        if(saveFile.exists()){
+        if (saveFile.exists()) {
             saveFile.delete();
         }
         saveManager.saveTo(saveFile, this);
@@ -101,7 +99,7 @@ public class Game implements Serializable {
         File[] savedgames = saveFolder.listFiles();
 
         int counter = 1;
-        for(File file : savedgames){
+        for (File file : savedgames) {
             System.out.println(counter + ". " + file.getName());
             counter++;
         }
@@ -109,7 +107,7 @@ public class Game implements Serializable {
         System.out.print("Save: ");
         int save = scanner.nextInt();
 
-        File file = savedgames[save-1];
+        File file = savedgames[save - 1];
         Game loadedGame = saveManager.loadFrom(file);
         if (loadedGame == null) {
             System.out.println("No save file found.");

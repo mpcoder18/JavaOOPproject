@@ -2,7 +2,6 @@ package nl.rug.oop.rpg.game;
 
 import nl.rug.oop.rpg.entities.*;
 import nl.rug.oop.rpg.environment.*;
-import nl.rug.oop.rpg.inventory.Item;
 import nl.rug.oop.rpg.inventory.items.Key;
 import nl.rug.oop.rpg.player.Player;
 
@@ -44,7 +43,7 @@ public class CreateGame {
 
         Game game = new Game(player, scanner, roomList);
 
-        startRoom.addNPC(new Wizard(game,"A boring wizard", 100, 100));
+        startRoom.addNPC(new Wizard(game, "A boring wizard", 100, 100));
         startRoom.addDoor(new LockedDoor(game, "A locked door", room3));
         startRoom.addNPC(new Enemy(game, "Spider", 3, 20));
         startRoom.addNPC(new Enemy(game, "Goblin", 5, 30));

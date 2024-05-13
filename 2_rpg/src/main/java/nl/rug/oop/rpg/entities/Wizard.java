@@ -16,9 +16,11 @@ public class Wizard extends NPC implements Serializable {
     @Serial
     private static final long serialVersionUID = 930359109899L;
     private Game game;
+
     /**
      * Constructor to create a new NPC.
      *
+     * @param game        Instance of the game
      * @param description Description of the NPC
      * @param damage      Damage the NPC can deal
      * @param health      Health of the NPC
