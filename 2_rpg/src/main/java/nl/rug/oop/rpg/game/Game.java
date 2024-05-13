@@ -81,4 +81,6 @@ public class Game {
     public void removeNPC(NPC npc) {
         player.getCurrentRoom().getNpcs().remove(npc);
     }
+
+    public void
 }

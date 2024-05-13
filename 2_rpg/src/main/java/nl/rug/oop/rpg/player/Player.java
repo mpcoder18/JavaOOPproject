@@ -9,33 +9,32 @@ import nl.rug.oop.rpg.environment.Room;
 import nl.rug.oop.rpg.inventory.items.Armor;
 import nl.rug.oop.rpg.inventory.items.Sword;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Class to represent a player.
  */
-public class Player implements Attackable {
+@Setter
+@Getter
+public class Player implements Attackable, Serializable {
+    private static final long serialVersionUID = 930359107779L;
     private final String name;
-    @Setter
-    @Getter
     private Room currentRoom;
     /**
      * Health of the player.
      */
-    @Getter
-    @Setter
     protected int health;
-
+    /**
+     * Sword of the player.
+     */
     protected Sword sword;
+    /**
+     * Armor of the player.
+     */
     protected Armor armor;
-
-    @Getter
-    @Setter
     private int money;
-
-    @Getter
-    @Setter
     private List<Item> inventory;
 
     /**

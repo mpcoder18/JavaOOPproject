@@ -2,6 +2,9 @@ package nl.rug.oop.rpg.environment;
 
 import nl.rug.oop.rpg.player.Player;
 
+/**
+ * A fake door that damages the player when interacted with
+ */
 public class FakeDoor extends Door {
     public FakeDoor(String description, Room connectingRoom){
         super(description, connectingRoom);

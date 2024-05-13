@@ -26,6 +26,11 @@ public class Enemy extends NPC implements Attackable {
         player.receiveDamage(damage);
     }
 
+    /**
+     * Method to receive damage.
+     *
+     * @param damage amount of damage to receive
+     */
     public void receiveDamage(int damage) {
         health -= damage;
         System.out.println("You attack the enemy and deal " + damage + " damage.");

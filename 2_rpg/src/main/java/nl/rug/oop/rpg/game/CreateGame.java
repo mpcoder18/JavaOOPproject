@@ -37,13 +37,14 @@ public class CreateGame {
         startRoom.addDoor(new FakeDoor("A suspicious door", room3));
         room1.addDoor(new Door("Door to head back to the start area", startRoom));
         room2.addDoor(new Door("A yellow door", room1));
-        startRoom.addNPC(new Wizard("A boring wizard", 100, 100));
+
         startRoom.addNPC(new Healer("A medic", 1, 10000));
         room1.addNPC(new Trader("A suspicious trader.", 100, 100));
         Player player = new Player("John", startRoom, 100);
 
         Game game = new Game(player, scanner, roomList);
 
+        startRoom.addNPC(new Wizard(game,"A boring wizard", 100, 100));
         startRoom.addDoor(new LockedDoor(game, "A locked door", room3));
         startRoom.addNPC(new Enemy(game, "Spider", 3, 20));
         startRoom.addNPC(new Enemy(game, "Goblin", 5, 30));
