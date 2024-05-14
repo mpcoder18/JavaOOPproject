@@ -55,8 +55,8 @@ public class TraderMenu {
         inventory.remove(item);
         player.getInventory().add(item);
         player.setMoney(player.getMoney() - item.getValue());
-        player.autoEquipBest();
         System.out.println("You bought the " + item.getName() + " for " + item.getValue() + " gold.");
+        player.autoEquipBest();
     }
 
     /**
@@ -65,7 +65,8 @@ public class TraderMenu {
      * @param player Player that interacts with the trader
      */
     void buyMenu(Player player) {
-        ChoiceMenu buyMenu = new ChoiceMenu("What do you want to buy?");
+        ChoiceMenu buyMenu = new ChoiceMenu("What do you want to buy? (You have "
+                + player.getMoney() + " gold)");
         for (int i = 0; i < inventory.size(); i++) {
             int finalI = i;
             String description = getDescription(trader, i);

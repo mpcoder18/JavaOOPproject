@@ -29,7 +29,6 @@ public class GenerateDungeon {
             dungeon.add(generateRoom());
         }
 
-        // To check: a single door might connect the same room
         Random random = new Random();
         for (Room room : dungeon) {
             Set<Room> connectedRooms = new HashSet<>();
@@ -52,8 +51,7 @@ public class GenerateDungeon {
         Door exitDoor = new ExitDoor("An exit door", null);
         exitRoom.addDoor(exitDoor);
 
-        // For every room that has less than 4 doors, add a fake door or a locked door. Locked doors still
-        // connect to a random room, but require a key to unlock.
+        // For every room that has less than 4 doors, add a fake door or a locked door.
         for (Room room : dungeon) {
             while (room.getDoors().size() < 4) {
                 if (Math.random() < 0.3) {
@@ -63,7 +61,7 @@ public class GenerateDungeon {
                             dungeon.get(random.nextInt(dungeon.size()))));
                 } else {
                     room.addDoor(new RandomDoor(this.game, generateDoorDescription(),
-                            dungeon.get(random.nextInt(dungeon.size()))));
+                            null));
                 }
             }
         }

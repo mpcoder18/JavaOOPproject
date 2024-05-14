@@ -2,6 +2,7 @@ package nl.rug.oop.rpg.game;
 
 import nl.rug.oop.rpg.entities.NPC;
 import nl.rug.oop.rpg.interfaces.Attackable;
+import nl.rug.oop.rpg.player.Player;
 
 /**
  * Class to represent combat between two attackable entities.
@@ -44,6 +45,7 @@ public class Combat {
         } else {
             int moneyReward = (int) (Math.random() * 100);
             System.out.println("You won the fight and earned " + moneyReward + " gold.");
+            ((Player) attacker).setMoney(((Player) attacker).getMoney() + moneyReward);
             game.removeNPC((NPC) opponent);
         }
     }

@@ -29,11 +29,29 @@ public class Armor implements Serializable {
     public Armor() {
         helmet = new Helmet("A helmet", 10, 2);
         chestplate = new Chestplate("A chestplate", 20, 3);
-        leggings = new Leggings("A pair of leggins", 15, 1);
+        leggings = new Leggings("A pair of leggings", 15, 1);
         boots = new Boots("A pair of boots", 10, 1);
     }
 
+    /**
+     * Method to get the total defense of the armor.
+     *
+     * @return Total defense of the armor
+     */
     public int getDefense() {
-        return helmet.getDefense() + chestplate.getDefense() + leggings.getDefense() + boots.getDefense();
+        int totalDefense = 0;
+        if (helmet != null) {
+            totalDefense += helmet.getDefense();
+        }
+        if (chestplate != null) {
+            totalDefense += chestplate.getDefense();
+        }
+        if (leggings != null) {
+            totalDefense += leggings.getDefense();
+        }
+        if (boots != null) {
+            totalDefense += boots.getDefense();
+        }
+        return totalDefense;
     }
 }
