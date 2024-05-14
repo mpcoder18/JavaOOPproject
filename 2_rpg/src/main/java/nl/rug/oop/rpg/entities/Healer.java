@@ -23,7 +23,10 @@ public class Healer extends NPC implements Serializable {
         super(description, damage, health);
     }
 
-    public void giveHealth(Player player, int health) {
-        player.setHealth(player.getHealth() + health);
+    @Override
+    public void interact(Player player) {
+        System.out.println("You greet the healer.");
+        System.out.println("The healer heals you for 10 health.");
+        player.heal(10);
     }
 }

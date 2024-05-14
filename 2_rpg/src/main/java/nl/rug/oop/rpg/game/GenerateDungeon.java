@@ -38,7 +38,7 @@ public class GenerateDungeon {
                 Room connectingRoom = dungeon.get(random.nextInt(dungeon.size()));
                 if (room != connectingRoom && !room.isConnectedTo(connectingRoom) &&
                         !connectedRooms.contains(connectingRoom) && connectingRoom.getDoors().size() < 4) {
-                    room.addDoor(generateDoor(connectingRoom));
+                    room.addDoor(new Door(generateDoorDescription(), connectingRoom));
                     connectedRooms.add(connectingRoom);
                 }
             }
@@ -51,6 +51,22 @@ public class GenerateDungeon {
         }
         Door exitDoor = new ExitDoor("An exit door", null);
         exitRoom.addDoor(exitDoor);
+
+        // For every room that has less than 4 doors, add a fake door or a locked door. Locked doors still
+        // connect to a random room, but require a key to unlock.
+        for (Room room : dungeon) {
+            while (room.getDoors().size() < 4) {
+                if (Math.random() < 0.3) {
+                    room.addDoor(new FakeDoor(generateDoorDescription(), null));
+                } else if (Math.random() < 0.5) {
+                    room.addDoor(new LockedDoor(this.game, generateDoorDescription(),
+                            dungeon.get(random.nextInt(dungeon.size()))));
+                } else {
+                    room.addDoor(new RandomDoor(this.game, generateDoorDescription(),
+                            dungeon.get(random.nextInt(dungeon.size()))));
+                }
+            }
+        }
 
         return dungeon;
     }
@@ -89,12 +105,11 @@ public class GenerateDungeon {
     }
 
     /**
-     * Generate a random door.
+     * Generate a random door description.
      *
-     * @param room The room the door connects to
      * @return Door A random door
      */
-    public Door generateDoor(Room room) {
+    private String generateDoorDescription() {
         List<String> doorDescriptions = List.of(
             "A red door made of wooden planks. ",
             "A blue door made of stone. ",
@@ -108,7 +123,7 @@ public class GenerateDungeon {
             "A brown door made of rubber. "
         );
 
-        return new Door(doorDescriptions.get((int) (Math.random() * doorDescriptions.size())), room);
+        return doorDescriptions.get((int) (Math.random() * doorDescriptions.size()));
     }
 
     /**
