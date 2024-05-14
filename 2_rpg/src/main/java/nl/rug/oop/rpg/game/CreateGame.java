@@ -25,6 +25,7 @@ public class CreateGame {
         roomList.add(startRoom);
         Player player = new Player("John", startRoom, 100);
         Game game = new Game(player, scanner, roomList);
+        player.setGame(game);
         GenerateDungeon dungeon = new GenerateDungeon(game);
         roomList = dungeon.generateDungeon(startRoom, 3);
         game.setRooms(roomList);

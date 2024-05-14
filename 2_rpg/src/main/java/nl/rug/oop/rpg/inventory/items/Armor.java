@@ -5,7 +5,7 @@ import lombok.Setter;
 import nl.rug.oop.rpg.inventory.items.armor.Boots;
 import nl.rug.oop.rpg.inventory.items.armor.Chestplate;
 import nl.rug.oop.rpg.inventory.items.armor.Helmet;
-import nl.rug.oop.rpg.inventory.items.armor.Leggins;
+import nl.rug.oop.rpg.inventory.items.armor.Leggings;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -20,7 +20,7 @@ public class Armor implements Serializable {
     private static final long serialVersionUID = 220359107779L;
     private Helmet helmet;
     private Chestplate chestplate;
-    private Leggins leggins;
+    private Leggings leggings;
     private Boots boots;
 
     /**
@@ -29,11 +29,11 @@ public class Armor implements Serializable {
     public Armor() {
         helmet = new Helmet("A helmet", 10, 2);
         chestplate = new Chestplate("A chestplate", 20, 3);
-        leggins = new Leggins("A pair of leggins", 15, 1);
+        leggings = new Leggings("A pair of leggins", 15, 1);
         boots = new Boots("A pair of boots", 10, 1);
     }
 
     public int getDefense() {
-        return helmet.getDefense() + chestplate.getDefense() + leggins.getDefense() + boots.getDefense();
+        return helmet.getDefense() + chestplate.getDefense() + leggings.getDefense() + boots.getDefense();
     }
 }

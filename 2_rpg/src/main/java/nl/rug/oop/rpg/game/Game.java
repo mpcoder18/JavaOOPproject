@@ -130,6 +130,10 @@ public class Game implements Serializable {
     }
 
     private void interactWithNPC() {
+        if (player.getCurrentRoom().getNpcs().isEmpty()) {
+            System.out.println("There is no one to interact with.");
+            return;
+        }
         int counter = 0;
         ChoiceMenu choiceMenu = new ChoiceMenu("Which creature do you want to interact with? (-1 to go back)");
         for (NPC npc : player.getCurrentRoom().getNpcs()) {

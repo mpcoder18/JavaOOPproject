@@ -2,12 +2,14 @@ package nl.rug.oop.rpg.player;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.rpg.game.Game;
 import nl.rug.oop.rpg.inventory.Item;
 import nl.rug.oop.rpg.interfaces.Attackable;
 import nl.rug.oop.rpg.entities.Enemy;
 import nl.rug.oop.rpg.environment.Room;
 import nl.rug.oop.rpg.inventory.items.Armor;
 import nl.rug.oop.rpg.inventory.items.Sword;
+import nl.rug.oop.rpg.inventory.items.armor.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -38,6 +40,7 @@ public class Player implements Attackable, Serializable {
     protected Armor armor;
     private int money;
     private List<Item> inventory;
+    private Game game;
 
     /**
      * Constructor to create a new player.
@@ -99,5 +102,43 @@ public class Player implements Attackable, Serializable {
             }
         }
         return false;
+    }
+
+    public void heal(int heal) {
+        this.health += heal;
+    }
+
+    /**
+     * Method to automatically equip the best armor and sword.
+     */
+    public void autoEquipBest() {
+        for (Item item : inventory) {
+            if (item instanceof Helmet) {
+                if (armor.getHelmet().getDefense() < ((Helmet) item).getDefense()) {
+                    System.out.println("You equipped a better helmet.");
+                    armor.setHelmet((Helmet) item);
+                }
+            } else if (item instanceof Chestplate) {
+                if (armor.getChestplate().getDefense() < ((Chestplate) item).getDefense()) {
+                    System.out.println("You equipped a better chestplate.");
+                    armor.setChestplate((Chestplate) item);
+                }
+            } else if (item instanceof Leggings) {
+                if (armor.getLeggings().getDefense() < ((Leggings) item).getDefense()) {
+                    System.out.println("You equipped better leggings.");
+                    armor.setLeggings((Leggings) item);
+                }
+            } else if (item instanceof Boots) {
+                if (armor.getBoots().getDefense() < ((Boots) item).getDefense()) {
+                    System.out.println("You equipped better boots.");
+                    armor.setBoots((Boots) item);
+                }
+            } else if (item instanceof Sword) {
+                if (sword.getDamage() < ((Sword) item).getDamage()) {
+                    System.out.println("You equipped a better sword.");
+                    sword = (Sword) item;
+                }
+            }
+        }
     }
 }

@@ -29,32 +29,6 @@ public class GenerateDungeon {
             dungeon.add(generateRoom());
         }
 
-        List<String> colors = List.of(
-                "red",
-                "blue",
-                "green",
-                "yellow",
-                "purple",
-                "orange",
-                "pink",
-                "black",
-                "white",
-                "brown"
-        );
-
-        List<String> materials = List.of(
-                "wooden",
-                "stone",
-                "metal",
-                "glass",
-                "plastic",
-                "paper",
-                "fabric",
-                "ceramic",
-                "clay",
-                "rubber"
-        );
-
         // To check: a single door might connect the same room
         Random random = new Random();
         for (Room room : dungeon) {
@@ -64,9 +38,7 @@ public class GenerateDungeon {
                 Room connectingRoom = dungeon.get(random.nextInt(dungeon.size()));
                 if (room != connectingRoom && !room.isConnectedTo(connectingRoom) &&
                         !connectedRooms.contains(connectingRoom) && connectingRoom.getDoors().size() < 4) {
-                    Door door = new Door("A " + colors.get(random.nextInt(colors.size())) + " door made of " +
-                            materials.get(random.nextInt(materials.size())), connectingRoom);
-                    room.addDoor(door);
+                    room.addDoor(generateDoor(connectingRoom));
                     connectedRooms.add(connectingRoom);
                 }
             }
@@ -91,8 +63,21 @@ public class GenerateDungeon {
     public Room generateRoom() {
         Room room = new Room();
 
+        List<String> roomDescriptions = List.of(
+                "You are in a dimly lit room, dusty and small. ",
+                "You are in a dark room, smelly and large. ",
+                "You are in a bright room, cold and tiny. ",
+                "You are in a colorful room, hot and huge. ",
+                "You are in a dull room, humid and narrow. ",
+                "You are in a gloomy room, dry and wide. ",
+                "You are in a shadowy room, wet and spacious. ",
+                "You are in a well-lit room, moldy and cramped. ",
+                "You are in a spacious room, stuffy and cozy. ",
+                "You are in a cramped room, clean and airy. "
+        );
+
         // Generate a random description for the room
-        room.setDescription(generateRoomDescription());
+        room.setDescription(roomDescriptions.get((int) (Math.random() * roomDescriptions.size())));
 
         // Add up to 3 NPCs to the room
         int numberOfNPCs = (int) (Math.random() * 3 + 1);
@@ -104,53 +89,26 @@ public class GenerateDungeon {
     }
 
     /**
-     * Generate a random room description.
+     * Generate a random door.
      *
-     * @return String A random room description
+     * @param room The room the door connects to
+     * @return Door A random door
      */
-    public String generateRoomDescription() {
-        String description = "You are in a ";
-        List<String> colors = List.of(
-                "dimly lit",
-                "dark",
-                "bright",
-                "colorful",
-                "dull",
-                "gloomy",
-                "shadowy",
-                "well-lit",
-                "spacious",
-                "cramped"
-        );
-        List<String> atmospheres = List.of(
-                "dusty",
-                "smelly",
-                "cold",
-                "hot",
-                "humid",
-                "dry",
-                "wet",
-                "moldy",
-                "stuffy",
-                "clean"
-        );
-        List<String> sizes = List.of(
-                "small",
-                "large",
-                "tiny",
-                "huge",
-                "narrow",
-                "wide",
-                "spacious",
-                "cramped",
-                "cozy",
-                "airy"
+    public Door generateDoor(Room room) {
+        List<String> doorDescriptions = List.of(
+            "A red door made of wooden planks. ",
+            "A blue door made of stone. ",
+            "A green door made of metal. ",
+            "A yellow door made of glass. ",
+            "A purple door made of plastic. ",
+            "An orange door made of paper. ",
+            "A pink door made of fabric. ",
+            "A black door made of ceramic. ",
+            "A white door made of clay. ",
+            "A brown door made of rubber. "
         );
 
-        description += colors.get((int) (Math.random() * colors.size())) + " room, ";
-        description += atmospheres.get((int) (Math.random() * atmospheres.size())) + " and ";
-        description += sizes.get((int) (Math.random() * sizes.size())) + ". ";
-        return description;
+        return new Door(doorDescriptions.get((int) (Math.random() * doorDescriptions.size())), room);
     }
 
     /**

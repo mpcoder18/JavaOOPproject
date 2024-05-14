@@ -4,13 +4,13 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * Class that represents a pair of leggins.
+ * Class that represents a pair of leggings.
  */
-public class Leggins extends ArmorPiece implements Serializable {
+public class Leggings extends ArmorPiece implements Serializable {
     @Serial
     private static final long serialVersionUID = 930359108879L;
 
-    public Leggins(String description, int value, int protection) {
+    public Leggings(String description, int value, int protection) {
         super("Leggins", description, value, protection);
     }
 }
