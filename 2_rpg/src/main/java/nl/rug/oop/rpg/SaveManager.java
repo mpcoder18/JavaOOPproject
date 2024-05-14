@@ -1,19 +1,23 @@
 package nl.rug.oop.rpg;
 
-import nl.rug.oop.rpg.entities.NPC;
-import nl.rug.oop.rpg.environment.Room;
 import nl.rug.oop.rpg.game.Game;
 
 import java.io.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-
-
+/**
+ * Class that manages saving and loading the game.
+ */
 public class SaveManager {
     public SaveManager() {
     }
 
+    /**
+     * Saves the game to a file called "quicksave.ser".
+     *
+     * @param game the game to save
+     */
     public void quickSave(Game game) {
         File saveDir = new File("savedgames");
         if (!saveDir.exists()) {
@@ -24,11 +28,22 @@ public class SaveManager {
 
     }
 
+    /**
+     * Loads the game from a file called "quicksave.ser".
+     *
+     * @return the loaded game
+     */
     public Game quickLoad() {
         File saveFile = new File("savedgames/quicksave.ser");
         return loadFrom(saveFile);
     }
 
+    /**
+     * Saves the game to a file.
+     *
+     * @param file the file to save to
+     * @param game the game to save
+     */
     public void saveTo(File file, Game game) {
         try (FileOutputStream fos = new FileOutputStream(file);
              GZIPOutputStream zipStream = new GZIPOutputStream(fos);
@@ -41,6 +56,12 @@ public class SaveManager {
         }
     }
 
+    /**
+     * Loads the game from a file.
+     *
+     * @param file the file to load from
+     * @return the loaded game
+     */
     public Game loadFrom(File file) {
         if (!file.exists()) {
             return null;

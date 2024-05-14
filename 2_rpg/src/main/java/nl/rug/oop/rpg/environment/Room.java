@@ -1,6 +1,7 @@
 package nl.rug.oop.rpg.environment;
 
 import lombok.Getter;
+import lombok.Setter;
 import nl.rug.oop.rpg.interfaces.Inspectable;
 import nl.rug.oop.rpg.entities.NPC;
 
@@ -12,20 +13,13 @@ import java.util.List;
 /**
  * Class to represent a room.
  */
+@Getter
 public class Room implements Inspectable, Serializable {
     @Serial
     private static final long serialVersionUID = 930351107779L;
-    @Getter
-    private final String description;
-    /**
-     * -- GETTER --
-     * Getter methopd to get the list of doors in the room.
-     *
-     * @return the list of doors int the room
-     */
-    @Getter
+    @Setter
+    private String description;
     private List<Door> doors;
-    @Getter
     private List<NPC> npcs;
 
     /**
@@ -35,6 +29,15 @@ public class Room implements Inspectable, Serializable {
      */
     public Room(String description) {
         this.description = description;
+        this.doors = new ArrayList<>();
+        this.npcs = new ArrayList<>();
+    }
+
+    /**
+     * Constructor to create a new empty room.
+     */
+    public Room() {
+        this.description = "Empty room";
         this.doors = new ArrayList<>();
         this.npcs = new ArrayList<>();
     }
@@ -52,10 +55,30 @@ public class Room implements Inspectable, Serializable {
      * @param door Door to add to the room
      */
     public void addDoor(Door door) {
-        doors.add(door);
+        if (!doors.contains(door)) {
+            doors.add(door);
+            if (door.getConnectingRoom() != null) {
+                door.getConnectingRoom().addDoor(door);
+            }
+        }
     }
 
     public void addNPC(NPC npc) {
         npcs.add(npc);
+    }
+
+    /**
+     * Method to check if a room is connected to another room.
+     *
+     * @param otherRoom Room to check if it is connected to
+     * @return True if the room is connected to the other room, false otherwise
+     */
+    public boolean isConnectedTo(Room otherRoom) {
+        for (Door door : doors) {
+            if (door.getConnectingRoom() == otherRoom) {
+                return true;
+            }
+        }
+        return false;
     }
 }

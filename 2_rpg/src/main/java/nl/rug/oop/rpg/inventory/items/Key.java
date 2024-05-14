@@ -11,6 +11,7 @@ import java.io.Serializable;
 public class Key extends Item implements Serializable {
     @Serial
     private static final long serialVersionUID = 939959107779L;
+
     public Key(String description, int value) {
         super("Key", description, value);
     }

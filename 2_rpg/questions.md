@@ -85,6 +85,16 @@ Explain the roles of this design pattern and how `FileOutputStream` and `ObjectO
 
 ___
 
-Answer:
+Answer: `FileOutputStream` and `ObjectOutputStream` both implement the Decorator design
+pattern. It allows adding new behaviors to objects dynamically by placing them inside
+special wrapper objects that contain these behaviors. The Decorator design pattern
+provides an alternative to creating subclasses to add new functionality to objects. The benefit
+of implementing this design pattern is that it allows adding new functionality to an object
+without altering the existing code. In the case of `FileOutputStream` and
+`ObjectOutputStream`, they implement the Decorator design pattern by wrapping the
+underlying streams with additional functionality. For example, `FileOutputStream` adds
+the ability to write data to a file, while `ObjectOutputStream` adds the ability to write
+objects to a stream. That way, the Decorator design pattern allows adding new
+functionality without breaking the code that uses the original objects.
 
 ___

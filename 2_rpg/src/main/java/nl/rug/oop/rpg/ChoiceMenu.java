@@ -32,11 +32,18 @@ public class ChoiceMenu {
         for (String description : descriptions) {
             System.out.println("  (" + counter++ + ") " + description);
         }
-        int choice = scanner.nextInt();
+        int choice;
+        try {
+            choice = scanner.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input");
+            scanner.nextLine();
+            return;
+        }
         if (choices.containsKey(choice)) {
             choices.get(choice).run();
         } else if (choice == -1) {
-            return;
+            System.out.println("You do nothing.");
         } else {
             System.out.println("Invalid choice");
         }
