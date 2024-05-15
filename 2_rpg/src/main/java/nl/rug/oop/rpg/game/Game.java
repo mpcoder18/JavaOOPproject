@@ -99,6 +99,7 @@ public class Game implements Serializable {
         File[] savedgames = saveFolder.listFiles();
 
         int counter = 1;
+        assert savedgames != null;
         for (File file : savedgames) {
             System.out.println(counter + ". " + file.getName());
             counter++;

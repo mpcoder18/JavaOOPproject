@@ -2,14 +2,17 @@ package nl.rug.oop.rpg.player;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.rpg.game.Game;
-import nl.rug.oop.rpg.inventory.Item;
-import nl.rug.oop.rpg.interfaces.Attackable;
 import nl.rug.oop.rpg.entities.Enemy;
 import nl.rug.oop.rpg.environment.Room;
+import nl.rug.oop.rpg.game.Game;
+import nl.rug.oop.rpg.interfaces.Attackable;
+import nl.rug.oop.rpg.inventory.Item;
 import nl.rug.oop.rpg.inventory.items.Armor;
 import nl.rug.oop.rpg.inventory.items.Sword;
-import nl.rug.oop.rpg.inventory.items.armor.*;
+import nl.rug.oop.rpg.inventory.items.armor.Boots;
+import nl.rug.oop.rpg.inventory.items.armor.Chestplate;
+import nl.rug.oop.rpg.inventory.items.armor.Helmet;
+import nl.rug.oop.rpg.inventory.items.armor.Leggings;
 
 import java.io.Serial;
 import java.io.Serializable;

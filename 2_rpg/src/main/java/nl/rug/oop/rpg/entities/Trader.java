@@ -5,7 +5,10 @@ import nl.rug.oop.rpg.ChoiceMenu;
 import nl.rug.oop.rpg.inventory.Item;
 import nl.rug.oop.rpg.inventory.items.Key;
 import nl.rug.oop.rpg.inventory.items.Sword;
-import nl.rug.oop.rpg.inventory.items.armor.*;
+import nl.rug.oop.rpg.inventory.items.armor.Boots;
+import nl.rug.oop.rpg.inventory.items.armor.Chestplate;
+import nl.rug.oop.rpg.inventory.items.armor.Helmet;
+import nl.rug.oop.rpg.inventory.items.armor.Leggings;
 import nl.rug.oop.rpg.player.Player;
 
 import java.io.Serial;

@@ -1,11 +1,11 @@
 package nl.rug.oop.rpg.game;
 
-import nl.rug.oop.rpg.environment.*;
+import nl.rug.oop.rpg.environment.Room;
 import nl.rug.oop.rpg.player.Player;
 
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Class that creates the game.

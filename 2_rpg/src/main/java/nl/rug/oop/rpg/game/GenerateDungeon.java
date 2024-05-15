@@ -3,7 +3,9 @@ package nl.rug.oop.rpg.game;
 import nl.rug.oop.rpg.entities.*;
 import nl.rug.oop.rpg.environment.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Class to generate a dungeon.
@@ -24,24 +26,23 @@ public class GenerateDungeon {
      */
     public List<Room> generateDungeon(Room startRoom, int size) {
         List<Room> dungeon = new ArrayList<>();
-        dungeon.add(startRoom);
-        for (int i = 0; i < size; i++) {
-            dungeon.add(generateRoom());
-        }
 
+        /**
+         * To generate a dungeon, until we have the desired number of rooms, we will select a random room from
+         * the dungeon, if the room has less than 4 doors, add a door to another random room. This will also
+         * avoid doors that lead to the same room.
+         */
         Random random = new Random();
-        for (Room room : dungeon) {
-            Set<Room> connectedRooms = new HashSet<>();
-            int numberOfDoors = random.nextInt(2) + 1;
-            for (int i = 0; i < numberOfDoors; i++) {
-                Room connectingRoom = dungeon.get(random.nextInt(dungeon.size()));
-                if (room != connectingRoom && !room.isConnectedTo(connectingRoom) &&
-                        !connectedRooms.contains(connectingRoom) && connectingRoom.getDoors().size() < 4) {
-                    room.addDoor(new Door(generateDoorDescription(), connectingRoom));
-                    connectedRooms.add(connectingRoom);
-                }
+        dungeon.add(startRoom);
+        while (dungeon.size() < size) {
+            Room randomRoom = dungeon.get(new Random().nextInt(dungeon.size()));
+            if (randomRoom.getDoors().size() < 4) {
+                Room newRoom = generateRoom();
+                randomRoom.addDoor(new Door(generateDoorDescription(), newRoom));
+                dungeon.add(newRoom);
             }
         }
+
 
         // Add an exit door to a random room that is not the start room
         Room exitRoom = dungeon.get(random.nextInt(dungeon.size()));

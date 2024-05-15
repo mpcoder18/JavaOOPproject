@@ -1,8 +1,8 @@
 package nl.rug.oop.rpg.entities;
 
 import nl.rug.oop.rpg.game.Combat;
-import nl.rug.oop.rpg.interfaces.Attackable;
 import nl.rug.oop.rpg.game.Game;
+import nl.rug.oop.rpg.interfaces.Attackable;
 import nl.rug.oop.rpg.player.Player;
 
 import java.io.Serial;

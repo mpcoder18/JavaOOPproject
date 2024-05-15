@@ -2,8 +2,8 @@ package nl.rug.oop.rpg.environment;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.rpg.interfaces.Inspectable;
 import nl.rug.oop.rpg.entities.NPC;
+import nl.rug.oop.rpg.interfaces.Inspectable;
 
 import java.io.Serial;
 import java.io.Serializable;
