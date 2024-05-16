@@ -15,7 +15,7 @@ import java.util.Random;
 public class Wizard extends NPC implements Serializable {
     @Serial
     private static final long serialVersionUID = 930359109899L;
-    private Game game;
+    private final Game game;
 
     /**
      * Constructor to create a new NPC.

@@ -60,7 +60,7 @@ public class GenerateDungeon {
                 if (Math.random() < 0.3) {
                     room.addDoor(new FakeDoor(generateDoorDescription(), null));
                 } else if (Math.random() < 0.5) {
-                    room.addDoor(new LockedDoor(this.game, generateDoorDescription(),
+                    room.addDoor(new LockedDoor(this.game, generateDoorDescription() + "It has a lock. ",
                             dungeon.get(random.nextInt(dungeon.size()))));
                 } else {
                     room.addDoor(new RandomDoor(this.game, generateDoorDescription(),
@@ -133,10 +133,11 @@ public class GenerateDungeon {
      */
     public NPC randomNPC() {
         Random random = new Random();
-        int damage = random.nextInt(5) + 1;
-        int health = random.nextInt(100) + 1;
+        // Random damage and health with bottom-heavy distribution
+        int damage = (int) (50 * Math.pow(random.nextDouble(), 2));
+        int health = (int) (100 * Math.pow(random.nextDouble(), 2));
         if (Math.random() < 0.75) {
-            return (NPC) new Enemy(this.game, "A monster", damage, health);
+            return new Enemy(this.game, "A monster", damage, health);
         } else {
             return switch ((int) (Math.random() * 3)) {
                 case 0 -> new Wizard(this.game, "A wizard", damage, health);

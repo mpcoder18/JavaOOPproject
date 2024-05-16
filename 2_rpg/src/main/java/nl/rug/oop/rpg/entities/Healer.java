@@ -11,6 +11,7 @@ import java.io.Serializable;
 public class Healer extends NPC implements Serializable {
     @Serial
     private static final long serialVersionUID = 930359103379L;
+    boolean healed = false;
 
     /**
      * Constructor to create a new NPC.
@@ -26,7 +27,12 @@ public class Healer extends NPC implements Serializable {
     @Override
     public void interact(Player player) {
         System.out.println("You greet the healer.");
+        if (healed) {
+            System.out.println("The healer has already healed you.");
+            return;
+        }
         System.out.println("The healer heals you for 10 health.");
         player.heal(10);
+        healed = true;
     }
 }

@@ -19,8 +19,8 @@ public class Room implements Inspectable, Serializable {
     private static final long serialVersionUID = 930351107779L;
     @Setter
     private String description;
-    private List<Door> doors;
-    private List<NPC> npcs;
+    private final List<Door> doors;
+    private final List<NPC> npcs;
 
     /**
      * Constructor to create a new room.

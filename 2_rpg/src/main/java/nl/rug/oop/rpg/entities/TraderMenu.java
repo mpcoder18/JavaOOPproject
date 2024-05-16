@@ -110,6 +110,7 @@ public class TraderMenu {
             case "Chestplate" -> description + " (" + ((Chestplate) inventory.get(i)).getDefense() + " defense)";
             case "Leggings" -> description + " (" + ((Leggings) inventory.get(i)).getDefense() + " defense)";
             case "Boots" -> description + " (" + ((Boots) inventory.get(i)).getDefense() + " defense)";
+            case "Key" -> description;
             default -> "";
         };
     }
