@@ -10,6 +10,7 @@ import nl.rug.oop.rpg.environment.Room;
 import nl.rug.oop.rpg.player.Player;
 
 import java.io.File;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Scanner;
@@ -18,6 +19,7 @@ import java.util.Scanner;
  * Class that contains the main game loop.
  */
 public class Game implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1324293489028L;
     private final Player player;
     @Getter
@@ -26,6 +28,7 @@ public class Game implements Serializable {
     @Setter
     private List<Room> rooms;
     private transient SaveManager saveManager;
+    private boolean isRunning = true;
 
     /**
      * Constructor for the Game class.
@@ -56,7 +59,7 @@ public class Game implements Serializable {
         choiceMenu.addChoice(6, this::save, "Save");
         choiceMenu.addChoice(7, this::load, "Load");
         choiceMenu.addChoice(8, this::quitGame, "Quit game");
-        while (true) {
+        while (isRunning) {
             choiceMenu.run(scanner);
         }
     }
@@ -79,9 +82,8 @@ public class Game implements Serializable {
     private void save() {
         File saveFolder = new File("savedgames");
         if (!saveFolder.exists()) {
-            try {
-                saveFolder.mkdirs();
-            } catch (SecurityException e) {
+            boolean created = saveFolder.mkdir();
+            if (!created) {
                 System.out.println("Could not create save folder.");
                 return;
             }
@@ -168,12 +170,12 @@ public class Game implements Serializable {
 
     public void gameOver() {
         System.out.println("Game over");
-        System.exit(0);
+        isRunning = false;
     }
 
     private void quitGame() {
         System.out.println("Goodbye!");
-        System.exit(0);
+        isRunning = false;
     }
 
     public void removeNPC(NPC npc) {
