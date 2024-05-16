@@ -78,24 +78,34 @@ public class Game implements Serializable {
     private void save() {
         File saveFolder = new File("savedgames");
         if (!saveFolder.exists()) {
-            saveFolder.mkdirs();
+            try {
+                saveFolder.mkdirs();
+            } catch (SecurityException e) {
+                System.out.println("Could not create save folder.");
+                return;
+            }
         }
 
         System.out.println("what will be the name of the saved game?");
         scanner.nextLine();
         String inputString = scanner.nextLine();
+        // Check with regex if the input is a valid file name
+        if (!inputString.matches("^[a-zA-Z0-9_]*$")) {
+            System.out.println("Invalid file name. Only letters, numbers and underscores are allowed.");
+            return;
+        }
 
         File saveFile = new File(saveFolder, inputString + ".save");
         System.out.println("Saving game to " + saveFile.getAbsolutePath());
-        // hier wordt dus gekeken of de game al bestaat
-        if (saveFile.exists()) {
-            saveFile.delete();
-        }
         saveManager.saveTo(saveFile, this);
     }
 
     private void load() {
         File saveFolder = new File("savedgames");
+        if (!saveFolder.exists()) {
+            System.out.println("No saves currently exists.");
+            return;
+        }
         File[] savedgames = saveFolder.listFiles();
 
         int counter = 1;
