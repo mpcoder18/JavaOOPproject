@@ -27,11 +27,8 @@ public class GenerateDungeon {
     public List<Room> generateDungeon(Room startRoom, int size) {
         List<Room> dungeon = new ArrayList<>();
 
-        /**
-         * To generate a dungeon, until we have the desired number of rooms, we will select a random room from
-         * the dungeon, if the room has less than 4 doors, add a door to another random room. This will also
-         * avoid doors that lead to the same room.
-         */
+        // While the dungeon is not big enough, add rooms to the dungeon
+        // expanding from a random room
         Random random = new Random();
         dungeon.add(startRoom);
         while (dungeon.size() < size) {
@@ -42,8 +39,7 @@ public class GenerateDungeon {
                 dungeon.add(newRoom);
             }
         }
-
-
+        
         // Add an exit door to a random room that is not the start room
         Room exitRoom = dungeon.get(random.nextInt(dungeon.size()));
         while (exitRoom == startRoom) {
@@ -53,6 +49,12 @@ public class GenerateDungeon {
         exitRoom.addDoor(exitDoor);
 
         // For every room that has less than 4 doors, add a fake door or a locked door.
+        fillDoors(dungeon, random);
+
+        return dungeon;
+    }
+
+    private void fillDoors(List<Room> dungeon, Random random) {
         for (Room room : dungeon) {
             while (room.getDoors().size() < 4) {
                 if (Math.random() < 0.3) {
@@ -66,8 +68,6 @@ public class GenerateDungeon {
                 }
             }
         }
-
-        return dungeon;
     }
 
     /**
