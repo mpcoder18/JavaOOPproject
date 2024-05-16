@@ -57,7 +57,7 @@ public class Player implements Attackable, Serializable {
         this.currentRoom = currentRoom;
         this.health = health;
         this.money = 0;
-        this.sword = new Sword("Fists", "Your fists", -1, 1);
+        this.sword = new Sword("Fists", "Your fists", -1, 7);
         this.armor = new Armor();
         this.inventory = new ArrayList<>();
     }
@@ -143,5 +143,32 @@ public class Player implements Attackable, Serializable {
                 }
             }
         }
+    }
+
+    /**
+     * Method to check the player's inventory.
+     */
+    public void checkInventory() {
+        System.out.println("You have " + health + " health.");
+        System.out.println("You have " + money + " gold.");
+        System.out.println("Your sword is " + sword.getName() + " with " + sword.getDamage() + " damage.");
+        System.out.println("Your armor is:");
+        System.out.println(" - " + armor.getHelmet().getName() + " with " + armor.getHelmet().getDefense()
+                + " defense.");
+        System.out.println(" - " + armor.getChestplate().getName() + " with " + armor.getChestplate().getDefense()
+                + " defense.");
+        System.out.println(" - " + armor.getLeggings().getName() + " with " + armor.getLeggings().getDefense()
+                + " defense.");
+        System.out.println(" - " + armor.getBoots().getName() + " with " + armor.getBoots().getDefense()
+                + " defense.");
+        if (inventory.isEmpty()) {
+            System.out.println("You have no items.\n");
+            return;
+        }
+        System.out.println("You have the following items:");
+        for (Item item : inventory) {
+            System.out.println(" - " + item.getName());
+        }
+        System.out.println();
     }
 }

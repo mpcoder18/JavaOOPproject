@@ -48,13 +48,14 @@ public class Game implements Serializable {
         System.out.println("Welcome to the game!");
         ChoiceMenu choiceMenu = new ChoiceMenu("What do you want to do? (-1 to do nothing)");
         choiceMenu.addChoice(0, () -> player.getCurrentRoom().inspect(), "Look around");
-        choiceMenu.addChoice(1, this::chooseDoor, "Look for a way out");
-        choiceMenu.addChoice(2, this::interactWithNPC, "Look for company");
-        choiceMenu.addChoice(3, this::quickSave, "Quick save");
-        choiceMenu.addChoice(4, this::quickLoad, "Quick load");
-        choiceMenu.addChoice(5, this::save, "Save");
-        choiceMenu.addChoice(6, this::load, "Load");
-        choiceMenu.addChoice(7, this::quitGame, "Quit game");
+        choiceMenu.addChoice(1, player::checkInventory, "Check inventory");
+        choiceMenu.addChoice(2, this::chooseDoor, "Look for a way out");
+        choiceMenu.addChoice(3, this::interactWithNPC, "Look for company");
+        choiceMenu.addChoice(4, this::quickSave, "Quick save");
+        choiceMenu.addChoice(5, this::quickLoad, "Quick load");
+        choiceMenu.addChoice(6, this::save, "Save");
+        choiceMenu.addChoice(7, this::load, "Load");
+        choiceMenu.addChoice(8, this::quitGame, "Quit game");
         while (true) {
             choiceMenu.run(scanner);
         }

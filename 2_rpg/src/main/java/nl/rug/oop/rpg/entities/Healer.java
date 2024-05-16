@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class Healer extends NPC implements Serializable {
     @Serial
     private static final long serialVersionUID = 930359103379L;
-    boolean healed = false;
+    private boolean healed = false;
 
     /**
      * Constructor to create a new NPC.
