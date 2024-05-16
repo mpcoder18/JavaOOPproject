@@ -94,6 +94,18 @@ public class Game implements Serializable {
             System.out.println("Invalid file name. Only letters, numbers and underscores are allowed.");
             return;
         }
+        // Check if the save already exists
+        File[] savedgames = saveFolder.listFiles();
+        assert savedgames != null;
+        for (File file : savedgames) {
+            if (file.getName().equals(inputString + ".save")) {
+                System.out.println("Save already exists. Overwrite? (y/n)");
+                String answer = scanner.next();
+                if (!answer.matches("[yY]")) {
+                    return;
+                }
+            }
+        }
 
         File saveFile = new File(saveFolder, inputString + ".save");
         System.out.println("Saving game to " + saveFile.getAbsolutePath());
