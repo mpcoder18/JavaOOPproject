@@ -13,6 +13,6 @@ public class ExitDoor extends Door {
     @Override
     public void interact(Player player) {
         System.out.println("You have exited the dungeon. Congratulations!");
-        System.exit(0);
+        player.getGame().quitGame();
     }
 }

@@ -72,6 +72,7 @@ public class Game implements Serializable {
         }
         loadedGame.scanner = scanner;
         loadedGame.saveManager = saveManager;
+        this.isRunning = false;
         loadedGame.run();
     }
 
@@ -141,6 +142,7 @@ public class Game implements Serializable {
         }
         loadedGame.scanner = scanner;
         loadedGame.saveManager = saveManager;
+        this.isRunning = false;
         loadedGame.run();
     }
 
@@ -173,7 +175,7 @@ public class Game implements Serializable {
         isRunning = false;
     }
 
-    private void quitGame() {
+    public void quitGame() {
         System.out.println("Goodbye!");
         isRunning = false;
     }
