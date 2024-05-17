@@ -19,6 +19,9 @@ public class FakeDoor extends Door implements Serializable {
     @Override
     public void interact(Player player) {
         System.out.println("You tried opening the door, but it bit you. Ouch!");
+        if (!getDescription().contains("(Fake)")) {
+            setDescription(getDescription() + " (Fake)");
+        }
         player.receiveDamage(1 + (int) (Math.random() * 5)); // Random damage between 1 and 5
     }
 }

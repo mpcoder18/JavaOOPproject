@@ -54,11 +54,11 @@ public class Room implements Inspectable, Serializable {
      *
      * @param door Door to add to the room
      */
-    public void addDoor(Door door) {
+    public void addDoor(Door door, boolean addBackDoor) {
         if (!doors.contains(door)) {
             doors.add(door);
-            if (door.getConnectingRoom() != null) {
-                door.getConnectingRoom().addDoor(door);
+            if (addBackDoor) {
+                door.getConnectingRoom().addDoor(new Door(door.getDescription(), this), false);
             }
         }
     }
@@ -80,5 +80,9 @@ public class Room implements Inspectable, Serializable {
             }
         }
         return false;
+    }
+
+    public void shuffleDoors() {
+        java.util.Collections.shuffle(doors);
     }
 }

@@ -35,7 +35,7 @@ public class GenerateDungeon {
             Room randomRoom = dungeon.get(new Random().nextInt(dungeon.size()));
             if (randomRoom.getDoors().size() < 4) {
                 Room newRoom = generateRoom();
-                randomRoom.addDoor(new Door(generateDoorDescription(), newRoom));
+                randomRoom.addDoor(new Door(generateDoorDescription(), newRoom), true);
                 dungeon.add(newRoom);
             }
         }
@@ -46,7 +46,12 @@ public class GenerateDungeon {
             exitRoom = dungeon.get(random.nextInt(dungeon.size()));
         }
         Door exitDoor = new ExitDoor("An exit door", null);
-        exitRoom.addDoor(exitDoor);
+        exitRoom.addDoor(exitDoor, false);
+
+        // For every list of doors in the rooms, shuffle them to avoid predictability
+        for (Room room : dungeon) {
+            room.shuffleDoors();
+        }
 
         // For every room that has less than 4 doors, add a fake door or a locked door.
         fillDoors(dungeon, random);
@@ -58,13 +63,13 @@ public class GenerateDungeon {
         for (Room room : dungeon) {
             while (room.getDoors().size() < 4) {
                 if (Math.random() < 0.3) {
-                    room.addDoor(new FakeDoor(generateDoorDescription(), null));
+                    room.addDoor(new FakeDoor(generateDoorDescription(), null), false);
                 } else if (Math.random() < 0.5) {
                     room.addDoor(new LockedDoor(this.game, generateDoorDescription() + "It has a lock. ",
-                            dungeon.get(random.nextInt(dungeon.size()))));
+                            dungeon.get(random.nextInt(dungeon.size()))), true);
                 } else {
                     room.addDoor(new RandomDoor(this.game, generateDoorDescription(),
-                            null));
+                            null), false);
                 }
             }
         }
@@ -136,13 +141,20 @@ public class GenerateDungeon {
         // Random damage and health with bottom-heavy distribution
         int damage = (int) (50 * Math.pow(random.nextDouble(), 2));
         int health = (int) (100 * Math.pow(random.nextDouble(), 2));
+        List<String> npcAdjectives = List.of(
+                "A fierce", "A strong", "A weak", "A powerful", "A mighty", "A feeble", "A brave", "A cowardly",
+                "A dangerous", "A harmless", "A friendly", "An evil", "A good", "A kind", "A cruel", "A mean"
+        );
+        String npcAdjective = npcAdjectives.get((int) (Math.random() * npcAdjectives.size()));
         if (Math.random() < 0.75) {
-            return new Enemy(this.game, "A monster", damage, health);
+            List<String> enemyTypes = List.of("goblin", "orc", "troll", "dragon", "skeleton", "zombie", "ghost", "vampire");
+            String enemyType = enemyTypes.get((int) (Math.random() * enemyTypes.size()));
+            return new Enemy(this.game, npcAdjective + " " + enemyType, damage, health);
         } else {
             return switch ((int) (Math.random() * 3)) {
-                case 0 -> new Wizard(this.game, "A wizard", damage, health);
-                case 1 -> new Healer("A healer", damage, health);
-                case 2 -> new Trader("A merchant", damage, health);
+                case 0 -> new Wizard(this.game, npcAdjective + " wizard", damage, health);
+                case 1 -> new Healer(npcAdjective + " healer", damage, health);
+                case 2 -> new Trader(npcAdjective + " trader", damage, health);
                 default -> null;
             };
         }

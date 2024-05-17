@@ -116,27 +116,27 @@ public class Player implements Attackable, Serializable {
      */
     public void autoEquipBest() {
         for (Item item : inventory) {
-            if (item instanceof Helmet) {
+            if (item.getName().equals("Helmet")) {
                 if (armor.getHelmet().getDefense() < ((Helmet) item).getDefense()) {
                     System.out.println("You equipped a better helmet.");
                     armor.setHelmet((Helmet) item);
                 }
-            } else if (item instanceof Chestplate) {
+            } else if (item.getName().equals("Chestplate")) {
                 if (armor.getChestplate().getDefense() < ((Chestplate) item).getDefense()) {
                     System.out.println("You equipped a better chestplate.");
                     armor.setChestplate((Chestplate) item);
                 }
-            } else if (item instanceof Leggings) {
+            } else if (item.getName().equals("Leggings")) {
                 if (armor.getLeggings().getDefense() < ((Leggings) item).getDefense()) {
                     System.out.println("You equipped better leggings.");
                     armor.setLeggings((Leggings) item);
                 }
-            } else if (item instanceof Boots) {
+            } else if (item.getName().equals("Boots")) {
                 if (armor.getBoots().getDefense() < ((Boots) item).getDefense()) {
                     System.out.println("You equipped better boots.");
                     armor.setBoots((Boots) item);
                 }
-            } else if (item instanceof Sword) {
+            } else if (item.getName().equals("Sword")) {
                 if (sword.getDamage() < ((Sword) item).getDamage()) {
                     System.out.println("You equipped a better sword.");
                     sword = (Sword) item;
