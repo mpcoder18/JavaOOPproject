@@ -1,6 +1,6 @@
 package nl.rug.oop.rpg.environment;
 
-import nl.rug.oop.rpg.ChoiceMenu;
+import nl.rug.oop.rpg.menus.ChoiceMenu;
 import nl.rug.oop.rpg.game.Game;
 import nl.rug.oop.rpg.interfaces.Interactable;
 import nl.rug.oop.rpg.player.Player;

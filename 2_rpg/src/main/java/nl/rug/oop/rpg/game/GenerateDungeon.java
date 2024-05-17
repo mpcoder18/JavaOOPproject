@@ -39,7 +39,7 @@ public class GenerateDungeon {
                 dungeon.add(newRoom);
             }
         }
-        
+
         // Add an exit door to a random room that is not the start room
         Room exitRoom = dungeon.get(random.nextInt(dungeon.size()));
         while (exitRoom == startRoom) {
@@ -115,16 +115,16 @@ public class GenerateDungeon {
      */
     private String generateDoorDescription() {
         List<String> doorDescriptions = List.of(
-            "A red door made of wooden planks. ",
-            "A blue door made of stone. ",
-            "A green door made of metal. ",
-            "A yellow door made of glass. ",
-            "A purple door made of plastic. ",
-            "An orange door made of paper. ",
-            "A pink door made of fabric. ",
-            "A black door made of ceramic. ",
-            "A white door made of clay. ",
-            "A brown door made of rubber. "
+                "A red door made of wooden planks. ",
+                "A blue door made of stone. ",
+                "A green door made of metal. ",
+                "A yellow door made of glass. ",
+                "A purple door made of plastic. ",
+                "An orange door made of paper. ",
+                "A pink door made of fabric. ",
+                "A black door made of ceramic. ",
+                "A white door made of clay. ",
+                "A brown door made of rubber. "
         );
 
         return doorDescriptions.get((int) (Math.random() * doorDescriptions.size()));
@@ -141,14 +141,9 @@ public class GenerateDungeon {
         // Random damage and health with bottom-heavy distribution
         int damage = (int) (50 * Math.pow(random.nextDouble(), 2));
         int health = (int) (100 * Math.pow(random.nextDouble(), 2));
-        List<String> npcAdjectives = List.of(
-                "A fierce", "A strong", "A weak", "A powerful", "A mighty", "A feeble", "A brave", "A cowardly",
-                "A dangerous", "A harmless", "A friendly", "An evil", "A good", "A kind", "A cruel", "A mean"
-        );
-        String npcAdjective = npcAdjectives.get((int) (Math.random() * npcAdjectives.size()));
+        String npcAdjective = getNpcAdjective();
         if (Math.random() < 0.75) {
-            List<String> enemyTypes = List.of("goblin", "orc", "troll", "dragon", "skeleton", "zombie", "ghost", "vampire");
-            String enemyType = enemyTypes.get((int) (Math.random() * enemyTypes.size()));
+            String enemyType = getEnemyType();
             return new Enemy(this.game, npcAdjective + " " + enemyType, damage, health);
         } else {
             return switch ((int) (Math.random() * 3)) {
@@ -158,5 +153,18 @@ public class GenerateDungeon {
                 default -> null;
             };
         }
+    }
+
+    private static String getEnemyType() {
+        List<String> enemyTypes = List.of("goblin", "orc", "troll", "dragon", "skeleton", "zombie", "ghost", "vampire");
+        return enemyTypes.get((int) (Math.random() * enemyTypes.size()));
+    }
+
+    private static String getNpcAdjective() {
+        List<String> npcAdjectives = List.of(
+                "A fierce", "A strong", "A weak", "A powerful", "A mighty", "A feeble", "A brave", "A cowardly",
+                "A dangerous", "A harmless", "A friendly", "An evil", "A good", "A kind", "A cruel", "A mean"
+        );
+        return npcAdjectives.get((int) (Math.random() * npcAdjectives.size()));
     }
 }

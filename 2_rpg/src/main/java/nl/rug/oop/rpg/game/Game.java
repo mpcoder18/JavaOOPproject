@@ -2,8 +2,8 @@ package nl.rug.oop.rpg.game;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.rpg.ChoiceMenu;
-import nl.rug.oop.rpg.SaveManager;
+import nl.rug.oop.rpg.menus.ChoiceMenu;
+import nl.rug.oop.rpg.menus.SaveManager;
 import nl.rug.oop.rpg.entities.NPC;
 import nl.rug.oop.rpg.environment.Door;
 import nl.rug.oop.rpg.environment.Room;
@@ -35,7 +35,7 @@ public class Game implements Serializable {
      *
      * @param player  Player of the game
      * @param scanner Scanner to get input from the terminal
-     * @param rooms List of rooms in the game
+     * @param rooms   List of rooms in the game
      */
     public Game(Player player, Scanner scanner, List<Room> rooms) {
         this.player = player;
@@ -153,7 +153,8 @@ public class Game implements Serializable {
         for (Door door : doors) {
             choiceMenu.addChoice(counter++, () -> door.interact(player), door.getDescription());
         }
-        choiceMenu.addChoice(counter, () -> {}, "Stay here");
+        choiceMenu.addChoice(counter, () -> {
+        }, "Stay here");
         choiceMenu.run(scanner);
     }
 

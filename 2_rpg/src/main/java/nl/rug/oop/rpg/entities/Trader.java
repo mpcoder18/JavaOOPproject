@@ -1,7 +1,7 @@
 package nl.rug.oop.rpg.entities;
 
 import lombok.Getter;
-import nl.rug.oop.rpg.ChoiceMenu;
+import nl.rug.oop.rpg.menus.ChoiceMenu;
 import nl.rug.oop.rpg.inventory.Item;
 import nl.rug.oop.rpg.inventory.items.Key;
 import nl.rug.oop.rpg.inventory.items.Sword;

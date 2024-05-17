@@ -65,7 +65,7 @@ public class Player implements Attackable, Serializable {
     /**
      * Method to attack an attackable entity.
      *
-     * @param attackable entity to attack (Casted to Enemy)
+     * @param attackable entity to attack (Cast to Enemy)
      */
     public void attack(Attackable attackable) {
         Enemy enemy = (Enemy) attackable;
@@ -86,10 +86,6 @@ public class Player implements Attackable, Serializable {
         this.health -= damage;
         System.out.println("You receive " + damage + " damage.");
         System.out.println("You have " + this.health + " health left.");
-    }
-
-    public void addItem(Item item) {
-        this.inventory.add(item);
     }
 
     /**
@@ -116,30 +112,36 @@ public class Player implements Attackable, Serializable {
      */
     public void autoEquipBest() {
         for (Item item : inventory) {
-            if (item.getName().equals("Helmet")) {
-                if (armor.getHelmet().getDefense() < ((Helmet) item).getDefense()) {
-                    System.out.println("You equipped a better helmet.");
-                    armor.setHelmet((Helmet) item);
+            switch (item.getName()) {
+                case "Helmet" -> {
+                    if (armor.getHelmet().getDefense() < ((Helmet) item).getDefense()) {
+                        System.out.println("You equipped a better helmet.");
+                        armor.setHelmet((Helmet) item);
+                    }
                 }
-            } else if (item.getName().equals("Chestplate")) {
-                if (armor.getChestplate().getDefense() < ((Chestplate) item).getDefense()) {
-                    System.out.println("You equipped a better chestplate.");
-                    armor.setChestplate((Chestplate) item);
+                case "Chestplate" -> {
+                    if (armor.getChestplate().getDefense() < ((Chestplate) item).getDefense()) {
+                        System.out.println("You equipped a better chestplate.");
+                        armor.setChestplate((Chestplate) item);
+                    }
                 }
-            } else if (item.getName().equals("Leggings")) {
-                if (armor.getLeggings().getDefense() < ((Leggings) item).getDefense()) {
-                    System.out.println("You equipped better leggings.");
-                    armor.setLeggings((Leggings) item);
+                case "Leggings" -> {
+                    if (armor.getLeggings().getDefense() < ((Leggings) item).getDefense()) {
+                        System.out.println("You equipped better leggings.");
+                        armor.setLeggings((Leggings) item);
+                    }
                 }
-            } else if (item.getName().equals("Boots")) {
-                if (armor.getBoots().getDefense() < ((Boots) item).getDefense()) {
-                    System.out.println("You equipped better boots.");
-                    armor.setBoots((Boots) item);
+                case "Boots" -> {
+                    if (armor.getBoots().getDefense() < ((Boots) item).getDefense()) {
+                        System.out.println("You equipped better boots.");
+                        armor.setBoots((Boots) item);
+                    }
                 }
-            } else if (item.getName().equals("Sword")) {
-                if (sword.getDamage() < ((Sword) item).getDamage()) {
-                    System.out.println("You equipped a better sword.");
-                    sword = (Sword) item;
+                case "Sword" -> {
+                    if (sword.getDamage() < ((Sword) item).getDamage()) {
+                        System.out.println("You equipped a better sword.");
+                        sword = (Sword) item;
+                    }
                 }
             }
         }

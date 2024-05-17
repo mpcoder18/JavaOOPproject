@@ -53,6 +53,7 @@ public class Room implements Inspectable, Serializable {
      * Method to add a door to a room.
      *
      * @param door Door to add to the room
+     * @param addBackDoor True if the door should be added to the connecting room as well, false otherwise
      */
     public void addDoor(Door door, boolean addBackDoor) {
         if (!doors.contains(door)) {
@@ -65,21 +66,6 @@ public class Room implements Inspectable, Serializable {
 
     public void addNPC(NPC npc) {
         npcs.add(npc);
-    }
-
-    /**
-     * Method to check if a room is connected to another room.
-     *
-     * @param otherRoom Room to check if it is connected to
-     * @return True if the room is connected to the other room, false otherwise
-     */
-    public boolean isConnectedTo(Room otherRoom) {
-        for (Door door : doors) {
-            if (door.getConnectingRoom() == otherRoom) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public void shuffleDoors() {

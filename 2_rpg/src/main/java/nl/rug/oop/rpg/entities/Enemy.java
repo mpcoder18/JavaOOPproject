@@ -1,6 +1,6 @@
 package nl.rug.oop.rpg.entities;
 
-import nl.rug.oop.rpg.game.Combat;
+import nl.rug.oop.rpg.menus.Combat;
 import nl.rug.oop.rpg.game.Game;
 import nl.rug.oop.rpg.interfaces.Attackable;
 import nl.rug.oop.rpg.player.Player;
@@ -24,7 +24,7 @@ public class Enemy extends NPC implements Attackable, Serializable {
     /**
      * Method to attack a player.
      *
-     * @param attackable entity to attack (Casted to Player)
+     * @param attackable entity to attack (Cast to Player)
      */
     public void attack(Attackable attackable) {
         Player player = (Player) attackable;

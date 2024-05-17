@@ -1,6 +1,6 @@
 package nl.rug.oop.rpg.entities;
 
-import nl.rug.oop.rpg.ChoiceMenu;
+import nl.rug.oop.rpg.menus.ChoiceMenu;
 import nl.rug.oop.rpg.game.Game;
 import nl.rug.oop.rpg.inventory.items.Sword;
 import nl.rug.oop.rpg.player.Player;

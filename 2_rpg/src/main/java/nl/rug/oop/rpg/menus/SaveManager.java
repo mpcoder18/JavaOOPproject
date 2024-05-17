@@ -1,4 +1,4 @@
-package nl.rug.oop.rpg;
+package nl.rug.oop.rpg.menus;
 
 import nl.rug.oop.rpg.game.Game;
 
@@ -21,7 +21,11 @@ public class SaveManager {
     public void quickSave(Game game) {
         File saveDir = new File("savedgames");
         if (!saveDir.exists()) {
-            saveDir.mkdir();
+            boolean created = saveDir.mkdir();
+            if (!created) {
+                System.out.println("Could not create save folder.");
+                return;
+            }
         }
         File saveFile = new File("savedgames/quicksave.ser");
         saveTo(saveFile, game);

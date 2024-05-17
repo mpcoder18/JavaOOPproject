@@ -1,6 +1,6 @@
 package nl.rug.oop.rpg.entities;
 
-import nl.rug.oop.rpg.ChoiceMenu;
+import nl.rug.oop.rpg.menus.ChoiceMenu;
 import nl.rug.oop.rpg.inventory.Item;
 import nl.rug.oop.rpg.inventory.items.Sword;
 import nl.rug.oop.rpg.inventory.items.armor.Boots;
@@ -73,7 +73,8 @@ public class TraderMenu {
             buyMenu.addChoice(i, () -> sellItem(player, inventory.get(finalI)),
                     description + " - " + inventory.get(i).getValue() + " gold");
         }
-        buyMenu.addChoice(inventory.size(), () -> {}, "Exit");
+        buyMenu.addChoice(inventory.size(), () -> {
+        }, "Exit");
         buyMenu.run(player.getGame().getScanner());
     }
 
@@ -90,22 +91,23 @@ public class TraderMenu {
             sellMenu.addChoice(i, () -> buyItem(player, player.getInventory().get(finalI)),
                     description + " - " + player.getInventory().get(i).getValue() + " gold");
         }
-        sellMenu.addChoice(player.getInventory().size(), () -> {}, "Exit");
+        sellMenu.addChoice(player.getInventory().size(), () -> {
+        }, "Exit");
         sellMenu.run(player.getGame().getScanner());
     }
 
     private String getDescription(Player player, int i) {
-        return getString(i, player.getInventory(), this.trader);
+        return getString(i, player.getInventory());
     }
 
     private String getDescription(Trader trader, int i) {
-        return getString(i, trader.getInventory(), trader);
+        return getString(i, trader.getInventory());
     }
 
-    private String getString(int i, List<Item> inventory, Trader trader) {
+    private String getString(int i, List<Item> inventory) {
         String description = inventory.get(i).getName();
         return switch (description) {
-            case "Sword" ->  description + " (" + ((Sword) inventory.get(i)).getDamage() + " damage)";
+            case "Sword" -> description + " (" + ((Sword) inventory.get(i)).getDamage() + " damage)";
             case "Helmet" -> description + " (" + ((Helmet) inventory.get(i)).getDefense() + " defense)";
             case "Chestplate" -> description + " (" + ((Chestplate) inventory.get(i)).getDefense() + " defense)";
             case "Leggings" -> description + " (" + ((Leggings) inventory.get(i)).getDefense() + " defense)";

@@ -1,6 +1,7 @@
-package nl.rug.oop.rpg.game;
+package nl.rug.oop.rpg.menus;
 
 import nl.rug.oop.rpg.entities.NPC;
+import nl.rug.oop.rpg.game.Game;
 import nl.rug.oop.rpg.interfaces.Attackable;
 import nl.rug.oop.rpg.player.Player;
 
