@@ -34,6 +34,18 @@ public class Combat {
      * Method to start the combat loop.
      */
     public void interact() {
+        System.out.println("You have " + (attacker.getHealth() + ((Player) attacker).getArmor().getDefense())
+                + " health (+ armor) and your sword deals " + ((Player) attacker).getSword().getDamage() + " damage.");
+        System.out.println("The enemy has " + opponent.getHealth() + " health and deals " +
+                ((NPC) opponent).getDamage() + " damage.");
+
+        ChoiceMenu choiceMenu = new ChoiceMenu("What do you want to do?");
+        choiceMenu.addChoice(0, this::fightEnemy, "Fight");
+        choiceMenu.addChoice(1, () -> System.out.println("You run away"), "Run away");
+        choiceMenu.run(game.getScanner());
+    }
+
+    private void fightEnemy() {
         while (isAlive(attacker) && isAlive(opponent)) {
             attacker.attack(opponent);
             if (isAlive(opponent)) {
