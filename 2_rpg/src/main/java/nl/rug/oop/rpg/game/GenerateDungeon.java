@@ -99,8 +99,8 @@ public class GenerateDungeon {
         // Generate a random description for the room
         room.setDescription(roomDescriptions.get((int) (Math.random() * roomDescriptions.size())));
 
-        // Add up to 3 NPCs to the room
-        int numberOfNPCs = (int) (Math.random() * 3 + 1);
+        // Add between 3 and 5 NPCs to the room
+        int numberOfNPCs = (int) (Math.random() * 3 + 3);
         for (int i = 0; i < numberOfNPCs; i++) {
             room.addNPC(randomNPC());
         }

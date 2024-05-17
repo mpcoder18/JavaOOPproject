@@ -57,7 +57,7 @@ public class Player implements Attackable, Serializable {
         this.currentRoom = currentRoom;
         this.health = health;
         this.money = 0;
-        this.sword = new Sword("Fists", "Your fists", -1, 7);
+        this.sword = new Sword("Sword", "A wooden sword", -1, 7);
         this.armor = new Armor();
         this.inventory = new ArrayList<>();
     }
