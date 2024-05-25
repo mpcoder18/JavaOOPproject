@@ -21,6 +21,7 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("RTS");
         frame.setSize(800, 600);
+        frame.setPreferredSize(frame.getSize());
         frame.setLocationRelativeTo(null);
         frame.pack();
         frame.setVisible(true);
