@@ -34,6 +34,7 @@ public class Main {
         graphManager.addEdge(new Edge(3, "Edge 3", graphManager.getNodes().get(2), graphManager.getNodes().get(0)));
 
         Panel panel = new Panel(graphManager);
+        graphManager.addObserver(panel);
         frame.add(panel);
 
         JToolBar toolBar = new JToolBar();
@@ -46,6 +47,8 @@ public class Main {
         toolBar.add(addEdgeButton);
         toolBar.add(removeEdgeButton);
         frame.add(toolBar, BorderLayout.NORTH);
+
+
 
         frame.pack();
         frame.setVisible(true);

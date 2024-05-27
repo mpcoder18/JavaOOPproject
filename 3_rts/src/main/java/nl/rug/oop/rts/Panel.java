@@ -3,13 +3,15 @@ package nl.rug.oop.rts;
 import javax.swing.*;
 import java.awt.*;
 
-public class Panel extends JPanel {
+public class Panel extends JPanel implements Observer {
     GraphManager graphManager;
 
     public Panel(GraphManager graphManager) {
         super();
         setBackground(Color.RED);
         this.graphManager = graphManager;
+        addMouseListener(new NodeSelector(graphManager));
+        addMouseMotionListener(new NodeSelector(graphManager));
     }
 
     @Override
@@ -22,10 +24,20 @@ public class Panel extends JPanel {
             g.drawString(edge.getName(), (edge.getStartNode().getX() + edge.getEndNode().getX())/2, (edge.getStartNode().getY() + edge.getEndNode().getY())/2);
         }
         for (Node node : graphManager.getNodes()) {
-            g.setColor(Color.BLACK);
-            g.fillRect(node.getX(), node.getY(), 50, 50);
+            if(node.isSelected()) {
+                g.setColor(Color.BLUE);
+                g.fillRect(node.getX(), node.getY(), 50, 50);
+            } else {
+                g.setColor(Color.BLACK);
+                g.fillRect(node.getX(), node.getY(), 50, 50);
+            }
             g.setColor(Color.WHITE);
             g.drawString(node.getName(), node.getX(), node.getY());
         }
+    }
+
+    @Override
+    public void update() {
+        repaint();
     }
 }

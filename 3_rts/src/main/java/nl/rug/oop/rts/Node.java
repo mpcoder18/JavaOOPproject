@@ -1,6 +1,7 @@
 package nl.rug.oop.rts;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +13,14 @@ public class Node {
     @Getter
     private List<Edge> edgeList;
     @Getter
+    @Setter
     private int x;
     @Getter
+    @Setter
     private int y;
+    @Getter
+    @Setter
+    private boolean selected;
 
     public Node(int id, String name, int x, int y) {
         this.ID = id;
@@ -22,6 +28,7 @@ public class Node {
         this.edgeList = new ArrayList<>();
         this.x = x;
         this.y = y;
+        this.selected = false;
     }
 
 }

@@ -5,15 +5,17 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphManager {
+public class GraphManager implements Observable {
     @Getter
     private List<Node> nodes;
     @Getter
     private List<Edge> edges;
+    private List<Observer> observers;
 
     public GraphManager() {
         nodes = new ArrayList<>();
         edges = new ArrayList<>();
+        observers = new ArrayList<>();
     }
 
     public void addNode(Node node){
@@ -34,5 +36,16 @@ public class GraphManager {
 
     public void removeEdge(Edge edge) {
         edges.remove(edge);
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    public void notifyObservers() {
+        for(Observer observer : observers) {
+            observer.update();
+        }
     }
 }
