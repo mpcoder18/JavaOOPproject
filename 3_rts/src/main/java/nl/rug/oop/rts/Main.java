@@ -25,7 +25,15 @@ public class Main {
         frame.setPreferredSize(frame.getSize());
         frame.setLocationRelativeTo(null);
 
-        Panel panel = new Panel();
+        GraphManager graphManager = new GraphManager();
+        graphManager.addNode(new Node(1, "Node 1", 100, 100));
+        graphManager.addNode(new Node(2, "Node 2", 200, 200));
+        graphManager.addNode(new Node(3, "Node 3", 100, 300));
+        graphManager.addEdge(new Edge(1, "Edge 1", graphManager.getNodes().get(0), graphManager.getNodes().get(1)));
+        graphManager.addEdge(new Edge(2, "Edge 2", graphManager.getNodes().get(1), graphManager.getNodes().get(2)));
+        graphManager.addEdge(new Edge(3, "Edge 3", graphManager.getNodes().get(2), graphManager.getNodes().get(0)));
+
+        Panel panel = new Panel(graphManager);
         frame.add(panel);
 
         JToolBar toolBar = new JToolBar();

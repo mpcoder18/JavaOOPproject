@@ -1,10 +1,14 @@
 package nl.rug.oop.rts;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class GraphManager {
+    @Getter
     private List<Node> nodes;
+    @Getter
     private List<Edge> edges;
 
     public GraphManager() {
