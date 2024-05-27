@@ -1,6 +1,7 @@
 package nl.rug.oop.rts;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +12,15 @@ public class GraphManager implements Observable {
     @Getter
     private List<Edge> edges;
     private List<Observer> observers;
+    @Getter
+    @Setter
+    protected List<Node> selectedNodes;
 
     public GraphManager() {
         nodes = new ArrayList<>();
         edges = new ArrayList<>();
         observers = new ArrayList<>();
+        selectedNodes = new ArrayList<>();
     }
 
     public void addNode(Node node){
@@ -25,7 +30,7 @@ public class GraphManager implements Observable {
 
     public void removeNode(Node node) {
         for(Edge edge : node.getEdgeList()) {
-            edges.remove(edge);
+            removeEdge(edge);
         }
         nodes.remove(node);
     }

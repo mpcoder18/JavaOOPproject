@@ -26,12 +26,18 @@ public class Main {
         frame.setLocationRelativeTo(null);
 
         GraphManager graphManager = new GraphManager();
-        graphManager.addNode(new Node(1, "Node 1", 100, 100));
-        graphManager.addNode(new Node(2, "Node 2", 200, 200));
-        graphManager.addNode(new Node(3, "Node 3", 100, 300));
-        graphManager.addEdge(new Edge(1, "Edge 1", graphManager.getNodes().get(0), graphManager.getNodes().get(1)));
-        graphManager.addEdge(new Edge(2, "Edge 2", graphManager.getNodes().get(1), graphManager.getNodes().get(2)));
-        graphManager.addEdge(new Edge(3, "Edge 3", graphManager.getNodes().get(2), graphManager.getNodes().get(0)));
+        Node node1 = new Node(1, "Node 1", 100, 100);
+        Node node2 = new Node(2, "Node 2", 200, 200);
+        Node node3 = new Node(3, "Node 3", 100, 300);
+        Edge edge1 = new Edge(1, "Edge 1", node1, node2);
+        Edge edge2 = new Edge(2, "Edge 2", node2, node3);
+        Edge edge3 = new Edge(3, "Edge 3", node3, node1);
+        graphManager.addNode(node1);
+        graphManager.addNode(node2);
+        graphManager.addNode(node3);
+        graphManager.addEdge(edge1);
+        graphManager.addEdge(edge2);
+        graphManager.addEdge(edge3);
 
         Panel panel = new Panel(graphManager);
         graphManager.addObserver(panel);
@@ -48,6 +54,20 @@ public class Main {
         toolBar.add(removeEdgeButton);
         frame.add(toolBar, BorderLayout.NORTH);
 
+        addNodeButton.addActionListener(e -> {
+            Node node = new Node(graphManager.getNodes().size() + 1, "Node " + (graphManager.getNodes().size() + 1), 0, 0);
+            graphManager.addNode(node);
+            graphManager.notifyObservers();
+        });
+
+        removeNodeButton.addActionListener(e -> {
+            if (graphManager.getSelectedNodes().size() > 0) {
+                for (Node node : graphManager.getSelectedNodes()) {
+                    graphManager.removeNode(node);
+                }
+                graphManager.notifyObservers();
+            }
+        });
 
 
         frame.pack();

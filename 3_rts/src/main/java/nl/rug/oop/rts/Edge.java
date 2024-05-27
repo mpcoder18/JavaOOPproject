@@ -16,5 +16,7 @@ public class Edge {
         this.name = name;
         this.startNode = startNode;
         this.endNode = endNode;
+        startNode.addEdge(this);
+        endNode.addEdge(this);
     }
 }

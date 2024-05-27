@@ -31,4 +31,11 @@ public class Node {
         this.selected = false;
     }
 
+    public void addEdge(Edge edge) {
+        edgeList.add(edge);
+    }
+
+    public void removeEdge(Edge edge) {
+        edgeList.remove(edge);
+    }
 }
