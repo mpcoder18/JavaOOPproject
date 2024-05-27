@@ -61,12 +61,7 @@ public class Main {
         });
 
         removeNodeButton.addActionListener(e -> {
-            if (graphManager.getSelectedNodes().size() > 0) {
-                for (Node node : graphManager.getSelectedNodes()) {
-                    graphManager.removeNode(node);
-                }
-                graphManager.notifyObservers();
-            }
+            graphManager.removeNode(graphManager.getSelectedNode());
         });
 
 

@@ -14,13 +14,12 @@ public class GraphManager implements Observable {
     private List<Observer> observers;
     @Getter
     @Setter
-    protected List<Node> selectedNodes;
+    protected Node selectedNode;
 
     public GraphManager() {
         nodes = new ArrayList<>();
         edges = new ArrayList<>();
         observers = new ArrayList<>();
-        selectedNodes = new ArrayList<>();
     }
 
     public void addNode(Node node){

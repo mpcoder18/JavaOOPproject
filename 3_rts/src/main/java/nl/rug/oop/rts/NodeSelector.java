@@ -6,49 +6,54 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NodeSelector extends MouseAdapter {
-    private GraphManager graphManager;
+    private final GraphManager graphManager;
+    private int offsetX;
+    private int offsetY;
 
     public NodeSelector(GraphManager graphManager) {
         this.graphManager = graphManager;
     }
 
+    private Node findNode(int x, int y) {
+        Node node = null;
+        int padding = 10;
+        int buttonWidth = 50;
+        for (Node n : graphManager.getNodes()) {
+            if (x >= n.getX()-padding && x <= n.getX() + buttonWidth+padding && y >= n.getY()-padding && y <= n.getY() + buttonWidth+padding) {
+                node = n;
+            }
+        }
+        return node;
+    }
+
     @Override
-    public void mouseClicked(MouseEvent e) {
-        for (Node node : graphManager.getNodes()) {
-            if (node.getX() < e.getX() && e.getX() < node.getX() + 50 && node.getY() < e.getY() && e.getY() < node.getY() + 50) {
-                if (!node.isSelected()) {
-                    node.setSelected(true);
-                    graphManager.selectedNodes.add(node);
-                } else {
-                    node.setSelected(false);
-                    graphManager.selectedNodes.remove(node);
-                }
-            } else {
-                node.setSelected(false);
-                graphManager.selectedNodes.remove(node);
+    public void mousePressed(MouseEvent e) {
+        Node node = findNode(e.getX(), e.getY());
+        if (node != null) { // Node found, select it if not already selected
+            if (graphManager.selectedNode != null) {
+                graphManager.selectedNode.setSelected(false);
+            }
+            node.setSelected(true);
+            graphManager.selectedNode = node;
+            offsetX = e.getX() - node.getX();
+            offsetY = e.getY() - node.getY();
+            System.out.println("OffsetX: " + offsetX + " OffsetY: " + offsetY);
+        } else { // Clicked on empty space, deselect node if one is selected
+            if (graphManager.selectedNode != null) {
+                graphManager.selectedNode.setSelected(false);
+                graphManager.selectedNode = null;
             }
         }
         graphManager.notifyObservers();
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-        graphManager.notifyObservers();
-    }
-
-    @Override
     public void mouseDragged(MouseEvent e) {
-        graphManager.notifyObservers();
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        for (Node node : graphManager.selectedNodes) {
-            node.setX(e.getX()-25);
-            node.setY(e.getY()-25);
-            node.setSelected(false);
+        if (graphManager.selectedNode != null) {
+            System.out.println("OffsetX: " + offsetX + " OffsetY: " + offsetY);
+            graphManager.selectedNode.setX(e.getX() - offsetX);
+            graphManager.selectedNode.setY(e.getY() - offsetY);
+            graphManager.notifyObservers();
         }
-        graphManager.selectedNodes.clear();
-        graphManager.notifyObservers();
     }
 }

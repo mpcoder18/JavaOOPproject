@@ -10,8 +10,9 @@ public class Panel extends JPanel implements Observer {
         super();
         setBackground(Color.RED);
         this.graphManager = graphManager;
-        addMouseListener(new NodeSelector(graphManager));
-        addMouseMotionListener(new NodeSelector(graphManager));
+        NodeSelector nodeSelector = new NodeSelector(graphManager);
+        addMouseListener(nodeSelector);
+        addMouseMotionListener(nodeSelector);
     }
 
     @Override
