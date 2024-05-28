@@ -61,9 +61,21 @@ public class Main {
         });
 
         removeNodeButton.addActionListener(e -> {
-            graphManager.removeNode(graphManager.getSelectedNode());
+            if (graphManager.getSelectedNode() != null) {
+                graphManager.removeNode(graphManager.getSelectedNode());
+            }
+            graphManager.notifyObservers();
         });
 
+        addEdgeButton.addActionListener(e -> {
+            if (graphManager.getSelectedNode() != null) {
+                if (graphManager.startNode == null) {
+                    graphManager.startNode = graphManager.getSelectedNode();
+                }
+            }
+            graphManager.notifyObservers();
+            // TODO: Deactivate button on no selected node
+        });
 
         frame.pack();
         frame.setVisible(true);
