@@ -77,6 +77,13 @@ public class Main {
             // TODO: Deactivate button on no selected node
         });
 
+        removeEdgeButton.addActionListener(e -> {
+            if (graphManager.getSelectedEdge() != null) {
+                graphManager.removeEdge(graphManager.getSelectedEdge());
+            }
+            graphManager.notifyObservers();
+        });
+
         frame.pack();
         frame.setVisible(true);
     }

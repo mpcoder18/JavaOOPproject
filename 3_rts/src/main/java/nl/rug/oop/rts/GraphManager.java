@@ -16,6 +16,8 @@ public class GraphManager implements Observable {
     @Setter
     protected Node selectedNode;
     protected Node startNode;
+    @Getter
+    @Setter
     protected Edge selectedEdge;
 
     public GraphManager() {

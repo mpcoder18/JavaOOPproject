@@ -19,7 +19,6 @@ public class Panel extends JPanel implements Observer {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         for (Edge edge : graphManager.getEdges()) {
-            // Set stroke width
             ((Graphics2D) g).setStroke(new BasicStroke(3));
             if (edge.isSelected()) {
                 g.setColor(Color.BLUE);
