@@ -33,9 +33,9 @@ public class NodeSelector extends MouseAdapter {
             int y1 = e.getStartNode().getY() + 25;
             int x2 = e.getEndNode().getX() + 25;
             int y2 = e.getEndNode().getY() + 25;
-            // Calculate the distance between the point and the line
-            int distance = (int) Math.abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) / (int) Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
-            if (distance <= padding) {
+            // Calculate the distance between the point and the line, but not beyond the edge
+            double distance = Math.abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) / Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
+            if (distance <= padding && x >= Math.min(x1, x2) - padding && x <= Math.max(x1, x2) + padding && y >= Math.min(y1, y2) - padding && y <= Math.max(y1, y2) + padding) {
                 edge = e;
             }
         }

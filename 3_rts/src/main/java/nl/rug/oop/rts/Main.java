@@ -66,6 +66,7 @@ public class Main {
         removeNodeButton.addActionListener(e -> {
             if (graphManager.getSelectedNode() != null) {
                 graphManager.removeNode(graphManager.getSelectedNode());
+                graphManager.selectedNode = null;
             }
             graphManager.notifyObservers();
         });
@@ -82,6 +83,7 @@ public class Main {
         removeEdgeButton.addActionListener(e -> {
             if (graphManager.getSelectedEdge() != null) {
                 graphManager.removeEdge(graphManager.getSelectedEdge());
+                graphManager.selectedEdge = null;
             }
             graphManager.notifyObservers();
         });
