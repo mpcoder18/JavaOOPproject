@@ -9,7 +9,8 @@ import java.util.List;
 public class Node {
     private final int ID;
     @Getter
-    private final String name;
+    @Setter
+    private String name;
     @Getter
     private List<Edge> edgeList;
     @Getter

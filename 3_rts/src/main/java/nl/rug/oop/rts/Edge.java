@@ -6,7 +6,8 @@ import lombok.Setter;
 public class Edge {
     private final int ID;
     @Getter
-    private final String name;
+    @Setter
+    private String name;
     @Getter
     private final Node startNode;
     @Getter

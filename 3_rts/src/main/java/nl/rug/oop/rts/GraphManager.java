@@ -29,7 +29,6 @@ public class GraphManager implements Observable {
 
     public void addNode(Node node){
         nodes.add(node);
-
     }
 
     public void removeNode(Node node) {

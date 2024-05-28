@@ -52,6 +52,9 @@ public class Main {
         toolBar.add(removeNodeButton);
         toolBar.add(addEdgeButton);
         toolBar.add(removeEdgeButton);
+        ButtonObserver buttonObserver = new ButtonObserver(graphManager, addNodeButton, removeNodeButton, addEdgeButton, removeEdgeButton);
+        graphManager.addObserver(buttonObserver);
+        graphManager.notifyObservers();
         frame.add(toolBar, BorderLayout.NORTH);
 
         addNodeButton.addActionListener(e -> {
@@ -74,7 +77,6 @@ public class Main {
                 }
             }
             graphManager.notifyObservers();
-            // TODO: Deactivate button on no selected node
         });
 
         removeEdgeButton.addActionListener(e -> {
@@ -83,6 +85,47 @@ public class Main {
             }
             graphManager.notifyObservers();
         });
+
+        JPanel optionsPanel = new JPanel();
+        JLabel messageLabel = new JLabel("Nothing selected");
+        optionsPanel.add(messageLabel);
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panel, optionsPanel);
+        splitPane.setOneTouchExpandable(true);
+        splitPane.setDividerLocation(600);
+
+        frame.add(splitPane, BorderLayout.CENTER);
+
+        graphManager.addObserver(new Observer() {
+            @Override
+            public void update() {
+                optionsPanel.removeAll();
+                if (graphManager.getSelectedNode() != null) {
+                    JLabel nameLabel = new JLabel("Name:");
+                    JTextField nameField = new JTextField(graphManager.getSelectedNode().getName());
+                    nameField.addActionListener(e -> {
+                        graphManager.getSelectedNode().setName(nameField.getText());
+                        graphManager.notifyObservers();
+                    });
+                    optionsPanel.add(nameLabel);
+                    optionsPanel.add(nameField);
+                } else if (graphManager.getSelectedEdge() != null) {
+                    JLabel nameLabel = new JLabel("Name:");
+                    JTextField nameField = new JTextField(graphManager.getSelectedEdge().getName());
+                    nameField.addActionListener(e -> {
+                        graphManager.getSelectedEdge().setName(nameField.getText());
+                        graphManager.notifyObservers();
+                    });
+                    optionsPanel.add(nameLabel);
+                    optionsPanel.add(nameField);
+                } else {
+                    optionsPanel.add(messageLabel);
+                }
+                optionsPanel.revalidate();
+                optionsPanel.repaint();
+            }
+        });
+
 
         frame.pack();
         frame.setVisible(true);
