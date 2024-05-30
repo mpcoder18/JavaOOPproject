@@ -26,18 +26,6 @@ public class Main {
         frame.setLocationRelativeTo(null);
 
         GraphManager graphManager = new GraphManager();
-        Node node1 = new Node(1, "Node 1", 100, 100);
-        Node node2 = new Node(2, "Node 2", 200, 200);
-        Node node3 = new Node(3, "Node 3", 100, 300);
-        Edge edge1 = new Edge(1, "Edge 1", node1, node2);
-        Edge edge2 = new Edge(2, "Edge 2", node2, node3);
-        Edge edge3 = new Edge(3, "Edge 3", node3, node1);
-        graphManager.addNode(node1);
-        graphManager.addNode(node2);
-        graphManager.addNode(node3);
-        graphManager.addEdge(edge1);
-        graphManager.addEdge(edge2);
-        graphManager.addEdge(edge3);
 
         Panel panel = new Panel(graphManager);
         graphManager.addObserver(panel);
@@ -92,9 +80,9 @@ public class Main {
         JLabel messageLabel = new JLabel("Nothing selected");
         optionsPanel.add(messageLabel);
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panel, optionsPanel);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, optionsPanel, panel);
         splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerLocation(600);
+        splitPane.setDividerLocation(200);
 
         frame.add(splitPane, BorderLayout.CENTER);
 
