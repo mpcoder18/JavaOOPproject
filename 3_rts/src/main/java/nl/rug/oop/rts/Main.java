@@ -4,6 +4,8 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 /**
  * Main class of the application. Add more details here.
@@ -85,7 +87,7 @@ public class Main {
         splitPane.setDividerLocation(200);
 
         frame.add(splitPane, BorderLayout.CENTER);
-
+        
         graphManager.addObserver(new Observer() {
             @Override
             public void update() {
@@ -116,6 +118,13 @@ public class Main {
             }
         });
 
+        // Resize listener
+        frame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                graphManager.notifyObservers();
+            }
+        });
 
         frame.pack();
         frame.setVisible(true);

@@ -52,6 +52,19 @@ public class Panel extends JPanel implements Observer {
 
     @Override
     public void update() {
+        // Make sure nodes are within the bounds of the panel
+        for (Node node : graphManager.getNodes()) {
+            if (node.getX() < 0) {
+                node.setX(0);
+            } else if (node.getX() > getWidth() - 50) {
+                node.setX(getWidth() - 50);
+            }
+            if (node.getY() < 0) {
+                node.setY(0);
+            } else if (node.getY() > getHeight() - 50) {
+                node.setY(getHeight() - 50);
+            }
+        }
         repaint();
     }
 }
