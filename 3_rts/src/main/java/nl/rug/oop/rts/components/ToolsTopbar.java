@@ -20,12 +20,12 @@ public class ToolsTopbar extends JPanel {
 
         ButtonObserver buttonObserver = new ButtonObserver(graphManager, addNodeButton, removeNodeButton, addEdgeButton, removeEdgeButton);
         graphManager.addObserver(buttonObserver);
-        graphManager.notifyObservers();
+        graphManager.notifyAllObservers();
 
         addNodeButton.addActionListener(e -> {
             Node node = new Node(graphManager.getNodes().size() + 1, "Node " + (graphManager.getNodes().size() + 1), 0, 0);
             graphManager.addNode(node);
-            graphManager.notifyObservers();
+            graphManager.notifyAllObservers();
         });
 
         removeNodeButton.addActionListener(e -> {
@@ -33,7 +33,7 @@ public class ToolsTopbar extends JPanel {
                 graphManager.removeNode(graphManager.getSelectedNode());
                 graphManager.setSelectedNode(null);
             }
-            graphManager.notifyObservers();
+            graphManager.notifyAllObservers();
         });
 
         addEdgeButton.addActionListener(e -> {
@@ -42,7 +42,7 @@ public class ToolsTopbar extends JPanel {
                     graphManager.setStartNode(graphManager.getSelectedNode());
                 }
             }
-            graphManager.notifyObservers();
+            graphManager.notifyAllObservers();
         });
 
         removeEdgeButton.addActionListener(e -> {
@@ -50,7 +50,7 @@ public class ToolsTopbar extends JPanel {
                 graphManager.removeEdge(graphManager.getSelectedEdge());
                 graphManager.setSelectedEdge(null);
             }
-            graphManager.notifyObservers();
+            graphManager.notifyAllObservers();
         });
     }
 

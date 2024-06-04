@@ -13,7 +13,7 @@ public class OptionsPanel extends JPanel implements Observer {
         this.graphManager = graphManager;
         messageLabel = new JLabel("Select a node or edge");
         add(messageLabel);
-        graphManager.addObserver(this);
+        this.observe(graphManager);
     }
 
     public void update() {
@@ -23,7 +23,7 @@ public class OptionsPanel extends JPanel implements Observer {
             JTextField nameField = new JTextField(graphManager.getSelectedNode().getName());
             nameField.addActionListener(e -> {
                 graphManager.getSelectedNode().setName(nameField.getText());
-                graphManager.notifyObservers();
+                graphManager.notifyAllObservers();
             });
             add(nameLabel);
             add(nameField);
@@ -32,7 +32,7 @@ public class OptionsPanel extends JPanel implements Observer {
             JTextField nameField = new JTextField(graphManager.getSelectedEdge().getName());
             nameField.addActionListener(e -> {
                 graphManager.getSelectedEdge().setName(nameField.getText());
-                graphManager.notifyObservers();
+                graphManager.notifyAllObservers();
             });
             add(nameLabel);
             add(nameField);

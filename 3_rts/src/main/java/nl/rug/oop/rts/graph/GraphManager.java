@@ -50,10 +50,4 @@ public class GraphManager implements Observable {
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
-
-    public void notifyObservers() {
-        for(Observer observer : observers) {
-            observer.update();
-        }
-    }
 }

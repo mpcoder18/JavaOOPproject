@@ -34,7 +34,7 @@ public class Main {
         GraphManager graphManager = new GraphManager();
 
         nl.rug.oop.rts.components.Panel panel = new Panel(graphManager);
-        graphManager.addObserver(panel);
+        panel.observe(graphManager);
         frame.add(panel);
 
         JToolBar toolBar = new JToolBar();
@@ -54,7 +54,7 @@ public class Main {
         frame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                graphManager.notifyObservers();
+                graphManager.notifyAllObservers();
             }
         });
 
