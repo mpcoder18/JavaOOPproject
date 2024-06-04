@@ -41,9 +41,9 @@ public class Panel extends JPanel implements Observer {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        ((Graphics2D) g).setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
+                10.0f, new float[]{10, 10}, 0));
         for (Edge edge : graphManager.getEdges()) {
-            ((Graphics2D) g).setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
-                    10.0f, new float[]{10, 10}, 0));
             if (edge.isSelected()) {
                 g.setColor(Color.RED);
             } else {
@@ -65,6 +65,14 @@ public class Panel extends JPanel implements Observer {
             }
             g.setColor(Color.WHITE);
             g.drawString(node.getName(), node.getX(), node.getY());
+        }
+        NodeSelector nodeSelector = (NodeSelector) getMouseMotionListeners()[0];
+        if (graphManager.getStartNode() != null && nodeSelector.getCurrentMousePosition() != null) {
+            g.setColor(Color.GRAY);
+            g.drawLine(graphManager.getStartNode().getX() + graphManager.getNodeSize() / 2,
+                    graphManager.getStartNode().getY() + graphManager.getNodeSize() / 2,
+                    nodeSelector.getCurrentMousePosition().x,
+                    nodeSelector.getCurrentMousePosition().y);
         }
     }
 

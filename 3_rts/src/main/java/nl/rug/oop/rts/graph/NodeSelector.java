@@ -1,5 +1,8 @@
 package nl.rug.oop.rts.graph;
 
+import lombok.Getter;
+
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -10,6 +13,8 @@ public class NodeSelector extends MouseAdapter {
     private final GraphManager graphManager;
     private int offsetX;
     private int offsetY;
+    @Getter
+    private Point currentMousePosition;
 
     public NodeSelector(GraphManager graphManager) {
         this.graphManager = graphManager;
@@ -104,6 +109,12 @@ public class NodeSelector extends MouseAdapter {
         } else {
             handleEmptySpaceClick();
         }
+        graphManager.notifyAllObservers();
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        currentMousePosition = e.getPoint();
         graphManager.notifyAllObservers();
     }
 
