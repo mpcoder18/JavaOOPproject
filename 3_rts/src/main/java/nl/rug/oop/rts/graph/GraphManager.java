@@ -22,6 +22,7 @@ public class GraphManager implements Observable {
     private Node startNode;
     @Setter
     private Edge selectedEdge;
+    private final int nodeSize = 80;
 
     /**
      * Create a new GraphManager.

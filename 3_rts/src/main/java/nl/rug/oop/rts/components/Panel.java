@@ -25,12 +25,13 @@ public class Panel extends JPanel implements Observer {
      * @param graphManager GraphManager to observe
      */
     public Panel(GraphManager graphManager) {
+        this.graphManager = graphManager;
+
         TextureLoader textureLoader = TextureLoader.getInstance();
         backgroundImage = textureLoader.getTexture("mapTexture", 800, 600);
-        nodeImage = textureLoader.getTexture("node4", 50, 50);
-        nodeImageSelected = textureLoader.getTexture("node3", 50, 50);
+        nodeImage = textureLoader.getTexture("node4", graphManager.getNodeSize(), graphManager.getNodeSize());
+        nodeImageSelected = textureLoader.getTexture("node3", graphManager.getNodeSize(), graphManager.getNodeSize());
 
-        this.graphManager = graphManager;
         NodeSelector nodeSelector = new NodeSelector(graphManager);
         addMouseListener(nodeSelector);
         addMouseMotionListener(nodeSelector);
@@ -41,15 +42,17 @@ public class Panel extends JPanel implements Observer {
         super.paintComponent(g);
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         for (Edge edge : graphManager.getEdges()) {
-            ((Graphics2D) g).setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
+            ((Graphics2D) g).setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
                     10.0f, new float[]{10, 10}, 0));
             if (edge.isSelected()) {
                 g.setColor(Color.RED);
             } else {
                 g.setColor(new Color(161, 100, 21));
             }
-            g.drawLine(edge.getStartNode().getX() + 25, edge.getStartNode().getY() + 25,
-                    edge.getEndNode().getX() + 25, edge.getEndNode().getY() + 25);
+            g.drawLine(edge.getStartNode().getX() + graphManager.getNodeSize() / 2,
+                    edge.getStartNode().getY() + graphManager.getNodeSize() / 2,
+                    edge.getEndNode().getX() + graphManager.getNodeSize() / 2,
+                    edge.getEndNode().getY() + graphManager.getNodeSize() / 2);
             g.setColor(Color.WHITE);
             g.drawString(edge.getName(), (edge.getStartNode().getX() + edge.getEndNode().getX()) / 2,
                     (edge.getStartNode().getY() + edge.getEndNode().getY()) / 2);
@@ -71,13 +74,13 @@ public class Panel extends JPanel implements Observer {
         for (Node node : graphManager.getNodes()) {
             if (node.getX() < 0) {
                 node.setX(0);
-            } else if (node.getX() > getWidth() - 50) {
-                node.setX(getWidth() - 50);
+            } else if (node.getX() > getWidth() - graphManager.getNodeSize()) {
+                node.setX(getWidth() - graphManager.getNodeSize());
             }
             if (node.getY() < 0) {
                 node.setY(0);
-            } else if (node.getY() > getHeight() - 50) {
-                node.setY(getHeight() - 50);
+            } else if (node.getY() > getHeight() - graphManager.getNodeSize()) {
+                node.setY(getHeight() - graphManager.getNodeSize());
             }
         }
         repaint();

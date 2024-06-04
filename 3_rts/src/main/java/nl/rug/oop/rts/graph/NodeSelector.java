@@ -18,7 +18,7 @@ public class NodeSelector extends MouseAdapter {
     private Node findNode(int x, int y) {
         Node node = null;
         int padding = 10;
-        int buttonWidth = 50;
+        int buttonWidth = graphManager.getNodeSize();
         for (Node n : graphManager.getNodes()) {
             if (x >= n.getX() - padding && x <= n.getX() + buttonWidth + padding && y >= n.getY()
                     - padding && y <= n.getY() + buttonWidth + padding) {
@@ -33,10 +33,10 @@ public class NodeSelector extends MouseAdapter {
         int padding = 10;
         for (Edge e : graphManager.getEdges()) {
             // Apply offset to the coordinates of the nodes
-            int x1 = e.getStartNode().getX() + 25;
-            int y1 = e.getStartNode().getY() + 25;
-            int x2 = e.getEndNode().getX() + 25;
-            int y2 = e.getEndNode().getY() + 25;
+            int x1 = e.getStartNode().getX() + graphManager.getNodeSize() / 2;
+            int y1 = e.getStartNode().getY() + graphManager.getNodeSize() / 2;
+            int x2 = e.getEndNode().getX() + graphManager.getNodeSize() / 2;
+            int y2 = e.getEndNode().getY() + graphManager.getNodeSize() / 2;
             // Calculate the distance between the point and the line, but not beyond the edge
             double distance = Math.abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1)
                     / Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
