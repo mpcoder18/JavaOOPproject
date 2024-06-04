@@ -1,4 +1,6 @@
-package nl.rug.oop.rts;
+package nl.rug.oop.rts.observable;
+
+import nl.rug.oop.rts.graph.GraphManager;
 
 import javax.swing.*;
 

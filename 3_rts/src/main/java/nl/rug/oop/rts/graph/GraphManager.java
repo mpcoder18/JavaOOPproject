@@ -1,24 +1,24 @@
-package nl.rug.oop.rts;
+package nl.rug.oop.rts.graph;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.rts.observable.Observable;
+import nl.rug.oop.rts.observable.Observer;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class GraphManager implements Observable {
-    @Getter
     private List<Node> nodes;
-    @Getter
     private List<Edge> edges;
     private List<Observer> observers;
-    @Getter
     @Setter
-    protected Node selectedNode;
-    protected Node startNode;
-    @Getter
+    private Node selectedNode;
     @Setter
-    protected Edge selectedEdge;
+    private Node startNode;
+    @Setter
+    private Edge selectedEdge;
 
     public GraphManager() {
         nodes = new ArrayList<>();

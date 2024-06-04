@@ -1,6 +1,10 @@
 package nl.rug.oop.rts;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
+import nl.rug.oop.rts.components.OptionsPanel;
+import nl.rug.oop.rts.components.Panel;
+import nl.rug.oop.rts.components.ToolsTopbar;
+import nl.rug.oop.rts.graph.GraphManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +33,7 @@ public class Main {
 
         GraphManager graphManager = new GraphManager();
 
-        Panel panel = new Panel(graphManager);
+        nl.rug.oop.rts.components.Panel panel = new Panel(graphManager);
         graphManager.addObserver(panel);
         frame.add(panel);
 

@@ -1,5 +1,10 @@
-package nl.rug.oop.rts;
+package nl.rug.oop.rts.components;
 
+import nl.rug.oop.rts.graph.Edge;
+import nl.rug.oop.rts.graph.GraphManager;
+import nl.rug.oop.rts.graph.Node;
+import nl.rug.oop.rts.graph.NodeSelector;
+import nl.rug.oop.rts.observable.Observer;
 import nl.rug.oop.rts.util.TextureLoader;
 
 import javax.swing.*;

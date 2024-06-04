@@ -1,7 +1,10 @@
-package nl.rug.oop.rts;
+package nl.rug.oop.rts.components;
+
+import nl.rug.oop.rts.observable.ButtonObserver;
+import nl.rug.oop.rts.graph.GraphManager;
+import nl.rug.oop.rts.graph.Node;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class ToolsTopbar extends JPanel {
     private final JButton addNodeButton;
@@ -28,15 +31,15 @@ public class ToolsTopbar extends JPanel {
         removeNodeButton.addActionListener(e -> {
             if (graphManager.getSelectedNode() != null) {
                 graphManager.removeNode(graphManager.getSelectedNode());
-                graphManager.selectedNode = null;
+                graphManager.setSelectedNode(null);
             }
             graphManager.notifyObservers();
         });
 
         addEdgeButton.addActionListener(e -> {
             if (graphManager.getSelectedNode() != null) {
-                if (graphManager.startNode == null) {
-                    graphManager.startNode = graphManager.getSelectedNode();
+                if (graphManager.getStartNode() == null) {
+                    graphManager.setStartNode(graphManager.getSelectedNode());
                 }
             }
             graphManager.notifyObservers();
@@ -45,7 +48,7 @@ public class ToolsTopbar extends JPanel {
         removeEdgeButton.addActionListener(e -> {
             if (graphManager.getSelectedEdge() != null) {
                 graphManager.removeEdge(graphManager.getSelectedEdge());
-                graphManager.selectedEdge = null;
+                graphManager.setSelectedEdge(null);
             }
             graphManager.notifyObservers();
         });
