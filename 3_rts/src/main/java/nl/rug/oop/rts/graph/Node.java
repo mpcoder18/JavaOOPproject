@@ -6,23 +6,30 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to represent a node in the graph.
+ */
+@Getter
 public class Node {
     private final int ID;
-    @Getter
     @Setter
     private String name;
-    @Getter
     private List<Edge> edgeList;
-    @Getter
     @Setter
     private int x;
-    @Getter
     @Setter
     private int y;
-    @Getter
     @Setter
     private boolean selected;
 
+    /**
+     * Create a new node.
+     *
+     * @param id   ID of the node
+     * @param name name of the node
+     * @param x    x coordinate of the node
+     * @param y    y coordinate of the node
+     */
     public Node(int id, String name, int x, int y) {
         this.ID = id;
         this.name = name;

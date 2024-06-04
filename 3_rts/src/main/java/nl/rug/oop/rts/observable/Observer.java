@@ -1,5 +1,8 @@
 package nl.rug.oop.rts.observable;
 
+/**
+ * Interface for Observer objects.
+ */
 public interface Observer {
     void update();
 

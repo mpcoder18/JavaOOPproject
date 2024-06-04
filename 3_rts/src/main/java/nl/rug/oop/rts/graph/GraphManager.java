@@ -8,6 +8,9 @@ import nl.rug.oop.rts.observable.Observer;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Manages the graph.
+ */
 @Getter
 public class GraphManager implements Observable {
     private List<Node> nodes;
@@ -20,6 +23,9 @@ public class GraphManager implements Observable {
     @Setter
     private Edge selectedEdge;
 
+    /**
+     * Create a new GraphManager.
+     */
     public GraphManager() {
         nodes = new ArrayList<>();
         edges = new ArrayList<>();
@@ -27,12 +33,17 @@ public class GraphManager implements Observable {
         startNode = null;
     }
 
-    public void addNode(Node node){
+    public void addNode(Node node) {
         nodes.add(node);
     }
 
+    /**
+     * Remove a node from the graph.
+     *
+     * @param node Node to remove
+     */
     public void removeNode(Node node) {
-        for(Edge edge : node.getEdgeList()) {
+        for (Edge edge : node.getEdgeList()) {
             removeEdge(edge);
         }
         nodes.remove(node);

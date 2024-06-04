@@ -1,42 +1,62 @@
 package nl.rug.oop.rts.components;
 
-import nl.rug.oop.rts.observable.ButtonObserver;
 import nl.rug.oop.rts.graph.GraphManager;
 import nl.rug.oop.rts.graph.Node;
+import nl.rug.oop.rts.observable.ButtonObserver;
 
 import javax.swing.*;
 
+/**
+ * Topbar with buttons to add and remove nodes and edges.
+ */
 public class ToolsTopbar extends JPanel {
     private final JButton addNodeButton;
     private final JButton removeNodeButton;
     private final JButton addEdgeButton;
     private final JButton removeEdgeButton;
 
+    /**
+     * Create a new tools topbar.
+     *
+     * @param graphManager GraphManager to observe
+     */
     public ToolsTopbar(GraphManager graphManager) {
-        addNodeButton = new JButton("Add Node");
-        removeNodeButton = new JButton("Remove Node");
-        addEdgeButton = new JButton("Add Edge");
-        removeEdgeButton = new JButton("Remove Edge");
+        addNodeButton = createAddNodeButton(graphManager);
+        removeNodeButton = createRemoveNodeButton(graphManager);
+        addEdgeButton = createAddEdgeButton(graphManager);
+        removeEdgeButton = createRemoveEdgeButton(graphManager);
 
-        ButtonObserver buttonObserver = new ButtonObserver(graphManager, addNodeButton, removeNodeButton, addEdgeButton, removeEdgeButton);
-        graphManager.addObserver(buttonObserver);
+        ButtonObserver btnObs = new ButtonObserver(graphManager, removeNodeButton, addEdgeButton, removeEdgeButton);
+        graphManager.addObserver(btnObs);
         graphManager.notifyAllObservers();
+    }
 
-        addNodeButton.addActionListener(e -> {
-            Node node = new Node(graphManager.getNodes().size() + 1, "Node " + (graphManager.getNodes().size() + 1), 0, 0);
+    private JButton createAddNodeButton(GraphManager graphManager) {
+        JButton button = new JButton("Add Node");
+        button.addActionListener(e -> {
+            Node node = new Node(graphManager.getNodes().size() + 1,
+                    "Node " + (graphManager.getNodes().size() + 1), 0, 0);
             graphManager.addNode(node);
             graphManager.notifyAllObservers();
         });
+        return button;
+    }
 
-        removeNodeButton.addActionListener(e -> {
+    private JButton createRemoveNodeButton(GraphManager graphManager) {
+        JButton button = new JButton("Remove Node");
+        button.addActionListener(e -> {
             if (graphManager.getSelectedNode() != null) {
                 graphManager.removeNode(graphManager.getSelectedNode());
                 graphManager.setSelectedNode(null);
             }
             graphManager.notifyAllObservers();
         });
+        return button;
+    }
 
-        addEdgeButton.addActionListener(e -> {
+    private JButton createAddEdgeButton(GraphManager graphManager) {
+        JButton button = new JButton("Add Edge");
+        button.addActionListener(e -> {
             if (graphManager.getSelectedNode() != null) {
                 if (graphManager.getStartNode() == null) {
                     graphManager.setStartNode(graphManager.getSelectedNode());
@@ -44,16 +64,28 @@ public class ToolsTopbar extends JPanel {
             }
             graphManager.notifyAllObservers();
         });
+        return button;
+    }
 
-        removeEdgeButton.addActionListener(e -> {
+    private JButton createRemoveEdgeButton(GraphManager graphManager) {
+        JButton button = new JButton("Remove Edge");
+        button.addActionListener(e -> {
             if (graphManager.getSelectedEdge() != null) {
+                graphManager.getSelectedEdge().getStartNode().removeEdge(graphManager.getSelectedEdge());
+                graphManager.getSelectedEdge().getEndNode().removeEdge(graphManager.getSelectedEdge());
                 graphManager.removeEdge(graphManager.getSelectedEdge());
                 graphManager.setSelectedEdge(null);
             }
             graphManager.notifyAllObservers();
         });
+        return button;
     }
 
+    /**
+     * Add the buttons to the toolbar.
+     *
+     * @param toolBar JToolBar to add the buttons to
+     */
     public void addToToolbar(JToolBar toolBar) {
         toolBar.add(addNodeButton);
         toolBar.add(removeNodeButton);

@@ -5,10 +5,18 @@ import nl.rug.oop.rts.observable.Observer;
 
 import javax.swing.*;
 
+/**
+ * Panel to display options for selected node or edge.
+ */
 public class OptionsPanel extends JPanel implements Observer {
     private final GraphManager graphManager;
     private final JLabel messageLabel;
 
+    /**
+     * Create a new OptionsPanel.
+     *
+     * @param graphManager GraphManager to observe
+     */
     public OptionsPanel(GraphManager graphManager) {
         this.graphManager = graphManager;
         messageLabel = new JLabel("Select a node or edge");
@@ -16,6 +24,9 @@ public class OptionsPanel extends JPanel implements Observer {
         this.observe(graphManager);
     }
 
+    /**
+     * Update the options panel based on the selected node or edge.
+     */
     public void update() {
         removeAll();
         if (graphManager.getSelectedNode() != null) {

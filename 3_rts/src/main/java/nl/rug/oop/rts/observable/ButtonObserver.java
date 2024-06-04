@@ -4,19 +4,28 @@ import nl.rug.oop.rts.graph.GraphManager;
 
 import javax.swing.*;
 
+/**
+ * Class to update buttons based on the selected node or edge.
+ */
 public class ButtonObserver implements Observer {
-    private final JButton addNodeButton;
+    private final GraphManager graphManager;
     private final JButton removeNodeButton;
     private final JButton addEdgeButton;
     private final JButton removeEdgeButton;
-    private final GraphManager graphManager;
 
-    public ButtonObserver(GraphManager graphManager, JButton addNodeButton, JButton removeNodeButton, JButton addEdgeButton, JButton removeEdgeButton) {
-        this.graphManager = graphManager;
-        this.addNodeButton = addNodeButton;
-        this.removeNodeButton = removeNodeButton;
-        this.addEdgeButton = addEdgeButton;
-        this.removeEdgeButton = removeEdgeButton;
+    /**
+     * Create a new ButtonObserver.
+     *
+     * @param gM         GraphManager to observe
+     * @param rmNodeBtn  JButton to remove a node
+     * @param addEdgeBtn JButton to add an edge
+     * @param rmEdgeBtn  JButton to remove an edge
+     */
+    public ButtonObserver(GraphManager gM, JButton rmNodeBtn, JButton addEdgeBtn, JButton rmEdgeBtn) {
+        this.graphManager = gM;
+        this.removeNodeButton = rmNodeBtn;
+        this.addEdgeButton = addEdgeBtn;
+        this.removeEdgeButton = rmEdgeBtn;
     }
 
     @Override
