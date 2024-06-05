@@ -40,9 +40,21 @@ public class Panel extends JPanel implements Observer {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        drawBackground(g);
+        drawEdges(g);
+        drawNodes(g);
+    }
+
+    private void drawBackground(Graphics g) {
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+    }
+
+    private void drawEdges(Graphics g) {
         ((Graphics2D) g).setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
                 10.0f, new float[]{10, 10}, 0));
+        // Set font size
+        g.setFont(new Font("Dialog", Font.PLAIN, 15));
+
         for (Edge edge : graphManager.getEdges()) {
             if (edge.isSelected()) {
                 g.setColor(Color.RED);
@@ -53,26 +65,38 @@ public class Panel extends JPanel implements Observer {
                     edge.getStartNode().getY() + graphManager.getNodeSize() / 2,
                     edge.getEndNode().getX() + graphManager.getNodeSize() / 2,
                     edge.getEndNode().getY() + graphManager.getNodeSize() / 2);
+            // Calculate the middle of the edge
+            int x = (edge.getStartNode().getX() + edge.getEndNode().getX()) / 2 + graphManager.getNodeSize() / 2;
+            int y = (edge.getStartNode().getY() + edge.getEndNode().getY()) / 2 + graphManager.getNodeSize() / 2;
+            int stringWidth = g.getFontMetrics().stringWidth(edge.getName());
+
+            // Drop shadow
+            g.setColor(Color.BLACK);
+            g.drawString(edge.getName(), x - stringWidth / 2 + 2, y + 2);
+
             g.setColor(Color.WHITE);
-            g.drawString(edge.getName(), (edge.getStartNode().getX() + edge.getEndNode().getX()) / 2,
-                    (edge.getStartNode().getY() + edge.getEndNode().getY()) / 2);
+            g.drawString(edge.getName(), x - stringWidth / 2, y);
         }
+    }
+
+    private void drawNodes(Graphics g) {
         for (Node node : graphManager.getNodes()) {
             if (node.isSelected()) {
                 g.drawImage(nodeImageSelected, node.getX(), node.getY(), this);
             } else {
                 g.drawImage(nodeImage, node.getX(), node.getY(), this);
             }
+
+            // Calculate the width of the string
+            int stringWidth = g.getFontMetrics().stringWidth(node.getName());
+            // Drop shadow
+            g.setColor(Color.BLACK);
+            g.drawString(node.getName(), node.getX() + graphManager.getNodeSize() / 2 - stringWidth / 2 + 2,
+                    node.getY() + graphManager.getNodeSize() / 2 + 2);
+
             g.setColor(Color.WHITE);
-            g.drawString(node.getName(), node.getX(), node.getY());
-        }
-        NodeSelector nodeSelector = (NodeSelector) getMouseMotionListeners()[0];
-        if (graphManager.getStartNode() != null && nodeSelector.getCurrentMousePosition() != null) {
-            g.setColor(Color.GRAY);
-            g.drawLine(graphManager.getStartNode().getX() + graphManager.getNodeSize() / 2,
-                    graphManager.getStartNode().getY() + graphManager.getNodeSize() / 2,
-                    nodeSelector.getCurrentMousePosition().x,
-                    nodeSelector.getCurrentMousePosition().y);
+            g.drawString(node.getName(), node.getX() + graphManager.getNodeSize() / 2 - stringWidth / 2,
+                    node.getY() + graphManager.getNodeSize() / 2);
         }
     }
 

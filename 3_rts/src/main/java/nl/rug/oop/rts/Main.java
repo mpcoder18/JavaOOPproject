@@ -12,14 +12,14 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 /**
- * Main class of the application. Add more details here.
+ * Main class of the application.
  */
 public class Main {
 
     /**
-     * Main function. Add more details here.
+     * Main method of the application.
      *
-     * @param args Commandline arguments.
+     * @param args Command line arguments
      */
     public static void main(String[] args) {
         FlatDarculaLaf.setup(); // Dark mode

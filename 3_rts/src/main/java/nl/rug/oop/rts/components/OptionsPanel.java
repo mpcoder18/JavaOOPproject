@@ -4,6 +4,7 @@ import nl.rug.oop.rts.graph.GraphManager;
 import nl.rug.oop.rts.observable.Observer;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Panel to display options for selected node or edge.
@@ -22,33 +23,50 @@ public class OptionsPanel extends JPanel implements Observer {
         messageLabel = new JLabel("Select a node or edge");
         add(messageLabel);
         this.observe(graphManager);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        add(new Box.Filler(new Dimension(0, 0), new Dimension(0, 0),
+                new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE)));
+    }
+
+    private void displayNodeOptions() {
+        JTextField nameField = new JTextField(graphManager.getSelectedNode().getName());
+        nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, nameField.getPreferredSize().height));
+        nameField.addActionListener(e -> {
+            graphManager.getSelectedNode().setName(nameField.getText());
+            graphManager.notifyAllObservers();
+        });
+        add(nameField);
+    }
+
+    private void displayEdgeOptions() {
+        JTextField nameField = new JTextField(graphManager.getSelectedEdge().getName());
+        nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, nameField.getPreferredSize().height));
+        nameField.addActionListener(e -> {
+            graphManager.getSelectedEdge().setName(nameField.getText());
+            graphManager.notifyAllObservers();
+        });
+        JLabel startNodeLabel = new JLabel("Start node: " + graphManager.getSelectedEdge().getStartNode().getName());
+        JLabel endNodeLabel = new JLabel("End node: " + graphManager.getSelectedEdge().getEndNode().getName());
+        add(nameField);
+        add(startNodeLabel);
+        add(endNodeLabel);
+    }
+
+    private void displayMessage() {
+        add(messageLabel);
     }
 
     /**
-     * Update the options panel based on the selected node or edge.
+     * Update the panel based on the selected node or edge.
      */
     public void update() {
         removeAll();
         if (graphManager.getSelectedNode() != null) {
-            JLabel nameLabel = new JLabel("Name:");
-            JTextField nameField = new JTextField(graphManager.getSelectedNode().getName());
-            nameField.addActionListener(e -> {
-                graphManager.getSelectedNode().setName(nameField.getText());
-                graphManager.notifyAllObservers();
-            });
-            add(nameLabel);
-            add(nameField);
+            displayNodeOptions();
         } else if (graphManager.getSelectedEdge() != null) {
-            JLabel nameLabel = new JLabel("Name:");
-            JTextField nameField = new JTextField(graphManager.getSelectedEdge().getName());
-            nameField.addActionListener(e -> {
-                graphManager.getSelectedEdge().setName(nameField.getText());
-                graphManager.notifyAllObservers();
-            });
-            add(nameLabel);
-            add(nameField);
+            displayEdgeOptions();
         } else {
-            add(messageLabel);
+            displayMessage();
         }
         revalidate();
         repaint();
