@@ -11,6 +11,8 @@ import java.util.List;
 /**
  * Manages the graph.
  */
+
+// TODO: this is the model and should handle notification
 @Getter
 public class GraphManager implements Observable {
     private final List<Node> nodes;
