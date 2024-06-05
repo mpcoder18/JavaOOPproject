@@ -13,9 +13,9 @@ import java.util.List;
  */
 @Getter
 public class GraphManager implements Observable {
-    private List<Node> nodes;
-    private List<Edge> edges;
-    private List<Observer> observers;
+    private final List<Node> nodes;
+    private final List<Edge> edges;
+    private final List<Observer> observers;
     @Setter
     private Node selectedNode;
     @Setter

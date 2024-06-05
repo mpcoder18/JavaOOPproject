@@ -14,7 +14,7 @@ public class Node {
     private final int ID;
     @Setter
     private String name;
-    private List<Edge> edgeList;
+    private final List<Edge> edgeList;
     @Setter
     private int x;
     @Setter
