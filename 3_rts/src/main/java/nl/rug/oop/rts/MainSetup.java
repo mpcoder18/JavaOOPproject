@@ -10,7 +10,13 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+/**
+ * Main class of the application.
+ */
 public class MainSetup {
+    /**
+     * Main method of the application.
+     */
     public MainSetup() {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,7 +48,7 @@ public class MainSetup {
         frame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                graphManager.notifyAllObservers();
+                graphManager.modified();
             }
         });
 

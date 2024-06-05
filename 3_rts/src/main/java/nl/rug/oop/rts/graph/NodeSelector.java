@@ -73,7 +73,6 @@ public class NodeSelector extends MouseAdapter {
                 graphManager.setStartNode(null);
                 node.setSelected(false);
                 graphManager.setSelectedNode(null);
-                graphManager.notifyAllObservers();
                 return;
             }
         }
@@ -109,13 +108,6 @@ public class NodeSelector extends MouseAdapter {
         } else {
             handleEmptySpaceClick();
         }
-        graphManager.notifyAllObservers();
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        currentMousePosition = e.getPoint();
-        graphManager.notifyAllObservers();
     }
 
     private void selectNode(Node node) {
@@ -149,11 +141,17 @@ public class NodeSelector extends MouseAdapter {
     }
 
     @Override
+    public void mouseMoved(MouseEvent e) {
+        currentMousePosition = e.getPoint();
+        graphManager.modified();
+    }
+
+    @Override
     public void mouseDragged(MouseEvent e) {
         if (graphManager.getSelectedNode() != null) {
             graphManager.getSelectedNode().setX(e.getX() - offsetX);
             graphManager.getSelectedNode().setY(e.getY() - offsetY);
-            graphManager.notifyAllObservers();
+            graphManager.modified();
         }
     }
 }

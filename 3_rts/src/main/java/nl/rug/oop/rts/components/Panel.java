@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Panel for the game.
+ * Panel for the game. View of the MVC pattern.
  */
 public class Panel extends JPanel implements Observer {
     private final GraphManager graphManager;
@@ -76,6 +76,16 @@ public class Panel extends JPanel implements Observer {
 
             g.setColor(Color.WHITE);
             g.drawString(edge.getName(), x - stringWidth / 2, y);
+        }
+
+        // Preview edge
+        NodeSelector nodeSelector = (NodeSelector) getMouseListeners()[0];
+        if (graphManager.getStartNode() != null && nodeSelector.getCurrentMousePosition() != null) {
+            g.setColor(Color.GRAY);
+            g.drawLine(graphManager.getStartNode().getX() + graphManager.getNodeSize() / 2,
+                    graphManager.getStartNode().getY() + graphManager.getNodeSize() / 2,
+                    nodeSelector.getCurrentMousePosition().x,
+                    nodeSelector.getCurrentMousePosition().y);
         }
     }
 

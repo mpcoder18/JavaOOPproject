@@ -7,7 +7,7 @@ import nl.rug.oop.rts.observable.ButtonObserver;
 import javax.swing.*;
 
 /**
- * Topbar with buttons to add and remove nodes and edges.
+ * Topbar with buttons to add and remove nodes and edges. Controller of the MVC pattern.
  */
 public class ToolsTopbar extends JPanel {
     private final JButton addNodeButton;
@@ -28,7 +28,6 @@ public class ToolsTopbar extends JPanel {
 
         ButtonObserver btnObs = new ButtonObserver(graphManager, removeNodeButton, addEdgeButton, removeEdgeButton);
         graphManager.addObserver(btnObs);
-        graphManager.notifyAllObservers();
     }
 
     private JButton createAddNodeButton(GraphManager graphManager) {
@@ -37,7 +36,6 @@ public class ToolsTopbar extends JPanel {
             Node node = new Node(graphManager.getNodes().size() + 1,
                     "Node " + (graphManager.getNodes().size() + 1), 0, 0);
             graphManager.addNode(node);
-            graphManager.notifyAllObservers();
         });
         return button;
     }
@@ -49,7 +47,6 @@ public class ToolsTopbar extends JPanel {
                 graphManager.removeNode(graphManager.getSelectedNode());
                 graphManager.setSelectedNode(null);
             }
-            graphManager.notifyAllObservers();
         });
         return button;
     }
@@ -62,7 +59,6 @@ public class ToolsTopbar extends JPanel {
                     graphManager.setStartNode(graphManager.getSelectedNode());
                 }
             }
-            graphManager.notifyAllObservers();
         });
         return button;
     }
@@ -76,7 +72,6 @@ public class ToolsTopbar extends JPanel {
                 graphManager.removeEdge(graphManager.getSelectedEdge());
                 graphManager.setSelectedEdge(null);
             }
-            graphManager.notifyAllObservers();
         });
         return button;
     }

@@ -33,7 +33,7 @@ public class OptionsPanel extends JPanel implements Observer {
         nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, nameField.getPreferredSize().height));
         nameField.addActionListener(e -> {
             graphManager.getSelectedNode().setName(nameField.getText());
-            graphManager.notifyAllObservers();
+            graphManager.modified();
         });
         add(nameField);
     }
@@ -43,7 +43,7 @@ public class OptionsPanel extends JPanel implements Observer {
         nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, nameField.getPreferredSize().height));
         nameField.addActionListener(e -> {
             graphManager.getSelectedEdge().setName(nameField.getText());
-            graphManager.notifyAllObservers();
+            graphManager.modified();
         });
         JLabel startNodeLabel = new JLabel("Start node: " + graphManager.getSelectedEdge().getStartNode().getName());
         JLabel endNodeLabel = new JLabel("End node: " + graphManager.getSelectedEdge().getEndNode().getName());
