@@ -7,7 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * Class to select nodes and edges in the graph.
+ * Class to select nodes and edges in the graph. Controller of the MVC pattern.
  */
 public class NodeSelector extends MouseAdapter {
     private final GraphManager graphManager;
@@ -97,19 +97,6 @@ public class NodeSelector extends MouseAdapter {
         }
     }
 
-    @Override
-    public void mousePressed(MouseEvent e) {
-        Node node = findNode(e.getX(), e.getY());
-        Edge edge = findEdge(e.getX(), e.getY());
-        if (node != null) {
-            handleNodeClick(node, e);
-        } else if (edge != null) {
-            handleEdgeClick(edge);
-        } else {
-            handleEmptySpaceClick();
-        }
-    }
-
     private void selectNode(Node node) {
         if (graphManager.getSelectedNode() != null) {
             graphManager.getSelectedNode().setSelected(false);
@@ -137,6 +124,19 @@ public class NodeSelector extends MouseAdapter {
         if (graphManager.getSelectedEdge() != null) {
             graphManager.getSelectedEdge().setSelected(false);
             graphManager.setSelectedEdge(null);
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        Node node = findNode(e.getX(), e.getY());
+        Edge edge = findEdge(e.getX(), e.getY());
+        if (node != null) {
+            handleNodeClick(node, e);
+        } else if (edge != null) {
+            handleEdgeClick(edge);
+        } else {
+            handleEmptySpaceClick();
         }
     }
 
