@@ -2,6 +2,7 @@ package nl.rug.oop.rts.graph;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.rts.objects.Army;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * Class to represent a node in the graph.
  */
 @Getter
-public class Node {
+public class Node { // TODO: implement selectable interface to only need one selected variable in graph manager
     private final int ID;
     @Setter
     private String name;
@@ -21,6 +22,7 @@ public class Node {
     private int y;
     @Setter
     private boolean selected;
+    private List<Army> armies;
 
     /**
      * Create a new node.
@@ -37,6 +39,7 @@ public class Node {
         this.x = x;
         this.y = y;
         this.selected = false;
+        this.armies = new ArrayList<>();
     }
 
     public void addEdge(Edge edge) {

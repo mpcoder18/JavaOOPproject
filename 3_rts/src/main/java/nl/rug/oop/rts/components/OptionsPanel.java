@@ -1,6 +1,8 @@
 package nl.rug.oop.rts.components;
 
 import nl.rug.oop.rts.graph.GraphManager;
+import nl.rug.oop.rts.objects.Army;
+import nl.rug.oop.rts.objects.Faction;
 import nl.rug.oop.rts.observable.Observer;
 
 import javax.swing.*;
@@ -36,6 +38,31 @@ public class OptionsPanel extends JPanel implements Observer {
             graphManager.modified();
         });
         add(nameField);
+
+        JButton addArmyButton = new JButton("Add army");
+        addArmyButton.addActionListener(e -> {
+            int option = JOptionPane.showOptionDialog(this, "Select a faction", "Add army",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                    Faction.values(), Faction.values()[0]);
+            if (option != JOptionPane.CLOSED_OPTION) {
+                graphManager.addArmy(Faction.values()[option]);
+            }
+        });
+        add(addArmyButton);
+
+        // List armies and add remove button
+        for (Army army : graphManager.getSelectedNode().getArmies()) {
+            JPanel armyPanel = new JPanel();
+            armyPanel.setLayout(new BoxLayout(armyPanel, BoxLayout.X_AXIS));
+            JLabel armyLabel = new JLabel(army.getFaction().toString());
+            JButton removeArmy = new JButton("x");
+            removeArmy.addActionListener(e -> {
+                graphManager.removeArmy(army);
+            });
+            armyPanel.add(armyLabel);
+            armyPanel.add(removeArmy);
+            add(armyPanel);
+        }
     }
 
     private void displayEdgeOptions() {

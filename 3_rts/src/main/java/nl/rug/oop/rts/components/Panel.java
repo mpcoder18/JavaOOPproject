@@ -4,11 +4,15 @@ import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.GraphManager;
 import nl.rug.oop.rts.graph.Node;
 import nl.rug.oop.rts.graph.NodeSelector;
+import nl.rug.oop.rts.objects.Army;
+import nl.rug.oop.rts.objects.Team;
 import nl.rug.oop.rts.observable.Observer;
 import nl.rug.oop.rts.util.TextureLoader;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Panel for the game. View of the MVC pattern.
@@ -107,6 +111,49 @@ public class Panel extends JPanel implements Observer {
             g.setColor(Color.WHITE);
             g.drawString(node.getName(), node.getX() + graphManager.getNodeSize() / 2 - stringWidth / 2,
                     node.getY() + graphManager.getNodeSize() / 2);
+
+            drawArmy(g, node);
+        }
+    }
+
+    /**
+     * Draw the armies on the node.
+     *
+     * @param g    Graphics object
+     * @param node Node to draw the armies on
+     */
+    public void drawArmy(Graphics g, Node node) {
+        int radius = graphManager.getNodeSize() / 2;
+        int centerX = node.getX() + radius;
+        int centerY = node.getY() + radius;
+
+        List<Army> teamA = new ArrayList<>();
+        List<Army> teamB = new ArrayList<>();
+
+        for (Army army : node.getArmies()) {
+            if (army.getFaction().getTeam() == Team.TEAM_A) {
+                teamA.add(army);
+            } else {
+                teamB.add(army);
+            }
+        }
+
+        // Draw Team A on the left side
+        for (int i = 0; i < teamA.size(); i++) {
+            g.setColor(teamA.get(i).getFaction().getColor());
+            double angle = Math.PI / 2 + Math.PI * (double)i / teamA.size();
+            int x = centerX + (int)(radius * Math.cos(angle));
+            int y = centerY + (int)(radius * Math.sin(angle));
+            g.fillOval(x - 10, y - 10, 20, 20); // Adjusted to center the circle on the node
+        }
+
+        // Draw Team B on the right side
+        for (int i = 0; i < teamB.size(); i++) {
+            g.setColor(teamB.get(i).getFaction().getColor());
+            double angle = 3 * Math.PI / 2 + Math.PI * (double)i / teamB.size();
+            int x = centerX + (int)(radius * Math.cos(angle));
+            int y = centerY + (int)(radius * Math.sin(angle));
+            g.fillOval(x - 10, y - 10, 20, 20); // Adjusted to center the circle on the node
         }
     }
 

@@ -2,6 +2,9 @@ package nl.rug.oop.rts.graph;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.rts.objects.Army;
+
+import java.util.List;
 
 /**
  * Class to represent an edge in the graph.
@@ -15,6 +18,7 @@ public class Edge {
     private String name;
     @Setter
     private boolean selected;
+    private List<Army> armies;
 
     /**
      * Create a new edge.
