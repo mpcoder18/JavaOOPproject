@@ -112,4 +112,14 @@ public class GraphManager implements Observable {
         selectedNode.getArmies().remove(army);
         notifyAllObservers();
     }
+
+    public void deselect() {
+        if (selectedNode != null) selectedNode.deselect();
+        if (selectedEdge != null) selectedEdge.deselect();
+        if (selected != null) selected.deselect();
+        selectedNode = null;
+        selectedEdge = null;
+        selected = null;
+        notifyAllObservers();
+    }
 }

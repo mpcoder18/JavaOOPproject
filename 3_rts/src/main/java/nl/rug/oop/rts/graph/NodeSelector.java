@@ -54,13 +54,11 @@ public class NodeSelector extends MouseAdapter {
     }
 
     private void handleNodeClick(Node node, MouseEvent e) {
-        selectNode(node);
+        graphManager.deselect();
+        select(node);
+        graphManager.setSelected(node);
         if (graphManager.getStartNode() != null && node != graphManager.getStartNode()) {
             createEdge(node);
-        }
-        if (graphManager.getSelectedEdge() != null) {
-            graphManager.getSelectedEdge().setSelected(false);
-            graphManager.setSelectedEdge(null);
         }
         offsetX = e.getX() - node.getX();
         offsetY = e.getY() - node.getY();
@@ -80,59 +78,30 @@ public class NodeSelector extends MouseAdapter {
                 graphManager.getStartNode(), node);
         graphManager.addEdge(newEdge);
         graphManager.setStartNode(null);
-        node.setSelected(false);
-        graphManager.setSelectedNode(null);
+        graphManager.deselect();
     }
 
     private void handleEdgeClick(Edge edge) {
-        selectEdge(edge);
-        deselectNode();
+        graphManager.deselect();
+        select(edge);
     }
 
     private void handleEmptySpaceClick() {
-        deselectNode();
-        deselectEdge();
+        graphManager.deselect();
         if (graphManager.getStartNode() != null) {
             graphManager.setStartNode(null);
         }
     }
 
-    private void selectNode(Node node) {
-        if (graphManager.getSelectedNode() != null) {
-            graphManager.getSelectedNode().setSelected(false);
-        }
-        node.setSelected(true);
-        graphManager.setSelectedNode(node);
-    }
-
-    private void deselectNode() {
-        if (graphManager.getSelectedNode() != null) {
-            graphManager.getSelectedNode().setSelected(false);
-            graphManager.setSelectedNode(null);
-        }
-    }
-
-    private void selectEdge(Edge edge) {
-        if (graphManager.getSelectedEdge() != null) {
-            graphManager.getSelectedEdge().setSelected(false);
-        }
-        edge.setSelected(true);
-        graphManager.setSelectedEdge(edge);
-    }
-
-    private void deselectEdge() {
-        if (graphManager.getSelectedEdge() != null) {
-            graphManager.getSelectedEdge().setSelected(false);
-            graphManager.setSelectedEdge(null);
-        }
-    }
-
     private void select(Selectable selectable) {
-        if (graphManager.getSelected() != null) {
-            graphManager.getSelected().deselect();
-        }
+        graphManager.deselect();
         selectable.select();
         graphManager.setSelected(selectable);
+        if (selectable instanceof Node node) {
+            graphManager.setSelectedNode(node);
+        } else if (selectable instanceof Edge edge) {
+            graphManager.setSelectedEdge(edge);
+        }
     }
 
     private Selectable getSelectable(int x, int y) {
@@ -167,9 +136,9 @@ public class NodeSelector extends MouseAdapter {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (graphManager.getSelectedNode() != null) {
-            graphManager.getSelectedNode().setX(e.getX() - offsetX);
-            graphManager.getSelectedNode().setY(e.getY() - offsetY);
+        if (graphManager.getSelected() instanceof Node node && node.isSelected()) {
+            node.setX(e.getX() - offsetX);
+            node.setY(e.getY() - offsetY);
             graphManager.modified();
         }
     }
