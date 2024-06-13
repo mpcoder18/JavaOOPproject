@@ -24,7 +24,6 @@ public class GraphManager implements Observable {
     private final List<Observer> observers;
     private final int nodeSize = 80;
     private Node startNode;
-    private Edge selectedEdge; // TODO: remove
     @Setter
     private Selectable selected;
 
@@ -63,11 +62,6 @@ public class GraphManager implements Observable {
 
     public void removeEdge(Edge edge) {
         edges.remove(edge);
-        notifyAllObservers();
-    }
-
-    public void setSelectedEdge(Edge edge) {
-        selectedEdge = edge;
         notifyAllObservers();
     }
 
@@ -114,30 +108,20 @@ public class GraphManager implements Observable {
      * @param selectable object to select
      */
     public void select(Selectable selectable) {
-        if (selectedEdge != null) {
-            selectedEdge.deselect();
-        }
         if (selected != null) {
             selected.deselect();
         }
         selectable.select();
         selected = selectable;
-        if (selectable instanceof Edge edge) {
-            selectedEdge = edge;
-        }
     }
 
     /**
      * Deselect any selected object.
      */
     public void deselect() {
-        if (selectedEdge != null) {
-            selectedEdge.deselect();
-        }
         if (selected != null) {
             selected.deselect();
         }
-        selectedEdge = null;
         selected = null;
         notifyAllObservers();
     }

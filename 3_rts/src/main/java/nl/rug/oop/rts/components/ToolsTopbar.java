@@ -67,13 +67,11 @@ public class ToolsTopbar extends JPanel {
     private JButton createRemoveEdgeButton(GraphManager graphManager) {
         JButton button = new JButton("Remove Edge");
         button.addActionListener(e -> {
-            if (graphManager.getSelectedEdge() != null) {
-                Edge edge = graphManager.getSelectedEdge();
-                graphManager.getSelectedEdge().getStartNode().removeEdge(edge);
-                graphManager.getSelectedEdge().getEndNode().removeEdge(edge);
+            if (graphManager.getSelected() instanceof Edge edge) {
+                edge.getStartNode().removeEdge(edge);
+                edge.getEndNode().removeEdge(edge);
                 graphManager.deselect();
                 graphManager.removeEdge(edge);
-                graphManager.setSelectedEdge(null);
             }
         });
         return button;
