@@ -1,6 +1,7 @@
 package nl.rug.oop.rts.graph;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -11,16 +12,26 @@ import java.awt.event.MouseEvent;
  */
 public class NodeSelector extends MouseAdapter {
     private final GraphManager graphManager;
+    @Getter
     private int offsetX;
+    @Getter
     private int offsetY;
     @Getter
+    @Setter
     private Point currentMousePosition;
 
     public NodeSelector(GraphManager graphManager) {
         this.graphManager = graphManager;
     }
 
-    private Node findNode(int x, int y) {
+    /**
+     * Find the node at a certain position.
+     *
+     * @param x - The x position.
+     * @param y - The y position.
+     * @return - The node at the position.
+     */
+    protected Node findNode(int x, int y) {
         Node node = null;
         int padding = 10;
         int buttonWidth = graphManager.getNodeSize();
@@ -33,7 +44,14 @@ public class NodeSelector extends MouseAdapter {
         return node;
     }
 
-    private Edge findEdge(int x, int y) {
+    /**
+     * Find the edge at a certain position.
+     *
+     * @param x - The x position.
+     * @param y - The y position.
+     * @return - The edge at the position.
+     */
+    protected Edge findEdge(int x, int y) {
         Edge edge = null;
         int padding = 10;
         for (Edge e : graphManager.getEdges()) {
@@ -53,10 +71,14 @@ public class NodeSelector extends MouseAdapter {
         return edge;
     }
 
-    private void handleNodeClick(Node node, MouseEvent e) {
-        graphManager.deselect();
-        select(node);
-        graphManager.setSelected(node);
+    /**
+     * Handle the click on a node.
+     *
+     * @param node - The node that was clicked.
+     * @param e    - The mouse event.
+     */
+    protected void handleNodeClick(Node node, MouseEvent e) {
+        graphManager.select(node);
         if (graphManager.getStartNode() != null && node != graphManager.getStartNode()) {
             createEdge(node);
         }
@@ -64,13 +86,17 @@ public class NodeSelector extends MouseAdapter {
         offsetY = e.getY() - node.getY();
     }
 
-    private void createEdge(Node node) {
+    /**
+     * Create an edge between the start node and the given node.
+     *
+     * @param node - The node to connect to the start node.
+     */
+    protected void createEdge(Node node) {
         for (Edge edge : graphManager.getEdges()) {
             if ((edge.getStartNode() == graphManager.getStartNode() && edge.getEndNode() == node)
                     || (edge.getStartNode() == node && edge.getEndNode() == graphManager.getStartNode())) {
                 graphManager.setStartNode(null);
-                node.setSelected(false);
-                graphManager.setSelectedNode(null);
+                graphManager.deselect();
                 return;
             }
         }
@@ -81,30 +107,34 @@ public class NodeSelector extends MouseAdapter {
         graphManager.deselect();
     }
 
-    private void handleEdgeClick(Edge edge) {
+    /**
+     * Handle the click on an edge.
+     *
+     * @param edge - The edge that was clicked.
+     */
+    protected void handleEdgeClick(Edge edge) {
         graphManager.deselect();
-        select(edge);
+        graphManager.select(edge);
     }
 
-    private void handleEmptySpaceClick() {
+    /**
+     * Handle the click on an empty space.
+     */
+    protected void handleEmptySpaceClick() {
         graphManager.deselect();
         if (graphManager.getStartNode() != null) {
             graphManager.setStartNode(null);
         }
     }
 
-    private void select(Selectable selectable) {
-        graphManager.deselect();
-        selectable.select();
-        graphManager.setSelected(selectable);
-        if (selectable instanceof Node node) {
-            graphManager.setSelectedNode(node);
-        } else if (selectable instanceof Edge edge) {
-            graphManager.setSelectedEdge(edge);
-        }
-    }
-
-    private Selectable getSelectable(int x, int y) {
+    /**
+     * Get the selectable object at a certain position.
+     *
+     * @param x - The x position.
+     * @param y - The y position.
+     * @return - The selectable object at the position.
+     */
+    protected Selectable getSelectable(int x, int y) {
         Selectable selectable = null;
         Node node = findNode(x, y);
         Edge edge = findEdge(x, y);
@@ -126,6 +156,7 @@ public class NodeSelector extends MouseAdapter {
         } else {
             handleEmptySpaceClick();
         }
+        graphManager.modified();
     }
 
     @Override

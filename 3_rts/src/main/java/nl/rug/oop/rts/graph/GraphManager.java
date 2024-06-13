@@ -22,12 +22,12 @@ public class GraphManager implements Observable {
     private final List<Node> nodes;
     private final List<Edge> edges;
     private final List<Observer> observers;
-    private Node selectedNode;
+    private final int nodeSize = 80;
+    private Node selectedNode; // TODO: remove
     private Node startNode;
-    private Edge selectedEdge;
+    private Edge selectedEdge; // TODO: remove
     @Setter
     private Selectable selected;
-    private final int nodeSize = 80;
 
     /**
      * Create a new GraphManager.
@@ -93,6 +93,7 @@ public class GraphManager implements Observable {
 
     /**
      * Add an army to the selected node.
+     *
      * @param faction Faction of the army
      */
     public void addArmy(Faction faction) {
@@ -113,10 +114,43 @@ public class GraphManager implements Observable {
         notifyAllObservers();
     }
 
+    /**
+     * Select a selectable object.
+     *
+     * @param selectable object to select
+     */
+    public void select(Selectable selectable) {
+        if (selectedNode != null) {
+            selectedNode.deselect();
+        }
+        if (selectedEdge != null) {
+            selectedEdge.deselect();
+        }
+        if (selected != null) {
+            selected.deselect();
+        }
+        selectable.select();
+        selected = selectable;
+        if (selectable instanceof Node node) {
+            selectedNode = node;
+        } else if (selectable instanceof Edge edge) {
+            selectedEdge = edge;
+        }
+    }
+
+    /**
+     * Deselect any selected object.
+     */
     public void deselect() {
-        if (selectedNode != null) selectedNode.deselect();
-        if (selectedEdge != null) selectedEdge.deselect();
-        if (selected != null) selected.deselect();
+        if (selectedNode != null) {
+            selectedNode.deselect();
+        }
+        if (selectedEdge != null) {
+            selectedEdge.deselect();
+        }
+        if (selected != null) {
+            selected.deselect();
+        }
         selectedNode = null;
         selectedEdge = null;
         selected = null;

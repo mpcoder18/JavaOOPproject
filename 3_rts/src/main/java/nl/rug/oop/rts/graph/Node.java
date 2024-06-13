@@ -11,7 +11,7 @@ import java.util.List;
  * Class to represent a node in the graph.
  */
 @Getter
-public class Node implements Selectable { // TODO: implement selectable interface to only need one selected variable in graph manager
+public class Node implements Selectable {
     private final int ID;
     @Setter
     private String name;
