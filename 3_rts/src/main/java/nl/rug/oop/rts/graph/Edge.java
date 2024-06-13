@@ -10,7 +10,7 @@ import java.util.List;
  * Class to represent an edge in the graph.
  */
 @Getter
-public class Edge {
+public class Edge implements Selectable {
     private final int ID;
     private final Node startNode;
     private final Node endNode;

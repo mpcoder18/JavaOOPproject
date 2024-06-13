@@ -127,13 +127,32 @@ public class NodeSelector extends MouseAdapter {
         }
     }
 
+    private void select(Selectable selectable) {
+        if (graphManager.getSelected() != null) {
+            graphManager.getSelected().deselect();
+        }
+        selectable.select();
+        graphManager.setSelected(selectable);
+    }
+
+    private Selectable getSelectable(int x, int y) {
+        Selectable selectable = null;
+        Node node = findNode(x, y);
+        Edge edge = findEdge(x, y);
+        if (node != null) {
+            selectable = node;
+        } else if (edge != null) {
+            selectable = edge;
+        }
+        return selectable;
+    }
+
     @Override
     public void mousePressed(MouseEvent e) {
-        Node node = findNode(e.getX(), e.getY());
-        Edge edge = findEdge(e.getX(), e.getY());
-        if (node != null) {
+        Selectable selectable = getSelectable(e.getX(), e.getY());
+        if (selectable instanceof Node node) {
             handleNodeClick(node, e);
-        } else if (edge != null) {
+        } else if (selectable instanceof Edge edge) {
             handleEdgeClick(edge);
         } else {
             handleEmptySpaceClick();

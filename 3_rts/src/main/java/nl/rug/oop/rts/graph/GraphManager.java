@@ -1,6 +1,7 @@
 package nl.rug.oop.rts.graph;
 
 import lombok.Getter;
+import lombok.Setter;
 import nl.rug.oop.rts.objects.Army;
 import nl.rug.oop.rts.objects.Faction;
 import nl.rug.oop.rts.objects.Unit;
@@ -24,6 +25,8 @@ public class GraphManager implements Observable {
     private Node selectedNode;
     private Node startNode;
     private Edge selectedEdge;
+    @Setter
+    private Selectable selected;
     private final int nodeSize = 80;
 
     /**
