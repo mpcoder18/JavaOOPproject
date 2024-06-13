@@ -77,8 +77,8 @@ public class OptionsPanel extends JPanel implements Observer {
             graphManager.getSelected().setName(nameField.getText());
             graphManager.modified();
         });
-        JLabel startNodeLabel = new JLabel("Start node: " + graphManager.getSelectedEdge().getStartNode().getName());
-        JLabel endNodeLabel = new JLabel("End node: " + graphManager.getSelectedEdge().getEndNode().getName());
+        JLabel startNodeLabel = new JLabel("Start node: " + ((Edge) graphManager.getSelected()).getStartNode().getName());
+        JLabel endNodeLabel = new JLabel("End node: " + ((Edge) graphManager.getSelected()).getEndNode().getName());
         add(nameField);
         add(startNodeLabel);
         add(endNodeLabel);
