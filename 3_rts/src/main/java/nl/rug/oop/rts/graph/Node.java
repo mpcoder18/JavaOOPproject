@@ -42,6 +42,7 @@ public class Node implements Selectable {
         this.y = y;
         this.selected = false;
         this.armies = new ArrayList<>();
+        this.events = new ArrayList<>();
     }
 
     public void addEdge(Edge edge) {
