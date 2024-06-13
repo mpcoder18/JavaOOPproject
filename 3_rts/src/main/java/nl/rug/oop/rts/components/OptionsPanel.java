@@ -57,7 +57,7 @@ public class OptionsPanel extends JPanel implements Observer {
         for (Army army : graphManager.getSelected().getArmies()) {
             JPanel armyPanel = new JPanel();
             armyPanel.setLayout(new BoxLayout(armyPanel, BoxLayout.X_AXIS));
-            JLabel armyLabel = new JLabel(army.getFaction().toString());
+            JLabel armyLabel = new JLabel(army.getFaction().toString() + " (" + army.getUnits().size() + " units)");
             JButton removeArmy = new JButton("x");
             removeArmy.addActionListener(e -> {
                 graphManager.removeArmy(army);
