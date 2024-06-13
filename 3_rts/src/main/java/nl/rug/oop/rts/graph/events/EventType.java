@@ -17,4 +17,17 @@ public enum EventType {
     SOUP("A good soup has been made! (+1 health)");
 
     private final String name;
+
+    /**
+     * Get the formatted name of the event type from the enum.
+     *
+     * @return The formatted name.
+     */
+    public String getFormattedName() {
+        String[] words = this.name().split("_");
+        for (int i = 0; i < words.length; i++) {
+            words[i] = words[i].substring(0, 1).toUpperCase() + words[i].substring(1).toLowerCase();
+        }
+        return String.join(" ", words);
+    }
 }

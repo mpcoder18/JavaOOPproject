@@ -24,6 +24,7 @@ public class Node implements Selectable {
     @Setter
     private boolean selected;
     private List<Army> armies;
+    @Setter
     private List<Event> events;
 
     /**

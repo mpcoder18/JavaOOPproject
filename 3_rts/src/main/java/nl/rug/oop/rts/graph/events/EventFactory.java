@@ -1,7 +1,6 @@
 package nl.rug.oop.rts.graph.events;
 
 import nl.rug.oop.rts.graph.events.types.*;
-import nl.rug.oop.rts.objects.Army;
 
 /**
  * A factory for creating events.
@@ -11,10 +10,9 @@ public class EventFactory {
      * Create an event.
      *
      * @param type the type of event
-     * @param army the army
      * @return the event
      */
-    public Event createEvent(EventType type, Army army) {
+    public Event createEvent(EventType type) {
         return switch (type) {
             case REINFORCEMENTS -> new ReinforcementsEvent();
             case NATURAL_DISASTER -> new NaturalDisasterEvent();

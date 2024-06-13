@@ -22,6 +22,7 @@ public class Edge implements Selectable {
     private boolean selected;
     @Setter
     private List<Army> armies;
+    @Setter
     private List<Event> events;
 
     /**

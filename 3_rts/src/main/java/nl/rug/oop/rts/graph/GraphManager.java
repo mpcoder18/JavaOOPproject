@@ -2,6 +2,9 @@ package nl.rug.oop.rts.graph;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.rts.graph.events.Event;
+import nl.rug.oop.rts.graph.events.EventFactory;
+import nl.rug.oop.rts.graph.events.EventType;
 import nl.rug.oop.rts.objects.Army;
 import nl.rug.oop.rts.objects.Faction;
 import nl.rug.oop.rts.objects.Unit;
@@ -27,6 +30,7 @@ public class GraphManager implements Observable {
     @Setter
     private Selectable selected;
     private Simulation simulation;
+    private EventFactory eventFactory;
 
     /**
      * Create a new GraphManager.
@@ -38,6 +42,7 @@ public class GraphManager implements Observable {
         startNode = null;
         selected = null;
         simulation = new Simulation(this);
+        eventFactory = new EventFactory();
     }
 
     public void addNode(Node node) {
@@ -102,6 +107,22 @@ public class GraphManager implements Observable {
 
     public void removeArmy(Army army) {
         selected.getArmies().remove(army);
+        notifyAllObservers();
+    }
+
+    /**
+     * Add an event to the selected node.
+     *
+     * @param eventType Type of event to add
+     */
+    public void addEvent(EventType eventType) {
+        Event event = eventFactory.createEvent(eventType);
+        selected.getEvents().add(event);
+        notifyAllObservers();
+    }
+
+    public void removeEvent(Event event) {
+        selected.getEvents().remove(event);
         notifyAllObservers();
     }
 

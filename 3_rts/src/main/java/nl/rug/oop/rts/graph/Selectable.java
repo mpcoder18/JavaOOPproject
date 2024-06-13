@@ -1,5 +1,6 @@
 package nl.rug.oop.rts.graph;
 
+import nl.rug.oop.rts.graph.events.Event;
 import nl.rug.oop.rts.objects.Army;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface Selectable {
     void setName(String name);
 
     List<Army> getArmies();
+
+    List<Event> getEvents();
 }
