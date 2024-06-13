@@ -1,6 +1,8 @@
 package nl.rug.oop.rts.objects;
 
 import lombok.Getter;
+import lombok.Setter;
+import nl.rug.oop.rts.graph.Node;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,10 @@ public class Army {
     private final List<Unit> units = new ArrayList<>();
     private final Faction faction;
     private final Team team;
+    @Setter
+    private Node movingToNextStep;
+    @Setter
+    private boolean moved = false;
 
     /**
      * Create a new army.

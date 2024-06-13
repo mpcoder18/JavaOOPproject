@@ -53,33 +53,40 @@ public class Panel extends JPanel implements Observer {
     private void drawEdges(Graphics g) {
         ((Graphics2D) g).setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
                 10.0f, new float[]{10, 10}, 0));
-        // Set font size
         g.setFont(new Font("Dialog", Font.PLAIN, 15));
 
         for (Edge edge : graphManager.getEdges()) {
-            if (edge.isSelected()) {
-                g.setColor(Color.RED);
-            } else {
-                g.setColor(new Color(161, 100, 21));
-            }
-            g.drawLine(edge.getStartNode().getX() + graphManager.getNodeSize() / 2,
-                    edge.getStartNode().getY() + graphManager.getNodeSize() / 2,
-                    edge.getEndNode().getX() + graphManager.getNodeSize() / 2,
-                    edge.getEndNode().getY() + graphManager.getNodeSize() / 2);
-            // Calculate the middle of the edge
-            int x = (edge.getStartNode().getX() + edge.getEndNode().getX()) / 2 + graphManager.getNodeSize() / 2;
-            int y = (edge.getStartNode().getY() + edge.getEndNode().getY()) / 2 + graphManager.getNodeSize() / 2;
-            int stringWidth = g.getFontMetrics().stringWidth(edge.getName());
-
-            // Drop shadow
-            g.setColor(Color.BLACK);
-            g.drawString(edge.getName(), x - stringWidth / 2 + 1, y + 1);
-
-            g.setColor(Color.WHITE);
-            g.drawString(edge.getName(), x - stringWidth / 2, y);
+            drawEdge(g, edge);
+            drawArmyEdge(g, edge);
         }
 
-        // Preview edge
+        drawEdgePreview(g);
+    }
+
+    private void drawEdge(Graphics g, Edge edge) {
+        if (edge.isSelected()) {
+            g.setColor(Color.RED);
+        } else {
+            g.setColor(new Color(161, 100, 21));
+        }
+        g.drawLine(edge.getStartNode().getX() + graphManager.getNodeSize() / 2,
+                edge.getStartNode().getY() + graphManager.getNodeSize() / 2,
+                edge.getEndNode().getX() + graphManager.getNodeSize() / 2,
+                edge.getEndNode().getY() + graphManager.getNodeSize() / 2);
+        // Calculate the middle of the edge
+        int x = (edge.getStartNode().getX() + edge.getEndNode().getX()) / 2 + graphManager.getNodeSize() / 2;
+        int y = (edge.getStartNode().getY() + edge.getEndNode().getY()) / 2 + graphManager.getNodeSize() / 2;
+        int stringWidth = g.getFontMetrics().stringWidth(edge.getName());
+
+        // Drop shadow
+        g.setColor(Color.BLACK);
+        g.drawString(edge.getName(), x - stringWidth / 2 + 1, y + 1);
+
+        g.setColor(Color.WHITE);
+        g.drawString(edge.getName(), x - stringWidth / 2, y);
+    }
+
+    private void drawEdgePreview(Graphics g) {
         MouseHandler mouseHandler = (MouseHandler) getMouseListeners()[0];
         NodeSelector nodeSelector = mouseHandler.getNodeSelector();
         if (graphManager.getStartNode() != null && nodeSelector.getCurrentMousePosition() != null) {
@@ -129,6 +136,41 @@ public class Panel extends JPanel implements Observer {
         List<Army> teamB = new ArrayList<>();
 
         for (Army army : node.getArmies()) {
+            if (army.getFaction().getTeam() == Team.TEAM_A) {
+                teamA.add(army);
+            } else {
+                teamB.add(army);
+            }
+        }
+
+        // Draw Team A on the left side
+        for (int i = 0; i < teamA.size(); i++) {
+            g.setColor(teamA.get(i).getFaction().getColor());
+            double angle = Math.PI / 2 + Math.PI * (double)i / teamA.size();
+            int x = centerX + (int)(radius * Math.cos(angle));
+            int y = centerY + (int)(radius * Math.sin(angle));
+            g.fillOval(x - 10, y - 10, 20, 20); // Adjusted to center the circle on the node
+        }
+
+        // Draw Team B on the right side
+        for (int i = 0; i < teamB.size(); i++) {
+            g.setColor(teamB.get(i).getFaction().getColor());
+            double angle = 3 * Math.PI / 2 + Math.PI * (double)i / teamB.size();
+            int x = centerX + (int)(radius * Math.cos(angle));
+            int y = centerY + (int)(radius * Math.sin(angle));
+            g.fillOval(x - 10, y - 10, 20, 20); // Adjusted to center the circle on the node
+        }
+    }
+
+    private void drawArmyEdge(Graphics g, Edge edge) {
+        int radius = graphManager.getNodeSize() / 2;
+        int centerX = (edge.getStartNode().getX() + edge.getEndNode().getX()) / 2 + radius;
+        int centerY = (edge.getStartNode().getY() + edge.getEndNode().getY()) / 2 + radius;
+
+        List<Army> teamA = new ArrayList<>();
+        List<Army> teamB = new ArrayList<>();
+
+        for (Army army : edge.getArmies()) {
             if (army.getFaction().getTeam() == Team.TEAM_A) {
                 teamA.add(army);
             } else {

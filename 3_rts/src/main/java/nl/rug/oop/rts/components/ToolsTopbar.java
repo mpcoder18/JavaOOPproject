@@ -15,6 +15,7 @@ public class ToolsTopbar extends JPanel {
     private final JButton removeNodeButton;
     private final JButton addEdgeButton;
     private final JButton removeEdgeButton;
+    private final JButton simulateStepButton;
 
     /**
      * Create a new tools topbar.
@@ -26,6 +27,7 @@ public class ToolsTopbar extends JPanel {
         removeNodeButton = createRemoveNodeButton(graphManager);
         addEdgeButton = createAddEdgeButton(graphManager);
         removeEdgeButton = createRemoveEdgeButton(graphManager);
+        simulateStepButton = createSimulateStepButton(graphManager);
 
         ButtonObserver btnObs = new ButtonObserver(graphManager, removeNodeButton, addEdgeButton, removeEdgeButton);
         graphManager.addObserver(btnObs);
@@ -77,6 +79,14 @@ public class ToolsTopbar extends JPanel {
         return button;
     }
 
+    private JButton createSimulateStepButton(GraphManager graphManager) {
+        JButton button = new JButton("▶");
+        button.addActionListener(e -> {
+            graphManager.getSimulation().step();
+        });
+        return button;
+    }
+
     /**
      * Add the buttons to the toolbar.
      *
@@ -87,5 +97,6 @@ public class ToolsTopbar extends JPanel {
         toolBar.add(removeNodeButton);
         toolBar.add(addEdgeButton);
         toolBar.add(removeEdgeButton);
+        toolBar.add(simulateStepButton);
     }
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.rts.objects.Army;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +19,7 @@ public class Edge implements Selectable {
     private String name;
     @Setter
     private boolean selected;
+    @Setter
     private List<Army> armies;
 
     /**
@@ -36,5 +38,22 @@ public class Edge implements Selectable {
         startNode.addEdge(this);
         endNode.addEdge(this);
         this.selected = false;
+        this.armies = new ArrayList<>();
+    }
+
+    /**
+     * Get the other node connected to this edge.
+     *
+     * @param node the current node
+     * @return the other node
+     */
+    public Node getOtherNode(Node node) {
+        if (node.equals(startNode)) {
+            return endNode;
+        } else if (node.equals(endNode)) {
+            return startNode;
+        } else {
+            return null;
+        }
     }
 }

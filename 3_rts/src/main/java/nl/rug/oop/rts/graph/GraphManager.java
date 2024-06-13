@@ -26,6 +26,7 @@ public class GraphManager implements Observable {
     private Node startNode;
     @Setter
     private Selectable selected;
+    private Simulation simulation;
 
     /**
      * Create a new GraphManager.
@@ -35,6 +36,8 @@ public class GraphManager implements Observable {
         edges = new ArrayList<>();
         observers = new ArrayList<>();
         startNode = null;
+        selected = null;
+        simulation = new Simulation(this);
     }
 
     public void addNode(Node node) {
