@@ -1,6 +1,7 @@
 package nl.rug.oop.rts.graph;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -9,6 +10,7 @@ import java.awt.event.MouseEvent;
  * Class to handle mouse events in the graph.
  */
 @AllArgsConstructor
+@Getter
 public class MouseHandler extends MouseAdapter {
     private NodeSelector nodeSelector;
     private GraphManager graphManager;
@@ -23,6 +25,7 @@ public class MouseHandler extends MouseAdapter {
         } else {
             nodeSelector.handleEmptySpaceClick();
         }
+        graphManager.modified();
     }
 
     @Override

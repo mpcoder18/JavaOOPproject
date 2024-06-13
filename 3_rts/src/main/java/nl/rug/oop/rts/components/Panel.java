@@ -1,9 +1,6 @@
 package nl.rug.oop.rts.components;
 
-import nl.rug.oop.rts.graph.Edge;
-import nl.rug.oop.rts.graph.GraphManager;
-import nl.rug.oop.rts.graph.Node;
-import nl.rug.oop.rts.graph.NodeSelector;
+import nl.rug.oop.rts.graph.*;
 import nl.rug.oop.rts.objects.Army;
 import nl.rug.oop.rts.objects.Team;
 import nl.rug.oop.rts.observable.Observer;
@@ -36,9 +33,9 @@ public class Panel extends JPanel implements Observer {
         nodeImage = textureLoader.getTexture("node4", graphManager.getNodeSize(), graphManager.getNodeSize());
         nodeImageSelected = textureLoader.getTexture("node3", graphManager.getNodeSize(), graphManager.getNodeSize());
 
-        NodeSelector nodeSelector = new NodeSelector(graphManager);
-        addMouseListener(nodeSelector);
-        addMouseMotionListener(nodeSelector);
+        MouseHandler mouseHandler = new MouseHandler(new NodeSelector(graphManager), graphManager);
+        addMouseListener(mouseHandler);
+        addMouseMotionListener(mouseHandler);
     }
 
     @Override
@@ -83,7 +80,8 @@ public class Panel extends JPanel implements Observer {
         }
 
         // Preview edge
-        NodeSelector nodeSelector = (NodeSelector) getMouseListeners()[0];
+        MouseHandler mouseHandler = (MouseHandler) getMouseListeners()[0];
+        NodeSelector nodeSelector = mouseHandler.getNodeSelector();
         if (graphManager.getStartNode() != null && nodeSelector.getCurrentMousePosition() != null) {
             g.setColor(Color.GRAY);
             g.drawLine(graphManager.getStartNode().getX() + graphManager.getNodeSize() / 2,

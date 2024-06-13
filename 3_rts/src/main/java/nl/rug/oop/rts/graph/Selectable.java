@@ -13,4 +13,8 @@ public interface Selectable {
     }
 
     void setSelected(boolean selected);
+
+    String getName();
+    
+    void setName(String name);
 }

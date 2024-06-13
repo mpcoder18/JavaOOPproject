@@ -145,32 +145,4 @@ public class NodeSelector extends MouseAdapter {
         }
         return selectable;
     }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        Selectable selectable = getSelectable(e.getX(), e.getY());
-        if (selectable instanceof Node node) {
-            handleNodeClick(node, e);
-        } else if (selectable instanceof Edge edge) {
-            handleEdgeClick(edge);
-        } else {
-            handleEmptySpaceClick();
-        }
-        graphManager.modified();
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        currentMousePosition = e.getPoint();
-        graphManager.modified();
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        if (graphManager.getSelected() instanceof Node node && node.isSelected()) {
-            node.setX(e.getX() - offsetX);
-            node.setY(e.getY() - offsetY);
-            graphManager.modified();
-        }
-    }
 }

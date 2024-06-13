@@ -31,10 +31,10 @@ public class OptionsPanel extends JPanel implements Observer {
     }
 
     private void displayNodeOptions() {
-        JTextField nameField = new JTextField(graphManager.getSelectedNode().getName());
+        JTextField nameField = new JTextField(graphManager.getSelected().getName());
         nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, nameField.getPreferredSize().height));
         nameField.addActionListener(e -> {
-            graphManager.getSelectedNode().setName(nameField.getText());
+            graphManager.getSelected().setName(nameField.getText());
             graphManager.modified();
         });
         add(nameField);
