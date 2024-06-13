@@ -21,7 +21,6 @@ public class Simulation {
     public void step() {
         resolveBattles();
         moveArmiesNode();
-        resetMoved(); // Remove this line to divide the move simulation into two steps
         resolveBattles();
 //        encounterRandomEvents();
         moveArmiesEdge();

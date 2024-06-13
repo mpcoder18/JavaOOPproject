@@ -2,6 +2,7 @@ package nl.rug.oop.rts.graph;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.rts.graph.events.Event;
 import nl.rug.oop.rts.objects.Army;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class Node implements Selectable {
     @Setter
     private boolean selected;
     private List<Army> armies;
+    private List<Event> events;
 
     /**
      * Create a new node.
