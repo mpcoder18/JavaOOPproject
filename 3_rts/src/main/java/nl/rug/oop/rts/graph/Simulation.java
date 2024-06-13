@@ -19,9 +19,11 @@ public class Simulation {
     public void step() {
         resolveBattles();
         moveArmiesNode();
+        resetMoved(); // Remove this line to divide the move simulation into two steps
 //        resolveBattles();
 //        encounterRandomEvents();
-//        moveArmiesEdge();
+        moveArmiesEdge();
+        resetMoved();
 //        resolveBattles();
 //        encounterRandomEvents();
     }
@@ -59,5 +61,36 @@ public class Simulation {
             node.getArmies().removeAll(armiesToMove);
         }
         graphManager.modified();
+    }
+
+    private void moveArmiesEdge() {
+        // Every army moves to their destination node
+        for (Edge edge : graphManager.getEdges()) {
+            List<Army> armiesToMove = new ArrayList<>();
+            for (Army army : edge.getArmies()) {
+                if (army.isMoved()) {
+                    continue;
+                }
+
+                Node destination = army.getMovingToNextStep();
+                destination.getArmies().add(army);
+                armiesToMove.add(army);
+            }
+            edge.getArmies().removeAll(armiesToMove);
+        }
+        graphManager.modified();
+    }
+
+    private void resetMoved() {
+        for (Node node : graphManager.getNodes()) {
+            for (Army army : node.getArmies()) {
+                army.setMoved(false);
+            }
+        }
+        for (Edge edge : graphManager.getEdges()) {
+            for (Army army : edge.getArmies()) {
+                army.setMoved(false);
+            }
+        }
     }
 }
