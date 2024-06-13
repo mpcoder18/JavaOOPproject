@@ -31,7 +31,6 @@ public class MouseHandler extends MouseAdapter {
     @Override
     public void mouseMoved(MouseEvent e) {
         nodeSelector.setCurrentMousePosition(e.getPoint());
-        graphManager.modified();
     }
 
     @Override

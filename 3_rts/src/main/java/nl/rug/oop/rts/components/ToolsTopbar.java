@@ -1,5 +1,6 @@
 package nl.rug.oop.rts.components;
 
+import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.GraphManager;
 import nl.rug.oop.rts.graph.Node;
 import nl.rug.oop.rts.observable.ButtonObserver;
@@ -43,9 +44,9 @@ public class ToolsTopbar extends JPanel {
     private JButton createRemoveNodeButton(GraphManager graphManager) {
         JButton button = new JButton("Remove Node");
         button.addActionListener(e -> {
-            if (graphManager.getSelectedNode() != null) {
-                graphManager.removeNode(graphManager.getSelectedNode());
-                graphManager.setSelectedNode(null);
+            if (graphManager.getSelected() instanceof Node) {
+                graphManager.removeNode((Node) graphManager.getSelected());
+                graphManager.deselect();
             }
         });
         return button;
@@ -54,9 +55,9 @@ public class ToolsTopbar extends JPanel {
     private JButton createAddEdgeButton(GraphManager graphManager) {
         JButton button = new JButton("Add Edge");
         button.addActionListener(e -> {
-            if (graphManager.getSelectedNode() != null) {
+            if (graphManager.getSelected() instanceof Node) {
                 if (graphManager.getStartNode() == null) {
-                    graphManager.setStartNode(graphManager.getSelectedNode());
+                    graphManager.setStartNode((Node) graphManager.getSelected());
                 }
             }
         });
@@ -67,9 +68,11 @@ public class ToolsTopbar extends JPanel {
         JButton button = new JButton("Remove Edge");
         button.addActionListener(e -> {
             if (graphManager.getSelectedEdge() != null) {
-                graphManager.getSelectedEdge().getStartNode().removeEdge(graphManager.getSelectedEdge());
-                graphManager.getSelectedEdge().getEndNode().removeEdge(graphManager.getSelectedEdge());
-                graphManager.removeEdge(graphManager.getSelectedEdge());
+                Edge edge = graphManager.getSelectedEdge();
+                graphManager.getSelectedEdge().getStartNode().removeEdge(edge);
+                graphManager.getSelectedEdge().getEndNode().removeEdge(edge);
+                graphManager.deselect();
+                graphManager.removeEdge(edge);
                 graphManager.setSelectedEdge(null);
             }
         });

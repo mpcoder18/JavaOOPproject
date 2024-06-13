@@ -23,7 +23,6 @@ public class GraphManager implements Observable {
     private final List<Edge> edges;
     private final List<Observer> observers;
     private final int nodeSize = 80;
-    private Node selectedNode; // TODO: remove
     private Node startNode;
     private Edge selectedEdge; // TODO: remove
     @Setter
@@ -67,11 +66,6 @@ public class GraphManager implements Observable {
         notifyAllObservers();
     }
 
-    public void setSelectedNode(Node node) {
-        selectedNode = node;
-        notifyAllObservers();
-    }
-
     public void setSelectedEdge(Edge edge) {
         selectedEdge = edge;
         notifyAllObservers();
@@ -105,12 +99,12 @@ public class GraphManager implements Observable {
                     faction.getUnitNames().get(rand.nextInt(faction.getUnitNames().size()))));
         }
         Army army = new Army(units, faction);
-        selectedNode.getArmies().add(army);
+        selected.getArmies().add(army);
         notifyAllObservers();
     }
 
     public void removeArmy(Army army) {
-        selectedNode.getArmies().remove(army);
+        selected.getArmies().remove(army);
         notifyAllObservers();
     }
 
@@ -120,9 +114,6 @@ public class GraphManager implements Observable {
      * @param selectable object to select
      */
     public void select(Selectable selectable) {
-        if (selectedNode != null) {
-            selectedNode.deselect();
-        }
         if (selectedEdge != null) {
             selectedEdge.deselect();
         }
@@ -131,9 +122,7 @@ public class GraphManager implements Observable {
         }
         selectable.select();
         selected = selectable;
-        if (selectable instanceof Node node) {
-            selectedNode = node;
-        } else if (selectable instanceof Edge edge) {
+        if (selectable instanceof Edge edge) {
             selectedEdge = edge;
         }
     }
@@ -142,16 +131,12 @@ public class GraphManager implements Observable {
      * Deselect any selected object.
      */
     public void deselect() {
-        if (selectedNode != null) {
-            selectedNode.deselect();
-        }
         if (selectedEdge != null) {
             selectedEdge.deselect();
         }
         if (selected != null) {
             selected.deselect();
         }
-        selectedNode = null;
         selectedEdge = null;
         selected = null;
         notifyAllObservers();

@@ -1,6 +1,9 @@
 package nl.rug.oop.rts.components;
 
+import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.GraphManager;
+import nl.rug.oop.rts.graph.Node;
+import nl.rug.oop.rts.graph.Selectable;
 import nl.rug.oop.rts.objects.Army;
 import nl.rug.oop.rts.objects.Faction;
 import nl.rug.oop.rts.observable.Observer;
@@ -51,7 +54,7 @@ public class OptionsPanel extends JPanel implements Observer {
         add(addArmyButton);
 
         // List armies and add remove button
-        for (Army army : graphManager.getSelectedNode().getArmies()) {
+        for (Army army : graphManager.getSelected().getArmies()) {
             JPanel armyPanel = new JPanel();
             armyPanel.setLayout(new BoxLayout(armyPanel, BoxLayout.X_AXIS));
             JLabel armyLabel = new JLabel(army.getFaction().toString());
@@ -66,10 +69,12 @@ public class OptionsPanel extends JPanel implements Observer {
     }
 
     private void displayEdgeOptions() {
-        JTextField nameField = new JTextField(graphManager.getSelectedEdge().getName());
+        Selectable selectedEdge = graphManager.getSelected();
+        String edgeName = selectedEdge == null ? "" : selectedEdge.getName();
+        JTextField nameField = new JTextField(edgeName);
         nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, nameField.getPreferredSize().height));
         nameField.addActionListener(e -> {
-            graphManager.getSelectedEdge().setName(nameField.getText());
+            graphManager.getSelected().setName(nameField.getText());
             graphManager.modified();
         });
         JLabel startNodeLabel = new JLabel("Start node: " + graphManager.getSelectedEdge().getStartNode().getName());
@@ -88,9 +93,9 @@ public class OptionsPanel extends JPanel implements Observer {
      */
     public void update() {
         removeAll();
-        if (graphManager.getSelectedNode() != null) {
+        if (graphManager.getSelected() instanceof Node) {
             displayNodeOptions();
-        } else if (graphManager.getSelectedEdge() != null) {
+        } else if (graphManager.getSelected() instanceof Edge) {
             displayEdgeOptions();
         } else {
             displayMessage();

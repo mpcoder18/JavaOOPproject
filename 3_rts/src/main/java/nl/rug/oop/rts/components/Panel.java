@@ -73,7 +73,7 @@ public class Panel extends JPanel implements Observer {
 
             // Drop shadow
             g.setColor(Color.BLACK);
-            g.drawString(edge.getName(), x - stringWidth / 2 + 2, y + 2);
+            g.drawString(edge.getName(), x - stringWidth / 2 + 1, y + 1);
 
             g.setColor(Color.WHITE);
             g.drawString(edge.getName(), x - stringWidth / 2, y);
@@ -103,8 +103,8 @@ public class Panel extends JPanel implements Observer {
             int stringWidth = g.getFontMetrics().stringWidth(node.getName());
             // Drop shadow
             g.setColor(Color.BLACK);
-            g.drawString(node.getName(), node.getX() + graphManager.getNodeSize() / 2 - stringWidth / 2 + 2,
-                    node.getY() + graphManager.getNodeSize() / 2 + 2);
+            g.drawString(node.getName(), node.getX() + graphManager.getNodeSize() / 2 - stringWidth / 2 + 1,
+                    node.getY() + graphManager.getNodeSize() / 2 + 1);
 
             g.setColor(Color.WHITE);
             g.drawString(node.getName(), node.getX() + graphManager.getNodeSize() / 2 - stringWidth / 2,

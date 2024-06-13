@@ -1,6 +1,7 @@
 package nl.rug.oop.rts.observable;
 
 import nl.rug.oop.rts.graph.GraphManager;
+import nl.rug.oop.rts.graph.Node;
 
 import javax.swing.*;
 
@@ -30,8 +31,8 @@ public class ButtonObserver implements Observer {
 
     @Override
     public void update() {
-        removeNodeButton.setEnabled(graphManager.getSelectedNode() != null);
-        addEdgeButton.setEnabled(graphManager.getSelectedNode() != null);
+        removeNodeButton.setEnabled(graphManager.getSelected() instanceof Node);
+        addEdgeButton.setEnabled(graphManager.getSelected() instanceof Node);
         removeEdgeButton.setEnabled(graphManager.getSelectedEdge() != null);
     }
 }
