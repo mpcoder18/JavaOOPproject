@@ -5,6 +5,7 @@ import nl.rug.oop.rts.graph.GraphManager;
 import nl.rug.oop.rts.graph.Node;
 import nl.rug.oop.rts.graph.Selectable;
 import nl.rug.oop.rts.graph.events.Event;
+import nl.rug.oop.rts.graph.events.EventRecord;
 import nl.rug.oop.rts.graph.events.EventType;
 import nl.rug.oop.rts.objects.Army;
 import nl.rug.oop.rts.objects.Faction;
@@ -101,8 +102,28 @@ public class OptionsPanel extends JPanel implements Observer {
         add(eventsScrollPane);
     }
 
+    private void createPastEventsList() {
+        JPanel pastEventsPanel = new JPanel();
+        pastEventsPanel.setLayout(new BoxLayout(pastEventsPanel, BoxLayout.Y_AXIS));
+        for (EventRecord eventRecord : graphManager.getEvents()) {
+            JPanel eventPanel = new JPanel();
+            eventPanel.setLayout(new BoxLayout(eventPanel, BoxLayout.X_AXIS));
+            JLabel eventLabel = new JLabel(eventRecord.getStep() + ". " +
+                    eventRecord.getEvent().getType().getFormattedName());
+            eventLabel.setToolTipText(eventRecord.getEvent().getDescription());
+            eventPanel.add(eventLabel);
+            pastEventsPanel.add(eventPanel);
+        }
+        pastEventsPanel.add(new Box.Filler(new Dimension(0, 0), new Dimension(0, 0),
+                new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE)));
+        JScrollPane pastEventsScrollPane = new JScrollPane(pastEventsPanel);
+        pastEventsScrollPane.setPreferredSize(new Dimension(200, 200));
+        add(pastEventsScrollPane);
+    }
+
     private JButton createAddArmyButton() {
         JButton addArmyButton = new JButton("Add army");
+        addArmyButton.setToolTipText("Add an army to the selected node");
         addArmyButton.addActionListener(e -> {
             int option = JOptionPane.showOptionDialog(this, "Select a faction", "Add army",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
@@ -116,6 +137,7 @@ public class OptionsPanel extends JPanel implements Observer {
 
     private JButton createAddEventButton() {
         JButton addEventButton = new JButton("Add event");
+        addEventButton.setToolTipText("Add an event to the selected node/edge");
         addEventButton.addActionListener(e -> {
             EventType[] eventTypes = EventType.values();
             String[] eventTypeNames = new String[eventTypes.length];
@@ -133,7 +155,6 @@ public class OptionsPanel extends JPanel implements Observer {
         return addEventButton;
     }
 
-    // TODO: add events add/remove buttons
     private void displayEdgeOptions() {
         Selectable selectedEdge = graphManager.getSelected();
         String edgeName = selectedEdge == null ? "" : selectedEdge.getName();
@@ -149,10 +170,14 @@ public class OptionsPanel extends JPanel implements Observer {
         add(nameField);
         add(startNodeLabel);
         add(endNodeLabel);
+        add(createAddEventButton());
+        createArmiesList();
+        createEventsList();
     }
 
     private void displayMessage() {
         add(messageLabel);
+        createPastEventsList();
     }
 
     /**

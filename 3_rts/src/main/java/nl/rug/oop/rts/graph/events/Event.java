@@ -13,4 +13,8 @@ public abstract class Event {
     private EventType type;
 
     public abstract void execute(Army army);
+
+    public String getDescription() {
+        return type.getDescription();
+    }
 }

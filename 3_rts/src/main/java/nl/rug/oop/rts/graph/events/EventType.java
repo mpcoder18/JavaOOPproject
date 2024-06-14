@@ -1,10 +1,12 @@
 package nl.rug.oop.rts.graph.events;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * An event type that can be executed on an army.
  */
+@Getter
 @AllArgsConstructor
 public enum EventType {
     REINFORCEMENTS("Additional troops have arrived! (+15 units)"),
@@ -16,7 +18,7 @@ public enum EventType {
     TRAINING("A unit has been trained! (+2 damage)"),
     SOUP("A good soup has been made! (+1 health)");
 
-    private final String name;
+    private final String description;
 
     /**
      * Get the formatted name of the event type from the enum.

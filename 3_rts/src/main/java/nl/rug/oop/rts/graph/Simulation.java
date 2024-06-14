@@ -1,12 +1,16 @@
 package nl.rug.oop.rts.graph;
 
 import lombok.AllArgsConstructor;
+import nl.rug.oop.rts.graph.events.Event;
+import nl.rug.oop.rts.graph.events.EventRecord;
 import nl.rug.oop.rts.objects.Army;
 import nl.rug.oop.rts.objects.Team;
 import nl.rug.oop.rts.objects.Unit;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Class to represent a simulation of the game.
@@ -21,12 +25,16 @@ public class Simulation {
     public void step() {
         resolveBattles();
         moveArmiesNode();
+        resetState();
         resolveBattles();
-//        encounterRandomEvents();
+        encounterRandomEvents();
         moveArmiesEdge();
-        resetMoved();
+        resetState();
         resolveBattles();
-//        encounterRandomEvents();
+        encounterRandomEvents();
+        resetState();
+        graphManager.setSimulationStep(graphManager.getSimulationStep() + 1);
+        graphManager.modified();
     }
 
     private void resolveBattles() {
@@ -145,16 +153,56 @@ public class Simulation {
         graphManager.modified();
     }
 
-    private void resetMoved() {
+    private void resetState() {
         for (Node node : graphManager.getNodes()) {
+            List<Army> toRemove = new ArrayList<>();
             for (Army army : node.getArmies()) {
                 army.setMoved(false);
+                if (army.getUnits().isEmpty()) {
+                    toRemove.add(army);
+                }
+            }
+            node.getArmies().removeAll(toRemove);
+        }
+        for (Edge edge : graphManager.getEdges()) {
+            List<Army> toRemove = new ArrayList<>();
+            for (Army army : edge.getArmies()) {
+                army.setMoved(false);
+                if (army.getUnits().isEmpty()) {
+                    toRemove.add(army);
+                }
+            }
+            edge.getArmies().removeAll(toRemove);
+        }
+    }
+
+    public void encounterRandomEvents() {
+        List<EventRecord> events = new ArrayList<>();
+        for (Node node : graphManager.getNodes()) {
+            for (Army army : node.getArmies()) {
+                events.add(encounterRandomEvent(army, node));
             }
         }
         for (Edge edge : graphManager.getEdges()) {
             for (Army army : edge.getArmies()) {
-                army.setMoved(false);
+                events.add(encounterRandomEvent(army, edge));
             }
         }
+        for (EventRecord event : events) {
+            if (event != null) {
+                graphManager.getEvents().add(0, event);
+            }
+        }
+    }
+
+    public EventRecord encounterRandomEvent(Army army, Selectable selectable) {
+        if (Math.random() < 0.5) {
+            if (!selectable.getEvents().isEmpty()) {
+                Event event = selectable.getEvents().get((int) (Math.random() * selectable.getEvents().size()));
+                event.execute(army);
+                return new EventRecord(event, graphManager.getSimulationStep());
+            }
+        }
+        return null;
     }
 }

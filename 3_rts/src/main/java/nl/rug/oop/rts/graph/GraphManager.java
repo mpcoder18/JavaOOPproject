@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.rts.graph.events.Event;
 import nl.rug.oop.rts.graph.events.EventFactory;
+import nl.rug.oop.rts.graph.events.EventRecord;
 import nl.rug.oop.rts.graph.events.EventType;
 import nl.rug.oop.rts.objects.Army;
 import nl.rug.oop.rts.objects.Faction;
@@ -31,6 +32,9 @@ public class GraphManager implements Observable {
     private Selectable selected;
     private Simulation simulation;
     private EventFactory eventFactory;
+    private List<EventRecord> events;
+    @Setter
+    private int SimulationStep = 0;
 
     /**
      * Create a new GraphManager.
@@ -43,6 +47,7 @@ public class GraphManager implements Observable {
         selected = null;
         simulation = new Simulation(this);
         eventFactory = new EventFactory();
+        events = new ArrayList<>();
     }
 
     public void addNode(Node node) {
