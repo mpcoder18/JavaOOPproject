@@ -154,4 +154,18 @@ public class GraphManager implements Observable {
         selected = null;
         notifyAllObservers();
     }
+
+    /**
+     * Save the current state of the graph to JSON.
+     */
+    public void save() {
+
+    }
+
+    /**
+     * Load a state of the graph from JSON.
+     */
+    public void load() {
+
+    }
 }

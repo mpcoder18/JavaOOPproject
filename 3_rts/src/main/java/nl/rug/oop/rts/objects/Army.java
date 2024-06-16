@@ -2,6 +2,7 @@ package nl.rug.oop.rts.objects;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.rts.JsonObject;
 import nl.rug.oop.rts.graph.Node;
 
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class Army {
      */
     public void addDamageToAllUnits(Integer damage) {
         for (Unit unit : units) {
-            unit.setDamage(Math.max(unit.getDamage() + damage, 0));
+            unit.setStrength(Math.max(unit.getStrength() + damage, 0));
         }
     }
 
@@ -83,5 +84,21 @@ public class Army {
                 units.remove(unit);
             }
         }
+    }
+
+    // TODO: implement an interface for toJson and fromJson ?
+    public JsonObject toJson() {
+        JsonObject jsonObject = new JsonObject()
+                .put("Name", faction.getName())
+                .put("Faction", faction.getName())
+                .put("Team", team.toString());
+
+        List<String> unitJsons = new ArrayList<>();
+        for (Unit unit : units) {
+            unitJsons.add(unit.toJsonObject().toJsonString());
+        }
+        jsonObject.put("Units", "[" + String.join(", ", unitJsons) + "]");
+
+        return jsonObject;
     }
 }

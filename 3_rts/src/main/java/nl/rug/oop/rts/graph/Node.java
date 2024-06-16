@@ -2,6 +2,7 @@ package nl.rug.oop.rts.graph;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.rts.JsonObject;
 import nl.rug.oop.rts.graph.events.Event;
 import nl.rug.oop.rts.objects.Army;
 
@@ -52,5 +53,26 @@ public class Node implements Selectable {
 
     public void removeEdge(Edge edge) {
         edgeList.remove(edge);
+    }
+
+    public JsonObject toJson() {
+        JsonObject jsonObject = new JsonObject()
+                .put("Id", ID)
+                .put("Name", name)
+                .put("X", x)
+                .put("Y", y);
+        List<String> armiesJson = new ArrayList<>();
+        for (Army army : armies) {
+            armiesJson.add(army.toJson().toJsonString());
+        }
+        jsonObject.put("Armies", "[" + String.join(",", armiesJson) + "]");
+
+        List<String> eventsJson = new ArrayList<>();
+        for (Event event : events) {
+            eventsJson.add(event.toJson().toJsonString());
+        }
+        jsonObject.put("Events", "[" + String.join(",", eventsJson) + "]");
+
+        return jsonObject;
     }
 }
