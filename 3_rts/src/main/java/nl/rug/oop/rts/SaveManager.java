@@ -1,5 +1,6 @@
 package nl.rug.oop.rts;
 
+import lombok.NoArgsConstructor;
 import nl.rug.oop.rts.graph.model.GraphModel;
 
 import java.io.FileWriter;
@@ -10,11 +11,8 @@ import java.nio.file.Paths;
 /**
  * Class to manage saving and loading the game.
  */
-// TODO: Implement save manager by putting all relevant methods here
+@NoArgsConstructor
 public class SaveManager {
-    public SaveManager() {
-
-    }
 
     public void saveGame(GraphModel model, String filePath) {
         JsonObject json = model.toJson();
@@ -33,8 +31,9 @@ public class SaveManager {
         try {
             String jsonString = new String(Files.readAllBytes(Paths.get(filePath)));
             JsonObject json = new JsonObject(jsonString);
-//            return new GraphModel(json); // TODO: Implement GraphModel constructor
-            return null;
+            System.out.println(jsonString);
+            System.out.println(json.toJsonString());
+            return new GraphModel(json.get("nodes"), json.get("edges"), json.get("simulationStep"), json.get("simulationSpeed"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

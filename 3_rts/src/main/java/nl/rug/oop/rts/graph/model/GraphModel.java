@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.rts.JsonList;
 import nl.rug.oop.rts.JsonObject;
+import nl.rug.oop.rts.SaveManager;
 import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.Node;
 import nl.rug.oop.rts.graph.Selectable;
@@ -46,6 +47,7 @@ public class GraphModel implements Observable {
     @Setter
     private int offsetY;
     private Point mousePosition;
+    private SaveManager saveManager;
 
     /**
      * Create a new GraphModel.
@@ -58,6 +60,19 @@ public class GraphModel implements Observable {
         selected = null;
         eventFactory = new EventFactory();
         eventRecords = new ArrayList<>();
+        saveManager = new SaveManager();
+    }
+
+    public GraphModel(Object nodes, Object edges, Object simulationStep, Object eventRecords) {
+        this.nodes = (List<Node>) nodes;
+        this.edges = (List<Edge>) edges;
+        this.observers = new ArrayList<>();
+        startNode = null;
+        selected = null;
+        eventFactory = new EventFactory();
+        this.SimulationStep = 0;
+        this.eventRecords = (List<EventRecord>) eventRecords;
+        saveManager = new SaveManager();
     }
 
     public void addNode(int ID, String name, int x, int y) {

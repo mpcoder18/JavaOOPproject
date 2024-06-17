@@ -20,7 +20,7 @@ public class JsonList {
                 values[i] = new JsonList(element);
             } else if (element.startsWith("\"")) {
                 values[i] = element.substring(1, element.length() - 1);
-            } else {
+            } else if (!element.isEmpty() && !element.equals("]") && !element.equals("]}")) {
                 values[i] = Integer.parseInt(element);
             }
         }

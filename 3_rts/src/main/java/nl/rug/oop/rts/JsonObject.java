@@ -17,17 +17,19 @@ public class JsonObject {
         jsonString = jsonString.substring(1, jsonString.length() - 1);
         String[] pairs = jsonString.split(",");
         for (String pair : pairs) {
-            String[] keyValue = pair.split(":");
-            String key = keyValue[0].trim();
-            String value = keyValue[1].trim();
-            if (value.startsWith("{")) {
-                values.put(key, new JsonObject(value));
-            } else if (value.startsWith("[")) {
-                values.put(key, new JsonList(value));
-            } else if (value.startsWith("\"")) {
-                values.put(key, value.substring(1, value.length() - 1));
-            } else {
-                values.put(key, Integer.parseInt(value));
+            if (pair.contains(":")) {
+                String[] keyValue = pair.split(":");
+                String key = keyValue[0].trim();
+                String value = keyValue[1].trim();
+                if (value.startsWith("{")) {
+                    values.put(key, new JsonObject(value));
+                } else if (value.startsWith("[")) {
+                    values.put(key, new JsonList(value));
+                } else if (value.startsWith("\"")) {
+                    values.put(key, value.substring(1, value.length() - 1));
+                } else {
+                    values.put(key, Integer.parseInt(value));
+                }
             }
         }
     }

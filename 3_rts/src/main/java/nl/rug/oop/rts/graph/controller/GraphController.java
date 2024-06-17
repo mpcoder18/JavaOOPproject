@@ -1,6 +1,8 @@
 package nl.rug.oop.rts.graph.controller;
 
 import lombok.Getter;
+import lombok.Setter;
+import nl.rug.oop.rts.SaveManager;
 import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.Node;
 import nl.rug.oop.rts.graph.Selectable;
@@ -22,6 +24,7 @@ import java.util.List;
  */
 @Getter
 public class GraphController {
+    @Setter
     private GraphModel model;
     private GraphView view;
 
@@ -202,5 +205,9 @@ public class GraphController {
 
     public int getStep() {
         return model.getSimulationStep();
+    }
+
+    public SaveManager getSaveManager() {
+        return model.getSaveManager();
     }
 }
