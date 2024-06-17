@@ -16,7 +16,7 @@ public class SaveManager {
 
     public void saveGame(GraphModel model, String filePath) {
         JsonObject json = model.toJson();
-        String jsonString = json.toJsonString();
+        String jsonString = json.toJsonString(1);
 
         try {
             FileWriter fileWriter = new FileWriter(filePath);
@@ -32,7 +32,7 @@ public class SaveManager {
             String jsonString = new String(Files.readAllBytes(Paths.get(filePath)));
             JsonObject json = new JsonObject(jsonString);
             System.out.println(jsonString);
-            System.out.println(json.toJsonString());
+            System.out.println(json.toJsonString(1));
             return new GraphModel(json.get("nodes"), json.get("edges"), json.get("simulationStep"), json.get("simulationSpeed"));
         } catch (IOException e) {
             throw new RuntimeException(e);

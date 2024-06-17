@@ -52,22 +52,26 @@ public class JsonList {
         return values.length;
     }
 
-    public String toJsonString() {
+    public String toJsonString(int indent) { // TODO: remove trailing comma
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("[");
+        stringBuilder.append("[\n");
         for (Object value : values) {
+            stringBuilder.append("  ".repeat(Math.max(0, indent)));
             if (value instanceof JsonObject) {
-                stringBuilder.append(((JsonObject) value).toJsonString());
+                stringBuilder.append(((JsonObject) value).toJsonString(indent + 1));
+            } else if (value instanceof JsonList) {
+                stringBuilder.append(((JsonList) value).toJsonString(indent + 1));
             } else if (value instanceof String) {
                 stringBuilder.append("\"").append(value).append("\"");
             } else {
                 stringBuilder.append(value);
             }
-            stringBuilder.append(", ");
+            stringBuilder.append(",\n");
         }
         if (values.length > 0) {
-            stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+            stringBuilder.deleteCharAt(stringBuilder.length() - 2);
         }
+        stringBuilder.append("  ".repeat(Math.max(0, indent - 1)));
         stringBuilder.append("]");
         return stringBuilder.toString();
     }

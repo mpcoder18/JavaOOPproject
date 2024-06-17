@@ -68,27 +68,28 @@ public class JsonObject {
      *
      * @return the JSON string representation of the JsonObject
      */
-    public String toJsonString() {
+    public String toJsonString(int indent) { // TODO: remove trailing comma
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{");
         for (Map.Entry<String, Object> entry : values.entrySet()) {
+            stringBuilder.append("\n");
+            stringBuilder.append("  ".repeat(Math.max(0, indent)));
             stringBuilder.append("\"").append(entry.getKey()).append("\": ");
-            if (entry.getValue() instanceof JsonObject) {
-                stringBuilder.append(((JsonObject) entry.getValue()).toJsonString());
-            } else if (entry.getValue() instanceof JsonList) {
-                stringBuilder.append(((JsonList) entry.getValue()).toJsonString());
-            } else if (entry.getValue() instanceof String) {
-                stringBuilder.append("\"").append(entry.getValue()).append("\"");
+            Object value = entry.getValue();
+            if (value instanceof JsonObject) {
+                stringBuilder.append(((JsonObject) value).toJsonString(indent + 1));
+            } else if (value instanceof JsonList) {
+                stringBuilder.append(((JsonList) value).toJsonString(indent + 1));
+            } else if (value instanceof String) {
+                stringBuilder.append("\"").append(value).append("\"");
             } else {
-                stringBuilder.append(entry.getValue());
+                stringBuilder.append(value);
             }
-            stringBuilder.append(", ");
+            stringBuilder.append(",");
         }
-        if (!values.isEmpty()) {
-            stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
-        }
+        stringBuilder.append("\n");
+        stringBuilder.append("  ".repeat(Math.max(0, indent - 1)));
         stringBuilder.append("}");
         return stringBuilder.toString();
     }
-
 }
