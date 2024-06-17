@@ -1,9 +1,8 @@
 package nl.rug.oop.rts;
 
 import nl.rug.oop.rts.components.OptionsPanel;
-import nl.rug.oop.rts.components.Panel;
 import nl.rug.oop.rts.components.ToolsTopbar;
-import nl.rug.oop.rts.graph.GraphManager;
+import nl.rug.oop.rts.graph.controller.GraphController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,20 +24,17 @@ public class MainSetup {
         frame.setPreferredSize(frame.getSize());
         frame.setLocationRelativeTo(null);
 
-        GraphManager graphManager = new GraphManager();
-
-        nl.rug.oop.rts.components.Panel panel = new Panel(graphManager);
-        panel.observe(graphManager);
-        frame.add(panel);
+        GraphController graphController = new GraphController();
+        frame.add(graphController.getView());
 
         JToolBar toolBar = new JToolBar();
-        ToolsTopbar toolsTopbar = new ToolsTopbar(graphManager);
+        ToolsTopbar toolsTopbar = new ToolsTopbar(graphController);
         toolsTopbar.addToToolbar(toolBar);
         frame.add(toolBar, BorderLayout.NORTH);
 
-        OptionsPanel optionsPanel = new OptionsPanel(graphManager);
+        OptionsPanel optionsPanel = new OptionsPanel(graphController);
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, optionsPanel, panel);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, optionsPanel, graphController.getView());
         splitPane.setOneTouchExpandable(true);
         splitPane.setDividerLocation(200);
 
@@ -48,7 +44,7 @@ public class MainSetup {
         frame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                graphManager.modified();
+                graphController.getModel().notifyAllObservers();
             }
         });
 

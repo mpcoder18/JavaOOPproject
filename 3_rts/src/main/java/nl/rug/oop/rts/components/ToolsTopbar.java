@@ -1,18 +1,15 @@
 package nl.rug.oop.rts.components;
 
 import nl.rug.oop.rts.graph.Edge;
-import nl.rug.oop.rts.graph.GraphManager;
+import nl.rug.oop.rts.graph.controller.GraphController;
 import nl.rug.oop.rts.graph.Node;
-import nl.rug.oop.rts.objects.Army;
-import nl.rug.oop.rts.objects.Unit;
 import nl.rug.oop.rts.observable.ButtonObserver;
 
 import javax.swing.*;
 import java.io.File;
-import java.util.List;
 
 /**
- * Topbar with buttons to add and remove nodes and edges. Controller of the MVC pattern.
+ * Topbar with buttons to add and remove nodes and edges, simulate a step, and save and load the graph.
  */
 public class ToolsTopbar extends JPanel {
     private final JButton addNodeButton;
@@ -26,77 +23,76 @@ public class ToolsTopbar extends JPanel {
     /**
      * Create a new tools topbar.
      *
-     * @param graphManager GraphManager to observe
+     * @param controller GraphController to control the graph
      */
-    public ToolsTopbar(GraphManager graphManager) {
-        // TODO: make a separate class for the buttons
-        addNodeButton = createAddNodeButton(graphManager);
-        removeNodeButton = createRemoveNodeButton(graphManager);
-        addEdgeButton = createAddEdgeButton(graphManager);
-        removeEdgeButton = createRemoveEdgeButton(graphManager);
-        simulateStepButton = createSimulateStepButton(graphManager);
-        saveButton = createSaveButton(graphManager);
-        loadButton = createLoadButton(graphManager);
+    public ToolsTopbar(GraphController controller) {
+        addNodeButton = createAddNodeButton(controller);
+        removeNodeButton = createRemoveNodeButton(controller);
+        addEdgeButton = createAddEdgeButton(controller);
+        removeEdgeButton = createRemoveEdgeButton(controller);
+        simulateStepButton = createSimulateStepButton(controller);
+        saveButton = createSaveButton(controller);
+        loadButton = createLoadButton(controller);
 
-        ButtonObserver btnObs = new ButtonObserver(graphManager, removeNodeButton, addEdgeButton, removeEdgeButton);
-        graphManager.addObserver(btnObs);
+        ButtonObserver btnObs = new ButtonObserver(controller, removeNodeButton, addEdgeButton, removeEdgeButton);
+        controller.addObserver(btnObs);
     }
 
-    private JButton createAddNodeButton(GraphManager graphManager) {
+    private JButton createAddNodeButton(GraphController graphController) {
         JButton button = new JButton("Add Node");
         button.addActionListener(e -> {
-            Node node = new Node(graphManager.getNodes().size() + 1,
-                    "Node " + (graphManager.getNodes().size() + 1), 0, 0);
-            graphManager.addNode(node);
+            graphController.addNode(graphController.getNodes().size() + 1,
+                    "Node " + (graphController.getNodes().size() + 1),
+                    0, 0);
         });
         return button;
     }
 
-    private JButton createRemoveNodeButton(GraphManager graphManager) {
+    private JButton createRemoveNodeButton(GraphController graphController) {
         JButton button = new JButton("Remove Node");
         button.addActionListener(e -> {
-            if (graphManager.getSelected() instanceof Node) {
-                graphManager.removeNode((Node) graphManager.getSelected());
-                graphManager.deselect();
+            if (graphController.getSelected() instanceof Node) {
+                graphController.removeNode((Node) graphController.getSelected());
+                graphController.deselect();
             }
         });
         return button;
     }
 
-    private JButton createAddEdgeButton(GraphManager graphManager) {
+    private JButton createAddEdgeButton(GraphController graphController) {
         JButton button = new JButton("Add Edge");
         button.addActionListener(e -> {
-            if (graphManager.getSelected() instanceof Node) {
-                if (graphManager.getStartNode() == null) {
-                    graphManager.setStartNode((Node) graphManager.getSelected());
+            if (graphController.getSelected() instanceof Node) {
+                if (graphController.getStartNode() == null) {
+                    graphController.setStartNode((Node) graphController.getSelected());
                 }
             }
         });
         return button;
     }
 
-    private JButton createRemoveEdgeButton(GraphManager graphManager) {
+    private JButton createRemoveEdgeButton(GraphController graphController) {
         JButton button = new JButton("Remove Edge");
         button.addActionListener(e -> {
-            if (graphManager.getSelected() instanceof Edge edge) {
+            if (graphController.getSelected() instanceof Edge edge) {
                 edge.getStartNode().removeEdge(edge);
                 edge.getEndNode().removeEdge(edge);
-                graphManager.deselect();
-                graphManager.removeEdge(edge);
+                graphController.deselect();
+                graphController.removeEdge(edge);
             }
         });
         return button;
     }
 
-    private JButton createSimulateStepButton(GraphManager graphManager) {
+    private JButton createSimulateStepButton(GraphController graphController) {
         JButton button = new JButton("▶");
         button.addActionListener(e -> {
-            graphManager.getSimulation().step();
+            graphController.getSimulation().step();
         });
         return button;
     }
 
-    private JButton createSaveButton(GraphManager graphManager) {
+    private JButton createSaveButton(GraphController graphController) {
         JButton button = new JButton("Save");
         button.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
@@ -106,7 +102,7 @@ public class ToolsTopbar extends JPanel {
                 if (e1.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
                     System.out.println("Saving to " + fileChooser.getSelectedFile().getAbsolutePath());
                     // TODO: Save the graph to a file
-                    Node node = graphManager.getNodes().get(0);
+                    Node node = graphController.getNodes().get(0);
                     System.out.println(node.toJson().toJsonString());
                 }
             });
@@ -115,10 +111,10 @@ public class ToolsTopbar extends JPanel {
         return button;
     }
 
-    private JButton createLoadButton(GraphManager graphManager) {
+    private JButton createLoadButton(GraphController graphController) {
         JButton button = new JButton("Load");
         button.addActionListener(e -> {
-            graphManager.load();
+//            graphController.load();
         });
         return button;
     }

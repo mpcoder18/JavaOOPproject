@@ -1,11 +1,8 @@
 package nl.rug.oop.rts.components;
 
-import nl.rug.oop.rts.graph.Edge;
-import nl.rug.oop.rts.graph.GraphManager;
-import nl.rug.oop.rts.graph.Node;
-import nl.rug.oop.rts.graph.Selectable;
+import nl.rug.oop.rts.graph.*;
+import nl.rug.oop.rts.graph.controller.GraphController;
 import nl.rug.oop.rts.graph.events.Event;
-import nl.rug.oop.rts.graph.events.EventRecord;
 import nl.rug.oop.rts.graph.events.EventType;
 import nl.rug.oop.rts.objects.Army;
 import nl.rug.oop.rts.objects.Faction;
@@ -18,19 +15,19 @@ import java.awt.*;
  * Panel to display options for selected node or edge.
  */
 public class OptionsPanel extends JPanel implements Observer {
-    private final GraphManager graphManager;
+    private final GraphController graphController;
     private final JLabel messageLabel;
 
     /**
      * Create a new OptionsPanel.
      *
-     * @param graphManager GraphManager to observe
+     * @param graphController GraphManager to observe
      */
-    public OptionsPanel(GraphManager graphManager) {
-        this.graphManager = graphManager;
+    public OptionsPanel(GraphController graphController) {
+        this.graphController = graphController;
         messageLabel = new JLabel("Select a node or edge");
         add(messageLabel);
-        this.observe(graphManager);
+        this.observe(graphController.getModel());
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(new Box.Filler(new Dimension(0, 0), new Dimension(0, 0),
                 new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE)));
@@ -45,11 +42,11 @@ public class OptionsPanel extends JPanel implements Observer {
     private void createSidePanelOptions() {
         JPanel optionsPanel = new JPanel();
         optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.Y_AXIS));
-        JTextField nameField = new JTextField(graphManager.getSelected().getName());
+        JTextField nameField = new JTextField(graphController.getSelected().getName());
         nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, nameField.getPreferredSize().height));
         nameField.addActionListener(e -> {
-            graphManager.getSelected().setName(nameField.getText());
-            graphManager.modified();
+            graphController.getSelected().setName(nameField.getText());
+            graphController.getModel().notifyAllObservers();
         });
         optionsPanel.add(nameField);
         optionsPanel.add(createAddArmyButton());
@@ -61,13 +58,13 @@ public class OptionsPanel extends JPanel implements Observer {
     private void createArmiesList() {
         JPanel armiesPanel = new JPanel();
         armiesPanel.setLayout(new BoxLayout(armiesPanel, BoxLayout.Y_AXIS));
-        for (Army army : graphManager.getSelected().getArmies()) {
+        for (Army army : graphController.getSelected().getArmies()) {
             JPanel armyPanel = new JPanel();
             armyPanel.setLayout(new BoxLayout(armyPanel, BoxLayout.X_AXIS));
             JLabel armyLabel = new JLabel(army.getFaction().toString() + " (" + army.getUnits().size() + " units)");
             JButton removeArmy = new JButton("x");
             removeArmy.addActionListener(e -> {
-                graphManager.removeArmy(army);
+                graphController.removeArmy(army);
             });
             armyPanel.add(armyLabel);
             armyPanel.add(removeArmy);
@@ -83,13 +80,13 @@ public class OptionsPanel extends JPanel implements Observer {
     private void createEventsList() {
         JPanel eventsPanel = new JPanel();
         eventsPanel.setLayout(new BoxLayout(eventsPanel, BoxLayout.Y_AXIS));
-        for (Event event : graphManager.getSelected().getEvents()) {
+        for (Event event : graphController.getSelected().getEvents()) {
             JPanel eventPanel = new JPanel();
             eventPanel.setLayout(new BoxLayout(eventPanel, BoxLayout.X_AXIS));
             JLabel eventLabel = new JLabel(event.getType().getFormattedName());
             JButton removeEvent = new JButton("x");
             removeEvent.addActionListener(e -> {
-                graphManager.removeEvent(event);
+                graphController.removeEvent(event);
             });
             eventPanel.add(eventLabel);
             eventPanel.add(removeEvent);
@@ -105,7 +102,7 @@ public class OptionsPanel extends JPanel implements Observer {
     private void createPastEventsList() {
         JPanel pastEventsPanel = new JPanel();
         pastEventsPanel.setLayout(new BoxLayout(pastEventsPanel, BoxLayout.Y_AXIS));
-        for (EventRecord eventRecord : graphManager.getEvents()) {
+        graphController.getEventRecords().forEach(eventRecord -> {
             JPanel eventPanel = new JPanel();
             eventPanel.setLayout(new BoxLayout(eventPanel, BoxLayout.X_AXIS));
             JLabel eventLabel = new JLabel(eventRecord.getStep() + ". " +
@@ -113,7 +110,7 @@ public class OptionsPanel extends JPanel implements Observer {
             eventLabel.setToolTipText(eventRecord.getEvent().getDescription());
             eventPanel.add(eventLabel);
             pastEventsPanel.add(eventPanel);
-        }
+        });
         pastEventsPanel.add(new Box.Filler(new Dimension(0, 0), new Dimension(0, 0),
                 new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE)));
         JScrollPane pastEventsScrollPane = new JScrollPane(pastEventsPanel);
@@ -129,7 +126,7 @@ public class OptionsPanel extends JPanel implements Observer {
                     JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
                     Faction.values(), Faction.values()[0]);
             if (option != JOptionPane.CLOSED_OPTION) {
-                graphManager.addArmy(Faction.values()[option]);
+                graphController.addArmy(Faction.values()[option]);
             }
         });
         return addArmyButton;
@@ -149,22 +146,22 @@ public class OptionsPanel extends JPanel implements Observer {
                     eventTypeNames, eventTypeNames[0]);
             if (option != JOptionPane.CLOSED_OPTION) {
                 EventType selectedEventType = eventTypes[option];
-                graphManager.addEvent(selectedEventType);
+                graphController.addEvent(selectedEventType);
             }
         });
         return addEventButton;
     }
 
     private void displayEdgeOptions() {
-        Selectable selectedEdge = graphManager.getSelected();
+        Selectable selectedEdge = graphController.getSelected();
         String edgeName = selectedEdge == null ? "" : selectedEdge.getName();
         JTextField nameField = new JTextField(edgeName);
         nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, nameField.getPreferredSize().height));
         nameField.addActionListener(e -> {
-            graphManager.getSelected().setName(nameField.getText());
-            graphManager.modified();
+            graphController.getSelected().setName(nameField.getText());
+            graphController.notifyAll();
         });
-        Edge edge = (Edge) graphManager.getSelected();
+        Edge edge = (Edge) graphController.getSelected();
         JLabel startNodeLabel = new JLabel("Start node: " + edge.getStartNode().getName());
         JLabel endNodeLabel = new JLabel("End node: " + edge.getEndNode().getName());
         add(nameField);
@@ -185,9 +182,9 @@ public class OptionsPanel extends JPanel implements Observer {
      */
     public void update() {
         removeAll();
-        if (graphManager.getSelected() instanceof Node) {
+        if (graphController.getSelected() instanceof Node) {
             displayNodeOptions();
-        } else if (graphManager.getSelected() instanceof Edge) {
+        } else if (graphController.getSelected() instanceof Edge) {
             displayEdgeOptions();
         } else {
             displayMessage();

@@ -1,6 +1,8 @@
-package nl.rug.oop.rts.components;
+package nl.rug.oop.rts.graph.view;
 
-import nl.rug.oop.rts.graph.*;
+import nl.rug.oop.rts.graph.Edge;
+import nl.rug.oop.rts.graph.controller.GraphController;
+import nl.rug.oop.rts.graph.Node;
 import nl.rug.oop.rts.objects.Army;
 import nl.rug.oop.rts.objects.Team;
 import nl.rug.oop.rts.observable.Observer;
@@ -8,46 +10,62 @@ import nl.rug.oop.rts.util.TextureLoader;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Panel for the game. View of the MVC pattern.
+ * View for the graph.
  */
-public class Panel extends JPanel implements Observer {
-    private final GraphManager graphManager;
+public class GraphView extends JPanel implements Observer {
+    private final GraphController controller;
     private final Image backgroundImage;
     private final Image nodeImage;
     private final Image nodeImageSelected;
 
-    /**
-     * Create a new panel.
-     *
-     * @param graphManager GraphManager to observe
-     */
-    public Panel(GraphManager graphManager) {
-        this.graphManager = graphManager;
+    public GraphView(GraphController controller) {
+        this.controller = controller;
 
         TextureLoader textureLoader = TextureLoader.getInstance();
         backgroundImage = textureLoader.getTexture("mapTexture", 800, 600);
-        nodeImage = textureLoader.getTexture("node4", graphManager.getNodeSize(), graphManager.getNodeSize());
-        nodeImageSelected = textureLoader.getTexture("node3", graphManager.getNodeSize(), graphManager.getNodeSize());
+        nodeImage = textureLoader.getTexture("node4", controller.getNodeSize(), controller.getNodeSize());
+        nodeImageSelected = textureLoader.getTexture("node3", controller.getNodeSize(), controller.getNodeSize());
 
-        MouseHandler mouseHandler = new MouseHandler(new NodeSelector(graphManager), graphManager);
-        addMouseListener(mouseHandler);
-        addMouseMotionListener(mouseHandler);
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                controller.handleMousePressed(e.getX(), e.getY());
+            }
+        });
+
+        addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                controller.handleMouseMoved(e.getX(), e.getY());
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                controller.handleMouseDragged(e.getX(), e.getY());
+            }
+        });
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawBackground(g);
         drawEdges(g);
         drawNodes(g);
     }
 
-    private void drawBackground(Graphics g) {
-        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+    private void drawNodes(Graphics g) {
+        for (Node node : controller.getNodes()) {
+            drawNode(g, node);
+            drawArmy(g, node);
+        }
     }
 
     private void drawEdges(Graphics g) {
@@ -55,12 +73,35 @@ public class Panel extends JPanel implements Observer {
                 10.0f, new float[]{10, 10}, 0));
         g.setFont(new Font("Dialog", Font.PLAIN, 15));
 
-        for (Edge edge : graphManager.getEdges()) {
+        for (Edge edge : controller.getEdges()) {
             drawEdge(g, edge);
             drawArmyEdge(g, edge);
         }
 
-        drawEdgePreview(g);
+        drawEdgePreview(g, getMousePosition());
+    }
+
+    private void drawBackground(Graphics g) {
+        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+    }
+
+    private void drawNode(Graphics g, Node node) {
+        if (node.isSelected()) {
+            g.drawImage(nodeImageSelected, node.getX(), node.getY(), this);
+        } else {
+            g.drawImage(nodeImage, node.getX(), node.getY(), this);
+        }
+
+        // Calculate the width of the string
+        int stringWidth = g.getFontMetrics().stringWidth(node.getName());
+        // Drop shadow
+        g.setColor(Color.BLACK);
+        g.drawString(node.getName(), node.getX() + controller.getNodeSize() / 2 - stringWidth / 2 + 1,
+                node.getY() + controller.getNodeSize() / 2 + 1);
+
+        g.setColor(Color.WHITE);
+        g.drawString(node.getName(), node.getX() + controller.getNodeSize() / 2 - stringWidth / 2,
+                node.getY() + controller.getNodeSize() / 2);
     }
 
     private void drawEdge(Graphics g, Edge edge) {
@@ -69,13 +110,13 @@ public class Panel extends JPanel implements Observer {
         } else {
             g.setColor(new Color(161, 100, 21));
         }
-        g.drawLine(edge.getStartNode().getX() + graphManager.getNodeSize() / 2,
-                edge.getStartNode().getY() + graphManager.getNodeSize() / 2,
-                edge.getEndNode().getX() + graphManager.getNodeSize() / 2,
-                edge.getEndNode().getY() + graphManager.getNodeSize() / 2);
+        g.drawLine(edge.getStartNode().getX() + controller.getNodeSize() / 2,
+                edge.getStartNode().getY() + controller.getNodeSize() / 2,
+                edge.getEndNode().getX() + controller.getNodeSize() / 2,
+                edge.getEndNode().getY() + controller.getNodeSize() / 2);
         // Calculate the middle of the edge
-        int x = (edge.getStartNode().getX() + edge.getEndNode().getX()) / 2 + graphManager.getNodeSize() / 2;
-        int y = (edge.getStartNode().getY() + edge.getEndNode().getY()) / 2 + graphManager.getNodeSize() / 2;
+        int x = (edge.getStartNode().getX() + edge.getEndNode().getX()) / 2 + controller.getNodeSize() / 2;
+        int y = (edge.getStartNode().getY() + edge.getEndNode().getY()) / 2 + controller.getNodeSize() / 2;
         int stringWidth = g.getFontMetrics().stringWidth(edge.getName());
 
         // Drop shadow
@@ -86,41 +127,6 @@ public class Panel extends JPanel implements Observer {
         g.drawString(edge.getName(), x - stringWidth / 2, y);
     }
 
-    private void drawEdgePreview(Graphics g) {
-        MouseHandler mouseHandler = (MouseHandler) getMouseListeners()[0];
-        NodeSelector nodeSelector = mouseHandler.getNodeSelector();
-        if (graphManager.getStartNode() != null && nodeSelector.getCurrentMousePosition() != null) {
-            g.setColor(Color.GRAY);
-            g.drawLine(graphManager.getStartNode().getX() + graphManager.getNodeSize() / 2,
-                    graphManager.getStartNode().getY() + graphManager.getNodeSize() / 2,
-                    nodeSelector.getCurrentMousePosition().x,
-                    nodeSelector.getCurrentMousePosition().y);
-        }
-    }
-
-    private void drawNodes(Graphics g) {
-        for (Node node : graphManager.getNodes()) {
-            if (node.isSelected()) {
-                g.drawImage(nodeImageSelected, node.getX(), node.getY(), this);
-            } else {
-                g.drawImage(nodeImage, node.getX(), node.getY(), this);
-            }
-
-            // Calculate the width of the string
-            int stringWidth = g.getFontMetrics().stringWidth(node.getName());
-            // Drop shadow
-            g.setColor(Color.BLACK);
-            g.drawString(node.getName(), node.getX() + graphManager.getNodeSize() / 2 - stringWidth / 2 + 1,
-                    node.getY() + graphManager.getNodeSize() / 2 + 1);
-
-            g.setColor(Color.WHITE);
-            g.drawString(node.getName(), node.getX() + graphManager.getNodeSize() / 2 - stringWidth / 2,
-                    node.getY() + graphManager.getNodeSize() / 2);
-
-            drawArmy(g, node);
-        }
-    }
-
     /**
      * Draw the armies on the node.
      *
@@ -128,12 +134,12 @@ public class Panel extends JPanel implements Observer {
      * @param node Node to draw the armies on
      */
     public void drawArmy(Graphics g, Node node) {
-        int radius = graphManager.getNodeSize() / 2;
+        int radius = controller.getNodeSize() / 2;
         int centerX = node.getX() + radius;
         int centerY = node.getY() + radius;
 
-        List<Army> teamA = new ArrayList<>();
-        List<Army> teamB = new ArrayList<>();
+        java.util.List<Army> teamA = new ArrayList<>();
+        java.util.List<Army> teamB = new ArrayList<>();
 
         for (Army army : node.getArmies()) {
             if (army.getFaction().getTeam() == Team.TEAM_A) {
@@ -163,11 +169,11 @@ public class Panel extends JPanel implements Observer {
     }
 
     private void drawArmyEdge(Graphics g, Edge edge) {
-        int radius = graphManager.getNodeSize() / 2;
+        int radius = controller.getNodeSize() / 2;
         int centerX = (edge.getStartNode().getX() + edge.getEndNode().getX()) / 2 + radius;
         int centerY = (edge.getStartNode().getY() + edge.getEndNode().getY()) / 2 + radius;
 
-        List<Army> teamA = new ArrayList<>();
+        java.util.List<Army> teamA = new ArrayList<>();
         List<Army> teamB = new ArrayList<>();
 
         for (Army army : edge.getArmies()) {
@@ -197,21 +203,22 @@ public class Panel extends JPanel implements Observer {
         }
     }
 
+    public void drawEdgePreview(Graphics g, Point mousePosition) {
+        ((Graphics2D) g).setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
+                10.0f, new float[]{10, 10}, 0));
+        g.setFont(new Font("Dialog", Font.PLAIN, 15));
+
+        if (controller.getStartNode() != null) {
+            g.setColor(Color.GRAY);
+            g.drawLine(controller.getStartNode().getX() + controller.getNodeSize() / 2,
+                    controller.getStartNode().getY() + controller.getNodeSize() / 2,
+                    mousePosition.x, mousePosition.y);
+        }
+    }
+
     @Override
     public void update() {
-        // Make sure nodes are within the bounds of the panel
-        for (Node node : graphManager.getNodes()) {
-            if (node.getX() < 0) {
-                node.setX(0);
-            } else if (node.getX() > getWidth() - graphManager.getNodeSize()) {
-                node.setX(getWidth() - graphManager.getNodeSize());
-            }
-            if (node.getY() < 0) {
-                node.setY(0);
-            } else if (node.getY() > getHeight() - graphManager.getNodeSize()) {
-                node.setY(getHeight() - graphManager.getNodeSize());
-            }
-        }
+        controller.checkBounds(getWidth(), getHeight());
         repaint();
     }
 }

@@ -1,23 +1,22 @@
 package nl.rug.oop.rts.graph;
 
 import lombok.AllArgsConstructor;
+import nl.rug.oop.rts.graph.controller.GraphController;
 import nl.rug.oop.rts.graph.events.Event;
 import nl.rug.oop.rts.graph.events.EventRecord;
 import nl.rug.oop.rts.objects.Army;
 import nl.rug.oop.rts.objects.Team;
 import nl.rug.oop.rts.objects.Unit;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Class to represent a simulation of the game.
  */
 @AllArgsConstructor
 public class Simulation {
-    private GraphManager graphManager;
+    private GraphController graphController;
 
     /**
      * Run a single step of the simulation.
@@ -33,17 +32,17 @@ public class Simulation {
         resolveBattles();
         encounterRandomEvents();
         resetState();
-        graphManager.setSimulationStep(graphManager.getSimulationStep() + 1);
-        graphManager.modified();
+        graphController.setSimulationStep(graphController.getSimulationStep() + 1);
+        graphController.getModel().notifyAllObservers();
     }
 
     private void resolveBattles() {
-        for (Node node : graphManager.getNodes()) {
+        for (Node node : graphController.getNodes()) {
             if (shouldBattle(node)) {
                 resolveBattle(node.getArmies());
             }
         }
-        for (Edge edge : graphManager.getEdges()) {
+        for (Edge edge : graphController.getEdges()) {
             if (shouldBattle(edge)) {
                 resolveBattle(edge.getArmies());
             }
@@ -77,7 +76,7 @@ public class Simulation {
                 armies.remove(armyB);
             }
         }
-        graphManager.modified();
+        graphController.getModel().notifyAllObservers();
     }
 
     private static void resolveArmyBattle(Army armyA, Army armyB) {
@@ -113,7 +112,7 @@ public class Simulation {
 
     private void moveArmiesNode() {
         // Every army moves to a random edge connected to the node
-        for (Node node : graphManager.getNodes()) {
+        for (Node node : graphController.getNodes()) {
             if (node.getEdgeList().isEmpty()) {
                 continue;
             }
@@ -132,12 +131,12 @@ public class Simulation {
             }
             node.getArmies().removeAll(armiesToMove);
         }
-        graphManager.modified();
+        graphController.getModel().notifyAllObservers();
     }
 
     private void moveArmiesEdge() {
         // Every army moves to their destination node
-        for (Edge edge : graphManager.getEdges()) {
+        for (Edge edge : graphController.getEdges()) {
             List<Army> armiesToMove = new ArrayList<>();
             for (Army army : edge.getArmies()) {
                 if (army.isMoved()) {
@@ -150,11 +149,11 @@ public class Simulation {
             }
             edge.getArmies().removeAll(armiesToMove);
         }
-        graphManager.modified();
+        graphController.getModel().notifyAllObservers();
     }
 
     private void resetState() {
-        for (Node node : graphManager.getNodes()) {
+        for (Node node : graphController.getNodes()) {
             List<Army> toRemove = new ArrayList<>();
             for (Army army : node.getArmies()) {
                 army.setMoved(false);
@@ -164,7 +163,7 @@ public class Simulation {
             }
             node.getArmies().removeAll(toRemove);
         }
-        for (Edge edge : graphManager.getEdges()) {
+        for (Edge edge : graphController.getEdges()) {
             List<Army> toRemove = new ArrayList<>();
             for (Army army : edge.getArmies()) {
                 army.setMoved(false);
@@ -178,19 +177,19 @@ public class Simulation {
 
     public void encounterRandomEvents() {
         List<EventRecord> events = new ArrayList<>();
-        for (Node node : graphManager.getNodes()) {
+        for (Node node : graphController.getNodes()) {
             for (Army army : node.getArmies()) {
                 events.add(encounterRandomEvent(army, node));
             }
         }
-        for (Edge edge : graphManager.getEdges()) {
+        for (Edge edge : graphController.getEdges()) {
             for (Army army : edge.getArmies()) {
                 events.add(encounterRandomEvent(army, edge));
             }
         }
         for (EventRecord event : events) {
             if (event != null) {
-                graphManager.getEvents().add(0, event);
+                graphController.getEventRecords().add(0, event);
             }
         }
     }
@@ -200,7 +199,7 @@ public class Simulation {
             if (!selectable.getEvents().isEmpty()) {
                 Event event = selectable.getEvents().get((int) (Math.random() * selectable.getEvents().size()));
                 event.execute(army);
-                return new EventRecord(event, graphManager.getSimulationStep());
+                return new EventRecord(event, graphController.getSimulationStep());
             }
         }
         return null;

@@ -1,7 +1,11 @@
-package nl.rug.oop.rts.graph;
+package nl.rug.oop.rts.graph.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.rts.graph.Edge;
+import nl.rug.oop.rts.graph.Node;
+import nl.rug.oop.rts.graph.Selectable;
+import nl.rug.oop.rts.graph.Simulation;
 import nl.rug.oop.rts.graph.events.Event;
 import nl.rug.oop.rts.graph.events.EventFactory;
 import nl.rug.oop.rts.graph.events.EventRecord;
@@ -12,57 +16,50 @@ import nl.rug.oop.rts.objects.Unit;
 import nl.rug.oop.rts.observable.Observable;
 import nl.rug.oop.rts.observable.Observer;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Manages the graph. Model of the MVC pattern.
- */
-
-// TODO: this is the model and should handle notification
 @Getter
-public class GraphManager implements Observable {
-    private final List<Node> nodes;
-    private final List<Edge> edges;
+public class GraphModel implements Observable {
+    private List<Node> nodes;
+    private List<Edge> edges;
     private final List<Observer> observers;
     private final int nodeSize = 80;
-    private Node startNode;
     @Setter
+    private Node startNode;
     private Selectable selected;
+    @Setter
     private Simulation simulation;
-    private EventFactory eventFactory;
-    private List<EventRecord> events;
     @Setter
     private int SimulationStep = 0;
+    private final EventFactory eventFactory;
+    private List<EventRecord> eventRecords;
+    @Setter
+    private int offsetX;
+    @Setter
+    private int offsetY;
+    private Point mousePosition;
 
-    /**
-     * Create a new GraphManager.
-     */
-    public GraphManager() {
+    public GraphModel() {
         nodes = new ArrayList<>();
         edges = new ArrayList<>();
         observers = new ArrayList<>();
         startNode = null;
         selected = null;
-        simulation = new Simulation(this);
         eventFactory = new EventFactory();
-        events = new ArrayList<>();
+        eventRecords = new ArrayList<>();
     }
 
-    public void addNode(Node node) {
-        nodes.add(node);
+    public void addNode(int ID, String name, int x, int y) {
+        nodes.add(new Node(ID, name, x, y));
         notifyAllObservers();
     }
 
-    /**
-     * Remove a node from the graph.
-     *
-     * @param node Node to remove
-     */
     public void removeNode(Node node) {
         for (Edge edge : node.getEdgeList()) {
-            removeEdge(edge);
+            edges.remove(edge);
         }
         nodes.remove(node);
         notifyAllObservers();
@@ -78,18 +75,9 @@ public class GraphManager implements Observable {
         notifyAllObservers();
     }
 
-    public void setStartNode(Node node) {
-        startNode = node;
-        notifyAllObservers();
-    }
-
     @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
-    }
-
-    public void modified() {
-        notifyAllObservers();
     }
 
     /**
@@ -131,41 +119,40 @@ public class GraphManager implements Observable {
         notifyAllObservers();
     }
 
-    /**
-     * Select a selectable object.
-     *
-     * @param selectable object to select
-     */
-    public void select(Selectable selectable) {
-        if (selected != null) {
-            selected.deselect();
+    public void select(Selectable selected) {
+        if (this.selected != null) {
+            this.selected.deselect();
         }
-        selectable.select();
-        selected = selectable;
-    }
-
-    /**
-     * Deselect any selected object.
-     */
-    public void deselect() {
-        if (selected != null) {
-            selected.deselect();
-        }
-        selected = null;
+        selected.select();
+        this.selected = selected;
         notifyAllObservers();
     }
 
-    /**
-     * Save the current state of the graph to JSON.
-     */
-    public void save() {
-
+    public void deselect() {
+        if (selected != null) {
+            selected.deselect();
+            selected = null;
+            notifyAllObservers();
+        }
     }
 
-    /**
-     * Load a state of the graph from JSON.
-     */
-    public void load() {
+    public void createStartNodeEdge(Node endNode) {
+        for (Edge edge : edges) {
+            if ((edge.getStartNode() == startNode && edge.getEndNode() == endNode)
+                    || (edge.getStartNode() == endNode && edge.getEndNode() == startNode)) {
+                setStartNode(null);
+                deselect();
+                return;
+            }
+        }
+        Edge newEdge = new Edge(edges.size(), "Edge " + edges.size(), startNode, endNode);
+        addEdge(newEdge);
+        setStartNode(null);
+        deselect();
+    }
 
+    public void setMousePosition(Point mousePosition) {
+        this.mousePosition = mousePosition;
+        notifyAllObservers();
     }
 }

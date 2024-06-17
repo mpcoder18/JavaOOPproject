@@ -1,7 +1,8 @@
 package nl.rug.oop.rts.observable;
 
+import lombok.AllArgsConstructor;
 import nl.rug.oop.rts.graph.Edge;
-import nl.rug.oop.rts.graph.GraphManager;
+import nl.rug.oop.rts.graph.controller.GraphController;
 import nl.rug.oop.rts.graph.Node;
 
 import javax.swing.*;
@@ -9,31 +10,17 @@ import javax.swing.*;
 /**
  * Class to update buttons based on the selected node or edge.
  */
+@AllArgsConstructor
 public class ButtonObserver implements Observer {
-    private final GraphManager graphManager;
+    private final GraphController graphController;
     private final JButton removeNodeButton;
     private final JButton addEdgeButton;
     private final JButton removeEdgeButton;
 
-    /**
-     * Create a new ButtonObserver.
-     *
-     * @param gM         GraphManager to observe
-     * @param rmNodeBtn  JButton to remove a node
-     * @param addEdgeBtn JButton to add an edge
-     * @param rmEdgeBtn  JButton to remove an edge
-     */
-    public ButtonObserver(GraphManager gM, JButton rmNodeBtn, JButton addEdgeBtn, JButton rmEdgeBtn) {
-        this.graphManager = gM;
-        this.removeNodeButton = rmNodeBtn;
-        this.addEdgeButton = addEdgeBtn;
-        this.removeEdgeButton = rmEdgeBtn;
-    }
-
     @Override
     public void update() {
-        removeNodeButton.setEnabled(graphManager.getSelected() instanceof Node);
-        addEdgeButton.setEnabled(graphManager.getSelected() instanceof Node);
-        removeEdgeButton.setEnabled(graphManager.getSelected() instanceof Edge);
+        removeNodeButton.setEnabled(graphController.getSelected() instanceof Node);
+        addEdgeButton.setEnabled(graphController.getSelected() instanceof Node);
+        removeEdgeButton.setEnabled(graphController.getSelected() instanceof Edge);
     }
 }
