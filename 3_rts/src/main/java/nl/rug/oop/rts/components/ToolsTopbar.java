@@ -102,9 +102,8 @@ public class ToolsTopbar extends JPanel {
             fileChooser.addActionListener(e1 -> {
                 if (e1.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
                     System.out.println("Saving to " + fileChooser.getSelectedFile().getAbsolutePath());
-                    // TODO: Save the graph to a file
-                    Node node = graphController.getNodes().get(0);
-                    System.out.println(node.toJson().toJsonString());
+                    System.out.println(graphController.getModel().toJson().toJsonString());
+
                 }
             });
             fileChooser.showSaveDialog(null);

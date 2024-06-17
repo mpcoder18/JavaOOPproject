@@ -2,6 +2,8 @@ package nl.rug.oop.rts.graph.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.rts.JsonList;
+import nl.rug.oop.rts.JsonObject;
 import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.Node;
 import nl.rug.oop.rts.graph.Selectable;
@@ -178,5 +180,27 @@ public class GraphModel implements Observable {
     public void setMousePosition(Point mousePosition) {
         this.mousePosition = mousePosition;
         notifyAllObservers();
+    }
+
+    public JsonObject toJson() {
+        JsonObject json = new JsonObject()
+                .put("nodeSize", nodeSize)
+                .put("simulationStep", SimulationStep);
+        JsonList jsonNodes = new JsonList(new Object[0]);
+        for (Node node : nodes) {
+            jsonNodes.add(node.toJson());
+        }
+        json.put("nodes", jsonNodes);
+        JsonList jsonEdges = new JsonList(new Object[0]);
+        for (Edge edge : edges) {
+            jsonEdges.add(edge.toJson());
+        }
+        json.put("edges", jsonEdges);
+        JsonList jsonEventRecords = new JsonList(new Object[0]);
+        for (EventRecord eventRecord : eventRecords) {
+            jsonEventRecords.add(eventRecord.toJson());
+        }
+        json.put("eventRecords", jsonEventRecords);
+        return json;
     }
 }

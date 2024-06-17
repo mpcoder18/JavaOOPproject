@@ -31,7 +31,7 @@ public class Unit {
      *
      * @return the JsonObject representation of the unit
      */
-    public JsonObject toJsonObject() {
+    public JsonObject toJson() {
         return new JsonObject()
                 .put("Name", name)
                 .put("Strength", strength)

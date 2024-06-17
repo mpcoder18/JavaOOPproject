@@ -1,5 +1,6 @@
 package nl.rug.oop.rts.graph;
 
+import nl.rug.oop.rts.JsonObject;
 import nl.rug.oop.rts.graph.events.Event;
 import nl.rug.oop.rts.objects.Army;
 
@@ -26,4 +27,6 @@ public interface Selectable {
     List<Army> getArmies();
 
     List<Event> getEvents();
+
+    JsonObject toJson();
 }

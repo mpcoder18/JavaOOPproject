@@ -2,6 +2,7 @@ package nl.rug.oop.rts.objects;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.rts.JsonList;
 import nl.rug.oop.rts.JsonObject;
 import nl.rug.oop.rts.graph.Node;
 
@@ -98,11 +99,11 @@ public class Army {
                 .put("Faction", faction.getName())
                 .put("Team", team.toString());
 
-        List<String> unitJsons = new ArrayList<>();
+        JsonList unitsJsonList = new JsonList(new Object[0]);
         for (Unit unit : units) {
-            unitJsons.add(unit.toJsonObject().toJsonString());
+            unitsJsonList.add(unit.toJson());
         }
-        jsonObject.put("Units", "[" + String.join(", ", unitJsons) + "]");
+        jsonObject.put("Units", unitsJsonList);
 
         return jsonObject;
     }
