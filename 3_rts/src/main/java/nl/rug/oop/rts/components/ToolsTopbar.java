@@ -1,8 +1,8 @@
 package nl.rug.oop.rts.components;
 
 import nl.rug.oop.rts.graph.Edge;
-import nl.rug.oop.rts.graph.controller.GraphController;
 import nl.rug.oop.rts.graph.Node;
+import nl.rug.oop.rts.graph.controller.GraphController;
 import nl.rug.oop.rts.observable.ButtonObserver;
 
 import javax.swing.*;
@@ -34,7 +34,8 @@ public class ToolsTopbar extends JPanel {
         saveButton = createSaveButton(controller);
         loadButton = createLoadButton(controller);
 
-        ButtonObserver btnObs = new ButtonObserver(controller, removeNodeButton, addEdgeButton, removeEdgeButton);
+        ButtonObserver btnObs = new ButtonObserver(controller, removeNodeButton, addEdgeButton,
+                removeEdgeButton, simulateStepButton);
         controller.addObserver(btnObs);
     }
 
@@ -85,7 +86,7 @@ public class ToolsTopbar extends JPanel {
     }
 
     private JButton createSimulateStepButton(GraphController graphController) {
-        JButton button = new JButton("▶");
+        JButton button = new JButton("▶ (Step 0)");
         button.addActionListener(e -> {
             graphController.getSimulation().step();
         });
@@ -114,7 +115,7 @@ public class ToolsTopbar extends JPanel {
     private JButton createLoadButton(GraphController graphController) {
         JButton button = new JButton("Load");
         button.addActionListener(e -> {
-//            graphController.load();
+            // TODO: Load the graph from a file
         });
         return button;
     }

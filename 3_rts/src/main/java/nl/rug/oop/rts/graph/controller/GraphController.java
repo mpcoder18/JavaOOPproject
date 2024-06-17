@@ -1,7 +1,10 @@
 package nl.rug.oop.rts.graph.controller;
 
 import lombok.Getter;
-import nl.rug.oop.rts.graph.*;
+import nl.rug.oop.rts.graph.Edge;
+import nl.rug.oop.rts.graph.Node;
+import nl.rug.oop.rts.graph.Selectable;
+import nl.rug.oop.rts.graph.Simulation;
 import nl.rug.oop.rts.graph.events.Event;
 import nl.rug.oop.rts.graph.events.EventRecord;
 import nl.rug.oop.rts.graph.events.EventType;
@@ -14,11 +17,17 @@ import nl.rug.oop.rts.observable.Observer;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Controller for the graph.
+ */
 @Getter
 public class GraphController {
     private GraphModel model;
     private GraphView view;
 
+    /**
+     * Create a new GraphController.
+     */
     public GraphController() {
         this.model = new GraphModel();
         this.model.setSimulation(new Simulation(this));
@@ -62,6 +71,12 @@ public class GraphController {
         model.removeArmy(army);
     }
 
+    /**
+     * Handle the mouse being pressed.
+     *
+     * @param x - The x coordinate of the mouse.
+     * @param y - The y coordinate of the mouse.
+     */
     public void handleMousePressed(int x, int y) {
         int padding = 10;
         for (Node node : model.getNodes()) {
@@ -94,6 +109,12 @@ public class GraphController {
         model.deselect();
     }
 
+    /**
+     * Handle the mouse being dragged.
+     *
+     * @param x - The x coordinate of the mouse.
+     * @param y - The y coordinate of the mouse.
+     */
     public void handleMouseDragged(int x, int y) {
         if (getSelected() instanceof Node node && node.isSelected()) {
             node.setX(x - model.getOffsetX());
@@ -146,6 +167,12 @@ public class GraphController {
         model.setMousePosition(new Point(x, y));
     }
 
+    /**
+     * Check if the nodes are within the bounds of the Panel.
+     *
+     * @param width  - The width of the screen.
+     * @param height - The height of the screen.
+     */
     public void checkBounds(int width, int height) {
         for (Node node : model.getNodes()) {
             if (node.getX() < 0) {
@@ -171,5 +198,9 @@ public class GraphController {
 
     public List<EventRecord> getEventRecords() {
         return model.getEventRecords();
+    }
+
+    public int getStep() {
+        return model.getSimulationStep();
     }
 }

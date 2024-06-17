@@ -1,6 +1,8 @@
 package nl.rug.oop.rts.components;
 
-import nl.rug.oop.rts.graph.*;
+import nl.rug.oop.rts.graph.Edge;
+import nl.rug.oop.rts.graph.Node;
+import nl.rug.oop.rts.graph.Selectable;
 import nl.rug.oop.rts.graph.controller.GraphController;
 import nl.rug.oop.rts.graph.events.Event;
 import nl.rug.oop.rts.graph.events.EventType;
@@ -106,7 +108,8 @@ public class OptionsPanel extends JPanel implements Observer {
             JPanel eventPanel = new JPanel();
             eventPanel.setLayout(new BoxLayout(eventPanel, BoxLayout.X_AXIS));
             JLabel eventLabel = new JLabel(eventRecord.getStep() + ". " +
-                    eventRecord.getEvent().getType().getFormattedName());
+                    eventRecord.getEvent().getType().getFormattedName() +
+                    " at " + eventRecord.getTarget().getName());
             eventLabel.setToolTipText(eventRecord.getEvent().getDescription());
             eventPanel.add(eventLabel);
             pastEventsPanel.add(eventPanel);

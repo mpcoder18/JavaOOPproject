@@ -2,8 +2,8 @@ package nl.rug.oop.rts.observable;
 
 import lombok.AllArgsConstructor;
 import nl.rug.oop.rts.graph.Edge;
-import nl.rug.oop.rts.graph.controller.GraphController;
 import nl.rug.oop.rts.graph.Node;
+import nl.rug.oop.rts.graph.controller.GraphController;
 
 import javax.swing.*;
 
@@ -16,11 +16,14 @@ public class ButtonObserver implements Observer {
     private final JButton removeNodeButton;
     private final JButton addEdgeButton;
     private final JButton removeEdgeButton;
+    private final JButton stepButton;
 
     @Override
     public void update() {
         removeNodeButton.setEnabled(graphController.getSelected() instanceof Node);
         addEdgeButton.setEnabled(graphController.getSelected() instanceof Node);
         removeEdgeButton.setEnabled(graphController.getSelected() instanceof Edge);
+        // Set the text of the step button based on the current step
+        stepButton.setText("▶ (Step " + graphController.getStep() + ")");
     }
 }

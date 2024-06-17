@@ -26,15 +26,15 @@ public class Unit {
         unit.health -= strength;
     }
 
+    /**
+     * Convert the unit to a JsonObject.
+     *
+     * @return the JsonObject representation of the unit
+     */
     public JsonObject toJsonObject() {
         return new JsonObject()
                 .put("Name", name)
                 .put("Strength", strength)
                 .put("Health", health);
-    }
-
-    public Unit fromJsonObject(JsonObject jsonObject) {
-        JsonObject jsonObjectItem = (JsonObject) jsonObject.get("unit");
-        return new Unit((int) jsonObjectItem.get("damage"), (int) jsonObjectItem.get("health"), (String) jsonObjectItem.get("name"));
     }
 }

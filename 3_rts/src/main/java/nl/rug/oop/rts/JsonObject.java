@@ -3,6 +3,9 @@ package nl.rug.oop.rts;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class to represent a JSON object.
+ */
 public class JsonObject {
     private Map<String, Object> values = new HashMap<>();
 
@@ -35,6 +38,11 @@ public class JsonObject {
         return values.size();
     }
 
+    /**
+     * Convert the JsonObject to a JSON string.
+     *
+     * @return the JSON string representation of the JsonObject
+     */
     public String toJsonString() { // TODO: Fix list being serialized as a string
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{");

@@ -87,6 +87,11 @@ public class Army {
     }
 
     // TODO: implement an interface for toJson and fromJson ?
+    /**
+     * Convert the army to a JSON object.
+     *
+     * @return the JSON object
+     */
     public JsonObject toJson() {
         JsonObject jsonObject = new JsonObject()
                 .put("Name", faction.getName())

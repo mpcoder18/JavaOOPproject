@@ -1,8 +1,8 @@
 package nl.rug.oop.rts.graph.view;
 
 import nl.rug.oop.rts.graph.Edge;
-import nl.rug.oop.rts.graph.controller.GraphController;
 import nl.rug.oop.rts.graph.Node;
+import nl.rug.oop.rts.graph.controller.GraphController;
 import nl.rug.oop.rts.objects.Army;
 import nl.rug.oop.rts.objects.Team;
 import nl.rug.oop.rts.observable.Observer;
@@ -25,6 +25,11 @@ public class GraphView extends JPanel implements Observer {
     private final Image nodeImage;
     private final Image nodeImageSelected;
 
+    /**
+     * Constructor for the graph view.
+     *
+     * @param controller Graph controller
+     */
     public GraphView(GraphController controller) {
         this.controller = controller;
 
@@ -152,18 +157,18 @@ public class GraphView extends JPanel implements Observer {
         // Draw Team A on the left side
         for (int i = 0; i < teamA.size(); i++) {
             g.setColor(teamA.get(i).getFaction().getColor());
-            double angle = Math.PI / 2 + Math.PI * (double)i / teamA.size();
-            int x = centerX + (int)(radius * Math.cos(angle));
-            int y = centerY + (int)(radius * Math.sin(angle));
+            double angle = Math.PI / 2 + Math.PI * (double) i / teamA.size();
+            int x = centerX + (int) (radius * Math.cos(angle));
+            int y = centerY + (int) (radius * Math.sin(angle));
             g.fillOval(x - 10, y - 10, 20, 20); // Adjusted to center the circle on the node
         }
 
         // Draw Team B on the right side
         for (int i = 0; i < teamB.size(); i++) {
             g.setColor(teamB.get(i).getFaction().getColor());
-            double angle = 3 * Math.PI / 2 + Math.PI * (double)i / teamB.size();
-            int x = centerX + (int)(radius * Math.cos(angle));
-            int y = centerY + (int)(radius * Math.sin(angle));
+            double angle = 3 * Math.PI / 2 + Math.PI * (double) i / teamB.size();
+            int x = centerX + (int) (radius * Math.cos(angle));
+            int y = centerY + (int) (radius * Math.sin(angle));
             g.fillOval(x - 10, y - 10, 20, 20); // Adjusted to center the circle on the node
         }
     }
@@ -187,22 +192,28 @@ public class GraphView extends JPanel implements Observer {
         // Draw Team A on the left side
         for (int i = 0; i < teamA.size(); i++) {
             g.setColor(teamA.get(i).getFaction().getColor());
-            double angle = Math.PI / 2 + Math.PI * (double)i / teamA.size();
-            int x = centerX + (int)(radius * Math.cos(angle));
-            int y = centerY + (int)(radius * Math.sin(angle));
+            double angle = Math.PI / 2 + Math.PI * (double) i / teamA.size();
+            int x = centerX + (int) (radius * Math.cos(angle));
+            int y = centerY + (int) (radius * Math.sin(angle));
             g.fillOval(x - 10, y - 10, 20, 20); // Adjusted to center the circle on the node
         }
 
         // Draw Team B on the right side
         for (int i = 0; i < teamB.size(); i++) {
             g.setColor(teamB.get(i).getFaction().getColor());
-            double angle = 3 * Math.PI / 2 + Math.PI * (double)i / teamB.size();
-            int x = centerX + (int)(radius * Math.cos(angle));
-            int y = centerY + (int)(radius * Math.sin(angle));
+            double angle = 3 * Math.PI / 2 + Math.PI * (double) i / teamB.size();
+            int x = centerX + (int) (radius * Math.cos(angle));
+            int y = centerY + (int) (radius * Math.sin(angle));
             g.fillOval(x - 10, y - 10, 20, 20); // Adjusted to center the circle on the node
         }
     }
 
+    /**
+     * Draw the preview of the edge.
+     *
+     * @param g            Graphics object
+     * @param mousePosition Position of the mouse
+     */
     public void drawEdgePreview(Graphics g, Point mousePosition) {
         ((Graphics2D) g).setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
                 10.0f, new float[]{10, 10}, 0));

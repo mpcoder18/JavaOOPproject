@@ -21,12 +21,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Model for the graph.
+ */
 @Getter
 public class GraphModel implements Observable {
-    private List<Node> nodes;
-    private List<Edge> edges;
     private final List<Observer> observers;
     private final int nodeSize = 80;
+    private final EventFactory eventFactory;
+    private List<Node> nodes;
+    private List<Edge> edges;
     @Setter
     private Node startNode;
     private Selectable selected;
@@ -34,7 +38,6 @@ public class GraphModel implements Observable {
     private Simulation simulation;
     @Setter
     private int SimulationStep = 0;
-    private final EventFactory eventFactory;
     private List<EventRecord> eventRecords;
     @Setter
     private int offsetX;
@@ -42,6 +45,9 @@ public class GraphModel implements Observable {
     private int offsetY;
     private Point mousePosition;
 
+    /**
+     * Create a new GraphModel.
+     */
     public GraphModel() {
         nodes = new ArrayList<>();
         edges = new ArrayList<>();
@@ -57,6 +63,11 @@ public class GraphModel implements Observable {
         notifyAllObservers();
     }
 
+    /**
+     * Remove a node from the graph.
+     *
+     * @param node The node to remove
+     */
     public void removeNode(Node node) {
         for (Edge edge : node.getEdgeList()) {
             edges.remove(edge);
@@ -119,6 +130,11 @@ public class GraphModel implements Observable {
         notifyAllObservers();
     }
 
+    /**
+     * Select a node or edge.
+     *
+     * @param selected The node or edge to select
+     */
     public void select(Selectable selected) {
         if (this.selected != null) {
             this.selected.deselect();
@@ -128,6 +144,9 @@ public class GraphModel implements Observable {
         notifyAllObservers();
     }
 
+    /**
+     * Deselect the currently selected node or edge.
+     */
     public void deselect() {
         if (selected != null) {
             selected.deselect();
@@ -136,6 +155,11 @@ public class GraphModel implements Observable {
         }
     }
 
+    /**
+     * Create a new edge between the start node and the end node.
+     *
+     * @param endNode The end node of the edge
+     */
     public void createStartNodeEdge(Node endNode) {
         for (Edge edge : edges) {
             if ((edge.getStartNode() == startNode && edge.getEndNode() == endNode)

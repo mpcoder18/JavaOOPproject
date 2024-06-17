@@ -18,6 +18,27 @@ import java.util.List;
 public class Simulation {
     private GraphController graphController;
 
+    private static void resolveArmyBattle(Army armyA, Army armyB) {
+        while (!armyA.getUnits().isEmpty() && !armyB.getUnits().isEmpty()) {
+            // Select the first unit from each army
+            Unit unitA = armyA.getUnits().get(0);
+            Unit unitB = armyB.getUnits().get(0);
+
+            if (Math.random() < 0.5) {
+                unitA.attack(unitB);
+            } else {
+                unitB.attack(unitA);
+            }
+
+            // Remove units with no health
+            if (unitA.getHealth() <= 0) {
+                armyA.getUnits().remove(unitA);
+            } else if (unitB.getHealth() <= 0) {
+                armyB.getUnits().remove(unitB);
+            }
+        }
+    }
+
     /**
      * Run a single step of the simulation.
      */
@@ -79,27 +100,6 @@ public class Simulation {
         graphController.getModel().notifyAllObservers();
     }
 
-    private static void resolveArmyBattle(Army armyA, Army armyB) {
-        while (!armyA.getUnits().isEmpty() && !armyB.getUnits().isEmpty()) {
-            // Select the first unit from each army
-            Unit unitA = armyA.getUnits().get(0);
-            Unit unitB = armyB.getUnits().get(0);
-
-            if (Math.random() < 0.5) {
-                unitA.attack(unitB);
-            } else {
-                unitB.attack(unitA);
-            }
-
-            // Remove units with no health
-            if (unitA.getHealth() <= 0) {
-                armyA.getUnits().remove(unitA);
-            } else if (unitB.getHealth() <= 0) {
-                armyB.getUnits().remove(unitB);
-            }
-        }
-    }
-
     private boolean shouldBattle(Selectable selectable) {
         // A battle occurs if there are more than one army and they are from different teams
         if (selectable instanceof Node node) {
@@ -154,27 +154,28 @@ public class Simulation {
 
     private void resetState() {
         for (Node node : graphController.getNodes()) {
-            List<Army> toRemove = new ArrayList<>();
-            for (Army army : node.getArmies()) {
-                army.setMoved(false);
-                if (army.getUnits().isEmpty()) {
-                    toRemove.add(army);
-                }
-            }
-            node.getArmies().removeAll(toRemove);
+            resetAllArmiesSelectable(node.getArmies(), node);
         }
         for (Edge edge : graphController.getEdges()) {
-            List<Army> toRemove = new ArrayList<>();
-            for (Army army : edge.getArmies()) {
-                army.setMoved(false);
-                if (army.getUnits().isEmpty()) {
-                    toRemove.add(army);
-                }
-            }
-            edge.getArmies().removeAll(toRemove);
+            resetAllArmiesSelectable(edge.getArmies(), edge);
         }
     }
 
+    private void resetAllArmiesSelectable(List<Army> armies, Selectable selectable) {
+        List<Army> toRemove = new ArrayList<>();
+        for (Army army : armies) {
+            army.setMoved(false);
+            if (army.getUnits().isEmpty()) {
+                toRemove.add(army);
+            }
+        }
+        armies.removeAll(toRemove);
+        selectable.getArmies().removeAll(toRemove);
+    }
+
+    /**
+     * Encounter random events on all nodes and edges.
+     */
     public void encounterRandomEvents() {
         List<EventRecord> events = new ArrayList<>();
         for (Node node : graphController.getNodes()) {
@@ -194,12 +195,19 @@ public class Simulation {
         }
     }
 
+    /**
+     * Randomly select an event to execute.
+     *
+     * @param army      The army to execute the event on.
+     * @param selectable The selectable to select the event from.
+     * @return The event record of the event executed.
+     */
     public EventRecord encounterRandomEvent(Army army, Selectable selectable) {
         if (Math.random() < 0.5) {
             if (!selectable.getEvents().isEmpty()) {
                 Event event = selectable.getEvents().get((int) (Math.random() * selectable.getEvents().size()));
                 event.execute(army);
-                return new EventRecord(event, graphController.getSimulationStep());
+                return new EventRecord(event, selectable, graphController.getSimulationStep());
             }
         }
         return null;

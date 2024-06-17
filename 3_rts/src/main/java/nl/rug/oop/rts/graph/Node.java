@@ -15,9 +15,9 @@ import java.util.List;
 @Getter
 public class Node implements Selectable {
     private final int ID;
+    private final List<Edge> edgeList;
     @Setter
     private String name;
-    private final List<Edge> edgeList;
     @Setter
     private int x;
     @Setter
@@ -55,6 +55,11 @@ public class Node implements Selectable {
         edgeList.remove(edge);
     }
 
+    /**
+     * Convert the node to a JsonObject.
+     *
+     * @return JsonObject representation of the node
+     */
     public JsonObject toJson() {
         JsonObject jsonObject = new JsonObject()
                 .put("Id", ID)
