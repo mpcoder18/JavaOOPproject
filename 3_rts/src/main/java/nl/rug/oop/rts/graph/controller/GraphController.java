@@ -85,29 +85,22 @@ public class GraphController {
      */
     public void handleMousePressed(int x, int y) {
         int padding = 10;
-        for (Node node : model.getNodes()) { // TODO: Select the node on top (aka last added node)
-            int buttonWidth = getNodeSize();
-            if (x >= node.getX() - padding && x <= node.getX() + buttonWidth + padding && y >= node.getY()
-                    - padding && y <= node.getY() + buttonWidth + padding) {
-                model.select(node);
-                model.setOffsetX(x - node.getX());
-                model.setOffsetY(y - node.getY());
-                if (getStartNode() != null && node != getStartNode()) {
-                    createStartNodeEdge(node);
-                }
-                return;
+        Node node = model.findNodeAt(new Point(x, y));
+        Edge edge = model.findEdgeAt(new Point(x, y));
+        if (node != null) {
+            model.select(node);
+            model.setOffsetX(x - node.getX());
+            model.setOffsetY(y - node.getY());
+            if (getStartNode() != null && node != getStartNode()) {
+                createStartNodeEdge(node);
             }
+            return;
         }
-        for (Edge edge : model.getEdges()) {
-            int x1 = edge.getStartNode().getX() + getNodeSize() / 2;
-            int y1 = edge.getStartNode().getY() + getNodeSize() / 2;
-            int x2 = edge.getEndNode().getX() + getNodeSize() / 2;
-            int y2 = edge.getEndNode().getY() + getNodeSize() / 2;
-            if (x >= Math.min(x1, x2) - padding && x <= Math.max(x1, x2) + padding &&
-                    y >= Math.min(y1, y2) - padding && y <= Math.max(y1, y2) + padding) {
-                model.select(edge);
-                return;
-            }
+        if (edge != null) {
+            model.select(edge);
+            model.setOffsetX(x - edge.getStartNode().getX());
+            model.setOffsetY(y - edge.getStartNode().getY());
+            return;
         }
         if (getStartNode() != null) {
             setStartNode(null);
@@ -223,5 +216,13 @@ public class GraphController {
         System.out.println(model.getSimulationStep());
 
         mainSetup.createComponents(this);
+    }
+
+    public void zoomIn() {
+        model.zoomIn();
+    }
+
+    public void zoomOut() {
+        model.zoomOut();
     }
 }

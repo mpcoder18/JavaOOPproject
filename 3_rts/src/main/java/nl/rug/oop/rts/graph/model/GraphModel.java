@@ -260,4 +260,51 @@ public class GraphModel implements Observable {
         json.put("EventRecords", jsonEventRecords);
         return json;
     }
+
+    public Node findNodeAt(Point point) {
+        for (int i = nodes.size() - 1; i >= 0; i--) {
+            Node node = nodes.get(i);
+            if (node.getX() <= point.x && point.x <= node.getX() + nodeSize
+                    && node.getY() <= point.y && point.y <= node.getY() + nodeSize) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    public Edge findEdgeAt(Point point) {
+        int padding = 20;
+        for (int i = edges.size() - 1; i >= 0; i--) {
+            Edge edge = edges.get(i);
+            int x0 = point.x;
+            int y0 = point.y;
+            int x1 = edge.getStartNode().getX() + nodeSize / 2;
+            int y1 = edge.getStartNode().getY() + nodeSize / 2;
+            int x2 = edge.getEndNode().getX() + nodeSize / 2;
+            int y2 = edge.getEndNode().getY() + nodeSize / 2;
+            Point topLeft = new Point(Math.min(x1, x2), Math.min(y1, y2));
+            Point bottomRight = new Point(Math.max(x1, x2), Math.max(y1, y2));
+            Rectangle edgeBounds = new Rectangle(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+            if (edgeBounds.contains(point)) {
+                int d = Math.abs((x2 - x1) * (y1 - y0) - (x1 - x0) * (y2 - y1))
+                        / (int) Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                if (d <= padding) {
+                    return edge;
+                }
+            }
+        }
+        return null;
+    }
+
+    public void zoomIn() {
+        nodeSize += 10;
+        notifyAllObservers();
+    }
+
+    public void zoomOut() {
+        if (nodeSize > 40) {
+            nodeSize -= 10;
+            notifyAllObservers();
+        }
+    }
 }

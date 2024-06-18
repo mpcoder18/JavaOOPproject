@@ -6,6 +6,7 @@ import nl.rug.oop.rts.graph.controller.GraphController;
 import nl.rug.oop.rts.observable.ButtonObserver;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 
 /**
@@ -19,6 +20,8 @@ public class ToolsTopbar extends JPanel {
     private final JButton simulateStepButton;
     private final JButton saveButton;
     private final JButton loadButton;
+    private final JButton zoomInButton;
+    private final JButton zoomOutButton;
 
     /**
      * Create a new tools topbar.
@@ -33,6 +36,8 @@ public class ToolsTopbar extends JPanel {
         simulateStepButton = createSimulateStepButton(controller);
         saveButton = createSaveButton(controller);
         loadButton = createLoadButton(controller);
+        zoomInButton = createZoomInButton(controller);
+        zoomOutButton = createZoomOutButton(controller);
 
         ButtonObserver btnObs = new ButtonObserver(controller, removeNodeButton, addEdgeButton,
                 removeEdgeButton, simulateStepButton);
@@ -172,6 +177,22 @@ public class ToolsTopbar extends JPanel {
         return button;
     }
 
+    private JButton createZoomInButton(GraphController graphController) {
+        JButton button = new JButton("+");
+        button.addActionListener(e -> {
+            graphController.zoomIn();
+        });
+        return button;
+    }
+
+    private JButton createZoomOutButton(GraphController graphController) {
+        JButton button = new JButton("-");
+        button.addActionListener(e -> {
+            graphController.zoomOut();
+        });
+        return button;
+    }
+
     /**
      * Add the buttons to the toolbar.
      *
@@ -183,7 +204,16 @@ public class ToolsTopbar extends JPanel {
         toolBar.add(addEdgeButton);
         toolBar.add(removeEdgeButton);
         toolBar.add(simulateStepButton);
+
+        // TODO: Rework the layout of the toolbar
+        toolBar.addSeparator(new Dimension(20, 20));
         toolBar.add(saveButton);
         toolBar.add(loadButton);
+        toolBar.addSeparator(new Dimension(20, 20));
+
+        JLabel zoomLabel = new JLabel("Zoom: ");
+        toolBar.add(zoomLabel);
+        toolBar.add(zoomInButton);
+        toolBar.add(zoomOutButton);
     }
 }

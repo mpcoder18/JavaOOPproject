@@ -74,9 +74,9 @@ public class GraphView extends JPanel implements Observer {
     }
 
     private void drawEdges(Graphics g) {
-        ((Graphics2D) g).setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
-                10.0f, new float[]{10, 10}, 0));
-        g.setFont(new Font("Dialog", Font.PLAIN, 15));
+        ((Graphics2D) g).setStroke(new BasicStroke((float) (controller.getNodeSize() * 3) /80, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
+                (float) (controller.getNodeSize() * 10) / 80, new float[]{(float) (controller.getNodeSize() * 10) / 80, (float) (controller.getNodeSize() * 10) / 80}, 0));
+        g.setFont(new Font("Dialog", Font.PLAIN, controller.getNodeSize() * 15 / 80));
 
         for (Edge edge : controller.getEdges()) {
             drawEdge(g, edge);
@@ -92,12 +92,15 @@ public class GraphView extends JPanel implements Observer {
 
     private void drawNode(Graphics g, Node node) {
         if (node.isSelected()) {
-            g.drawImage(nodeImageSelected, node.getX(), node.getY(), this);
+            g.drawImage(nodeImageSelected, node.getX(), node.getY(), controller.getNodeSize(), controller.getNodeSize(),
+                     this);
         } else {
-            g.drawImage(nodeImage, node.getX(), node.getY(), this);
+            g.drawImage(nodeImage, node.getX(), node.getY(), controller.getNodeSize(), controller.getNodeSize(),
+                    this);
         }
 
-        // Calculate the width of the string
+        g.setFont(new Font("Dialog", Font.PLAIN, controller.getNodeSize() * 15 / 80));
+        // Calculate the width of the string for centering
         int stringWidth = g.getFontMetrics().stringWidth(node.getName());
         // Drop shadow
         g.setColor(Color.BLACK);
