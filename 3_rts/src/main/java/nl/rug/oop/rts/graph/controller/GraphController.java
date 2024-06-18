@@ -2,6 +2,8 @@ package nl.rug.oop.rts.graph.controller;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.rts.Main;
+import nl.rug.oop.rts.MainSetup;
 import nl.rug.oop.rts.SaveManager;
 import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.Node;
@@ -24,17 +26,18 @@ import java.util.List;
  */
 @Getter
 public class GraphController {
-    @Setter
     private GraphModel model;
     private GraphView view;
+    private MainSetup mainSetup;
 
     /**
      * Create a new GraphController.
      */
-    public GraphController() {
+    public GraphController(MainSetup mainSetup) {
         this.model = new GraphModel();
         this.model.setSimulation(new Simulation(this));
         this.view = new GraphView(this);
+        this.mainSetup = mainSetup;
         model.addObserver(view);
     }
 
@@ -82,7 +85,7 @@ public class GraphController {
      */
     public void handleMousePressed(int x, int y) {
         int padding = 10;
-        for (Node node : model.getNodes()) {
+        for (Node node : model.getNodes()) { // TODO: Select the node on top (aka last added node)
             int buttonWidth = getNodeSize();
             if (x >= node.getX() - padding && x <= node.getX() + buttonWidth + padding && y >= node.getY()
                     - padding && y <= node.getY() + buttonWidth + padding) {
@@ -209,5 +212,16 @@ public class GraphController {
 
     public SaveManager getSaveManager() {
         return model.getSaveManager();
+    }
+
+    public void setModel(GraphModel model) {
+        this.model = model;
+        this.model.setSimulation(new Simulation(this));
+        this.view = new GraphView(this);
+        model.addObserver(view);
+        System.out.println("Setting model");
+        System.out.println(model.getSimulationStep());
+
+        mainSetup.createComponents(this);
     }
 }

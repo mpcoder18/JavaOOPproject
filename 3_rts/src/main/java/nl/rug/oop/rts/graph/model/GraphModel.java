@@ -30,10 +30,10 @@ import java.util.Random;
 @Getter
 public class GraphModel implements Observable {
     private final List<Observer> observers;
-    private final int nodeSize = 80;
+    private int nodeSize = 80;
     private final EventFactory eventFactory;
-    private List<Node> nodes;
-    private List<Edge> edges;
+    private final List<Node> nodes;
+    private final List<Edge> edges;
     @Setter
     private Node startNode;
     private Selectable selected;
@@ -41,13 +41,13 @@ public class GraphModel implements Observable {
     private Simulation simulation;
     @Setter
     private int SimulationStep = 0;
-    private List<EventRecord> eventRecords;
+    private final List<EventRecord> eventRecords;
     @Setter
     private int offsetX;
     @Setter
     private int offsetY;
     private Point mousePosition;
-    private SaveManager saveManager;
+    private final SaveManager saveManager;
 
     /**
      * Create a new GraphModel.
@@ -63,15 +63,57 @@ public class GraphModel implements Observable {
         saveManager = new SaveManager();
     }
 
-    public GraphModel(Object nodes, Object edges, Object simulationStep, Object eventRecords) {
-        this.nodes = (List<Node>) nodes;
-        this.edges = (List<Edge>) edges;
+    public GraphModel(Object nodeSize, Object simulationStep, JsonList edges, JsonList nodes, JsonList eventRecords) {
+        this.nodes = new ArrayList<>();
+        for (Object node : nodes.getValues()) {
+            this.nodes.add(new Node((JsonObject) node));
+        }
+        this.edges = new ArrayList<>();
+        for (Object edge : edges.getValues()) {
+            Edge newEdge = new Edge((JsonObject) edge);
+            // set the start node to the node with id (int) ((JsonObject) edge).get("StartNode"))
+            for (Node node : this.nodes) {
+                if (node.getID() == (int) ((JsonObject) edge).get("StartNode")) {
+                    newEdge.setStartNode(node);
+                    break;
+                }
+            }
+            // set the end node to the node with id (int) ((JsonObject) edge).get("EndNode"))
+            for (Node node : this.nodes) {
+                if (node.getID() == (int) ((JsonObject) edge).get("EndNode")) {
+                    newEdge.setEndNode(node);
+                    break;
+                }
+            }
+            this.edges.add(newEdge);
+        }
         this.observers = new ArrayList<>();
         startNode = null;
         selected = null;
         eventFactory = new EventFactory();
-        this.SimulationStep = 0;
-        this.eventRecords = (List<EventRecord>) eventRecords;
+        this.SimulationStep = (int) simulationStep;
+        this.eventRecords = new ArrayList<>();
+        for (Object eventRecord : ((JsonList) eventRecords).getValues()) {
+            EventRecord newEventRecord = new EventRecord((JsonObject) eventRecord);
+            if (((JsonObject) eventRecord).get("TargetType").equals("Node")) {
+                for (Node node : this.nodes) {
+                    if (node.getID() == Integer.parseInt((String) ((JsonObject) eventRecord).get("TargetId"))) {
+                        newEventRecord.setTarget(node);
+                        break;
+                    }
+                }
+            } else {
+                for (Edge edge : this.edges) {
+                    if (edge.getID() == Integer.parseInt((String) ((JsonObject) eventRecord).get("TargetId"))) {
+                        newEventRecord.setTarget(edge);
+                        break;
+                    }
+                }
+                System.out.println("Could not find target edge with ID " + ((JsonObject) eventRecord).get("TargetId"));
+            }
+            this.eventRecords.add(newEventRecord);
+        }
+        this.nodeSize = (int) nodeSize;
         saveManager = new SaveManager();
     }
 
@@ -199,23 +241,23 @@ public class GraphModel implements Observable {
 
     public JsonObject toJson() {
         JsonObject json = new JsonObject()
-                .put("nodeSize", nodeSize)
-                .put("simulationStep", SimulationStep);
+                .put("NodeSize", nodeSize)
+                .put("SimulationStep", SimulationStep);
         JsonList jsonNodes = new JsonList(new Object[0]);
         for (Node node : nodes) {
             jsonNodes.add(node.toJson());
         }
-        json.put("nodes", jsonNodes);
+        json.put("Nodes", jsonNodes);
         JsonList jsonEdges = new JsonList(new Object[0]);
         for (Edge edge : edges) {
             jsonEdges.add(edge.toJson());
         }
-        json.put("edges", jsonEdges);
+        json.put("Edges", jsonEdges);
         JsonList jsonEventRecords = new JsonList(new Object[0]);
         for (EventRecord eventRecord : eventRecords) {
             jsonEventRecords.add(eventRecord.toJson());
         }
-        json.put("eventRecords", jsonEventRecords);
+        json.put("EventRecords", jsonEventRecords);
         return json;
     }
 }

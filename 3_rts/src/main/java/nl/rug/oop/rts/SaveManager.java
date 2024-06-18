@@ -29,11 +29,12 @@ public class SaveManager {
 
     public GraphModel loadGame(String filePath) {
         try {
+            JsonParser parser = new JsonParser();
             String jsonString = new String(Files.readAllBytes(Paths.get(filePath)));
-            JsonObject json = new JsonObject(jsonString);
-            System.out.println(jsonString);
-            System.out.println(json.toJsonString(1));
-            return new GraphModel(json.get("nodes"), json.get("edges"), json.get("simulationStep"), json.get("simulationSpeed"));
+            JsonObject json = (JsonObject) parser.parse(jsonString);
+//            System.out.println(jsonString);
+//            System.out.println(json.toJsonString(1));
+            return new GraphModel(json.get("NodeSize"), json.get("SimulationStep"), (JsonList) json.get("Edges"), (JsonList) json.get("Nodes"), (JsonList) json.get("EventRecords"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

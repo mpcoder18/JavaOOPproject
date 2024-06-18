@@ -18,7 +18,7 @@ import java.util.List;
 public class Simulation {
     private GraphController graphController;
 
-    private static void resolveArmyBattle(Army armyA, Army armyB) {
+    private void resolveArmyBattle(Army armyA, Army armyB) {
         while (!armyA.getUnits().isEmpty() && !armyB.getUnits().isEmpty()) {
             // Select the first unit from each army
             Unit unitA = armyA.getUnits().get(0);

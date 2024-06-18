@@ -127,7 +127,7 @@ public class ToolsTopbar extends JPanel {
         return button;
     }
 
-    private static JFileChooser getjFileChooser() {
+    private JFileChooser getjFileChooser() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Save graph");
         fileChooser.setSelectedFile(new File("graph.json"));

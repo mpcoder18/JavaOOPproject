@@ -5,6 +5,8 @@ import lombok.Setter;
 import nl.rug.oop.rts.JsonList;
 import nl.rug.oop.rts.JsonObject;
 import nl.rug.oop.rts.graph.events.Event;
+import nl.rug.oop.rts.graph.events.EventFactory;
+import nl.rug.oop.rts.graph.events.EventType;
 import nl.rug.oop.rts.objects.Army;
 
 import java.util.ArrayList;
@@ -16,8 +18,10 @@ import java.util.List;
 @Getter
 public class Edge implements Selectable {
     private final int ID;
-    private final Node startNode;
-    private final Node endNode;
+    @Setter
+    private Node startNode;
+    @Setter
+    private Node endNode;
     @Setter
     private String name;
     @Setter
@@ -47,6 +51,29 @@ public class Edge implements Selectable {
         this.events = new ArrayList<>();
     }
 
+    public Edge(JsonObject jsonObject) {
+        this.ID = (int) jsonObject.get("Id");
+        this.name = (String) jsonObject.get("Name");
+        this.startNode = null;
+        this.endNode = null;
+        this.selected = false;
+        this.armies = new ArrayList<>();
+        this.events = new ArrayList<>();
+        JsonList armiesJsonList = jsonObject.getList("Armies");
+        if (armiesJsonList != null) {
+            for (Object armyObject : armiesJsonList.getValues()) {
+                armies.add(new Army((JsonObject) armyObject));
+            }
+        }
+        JsonList eventsJsonList = jsonObject.getList("Events");
+        EventFactory eventFactory = new EventFactory();
+        if (eventsJsonList != null) {
+            for (Object eventObject : eventsJsonList.getValues()) {
+                events.add(eventFactory.createEvent(EventType.valueOf((String) ((JsonObject) eventObject).get("Type"))));
+            }
+        }
+    }
+
     /**
      * Get the other node connected to this edge.
      *
@@ -65,10 +92,11 @@ public class Edge implements Selectable {
 
     public JsonObject toJson() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.put("ID", ID);
-        jsonObject.put("name", name);
-        jsonObject.put("startNode", startNode.getID());
-        jsonObject.put("endNode", endNode.getID());
+        jsonObject.put("Id", ID);
+        jsonObject.put("Name", name);
+        jsonObject.put("StartNode", startNode.getID());
+        jsonObject.put("EndNode", endNode.getID());
+        jsonObject.put("Type", "Edge");
         JsonList armiesJsonList = new JsonList(new Object[0]);
         for (Army army : armies) {
             armiesJsonList.add(army.toJson());

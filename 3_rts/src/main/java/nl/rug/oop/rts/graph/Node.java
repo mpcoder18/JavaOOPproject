@@ -5,6 +5,9 @@ import lombok.Setter;
 import nl.rug.oop.rts.JsonList;
 import nl.rug.oop.rts.JsonObject;
 import nl.rug.oop.rts.graph.events.Event;
+import nl.rug.oop.rts.graph.events.EventFactory;
+import nl.rug.oop.rts.graph.events.EventRecord;
+import nl.rug.oop.rts.graph.events.EventType;
 import nl.rug.oop.rts.objects.Army;
 
 import java.util.ArrayList;
@@ -25,7 +28,7 @@ public class Node implements Selectable {
     private int y;
     @Setter
     private boolean selected;
-    private List<Army> armies;
+    private final List<Army> armies;
     @Setter
     private List<Event> events;
 
@@ -66,7 +69,8 @@ public class Node implements Selectable {
                 .put("Id", ID)
                 .put("Name", name)
                 .put("X", x)
-                .put("Y", y);
+                .put("Y", y)
+                .put("Type", "Node");
         JsonList armiesJsonList = new JsonList(new Object[0]);
         for (Army army : armies) {
             armiesJsonList.add(army.toJson());
@@ -80,5 +84,29 @@ public class Node implements Selectable {
         jsonObject.put("Events", eventsJsonList);
 
         return jsonObject;
+    }
+
+    public Node(JsonObject jsonObject) {
+        this.ID = (int) jsonObject.get("Id");
+        this.name = (String) jsonObject.get("Name");
+        this.x = (int) jsonObject.get("X");
+        this.y = (int) jsonObject.get("Y");
+        this.edgeList = new ArrayList<>();
+        this.selected = false;
+        this.armies = new ArrayList<>();
+        this.events = new ArrayList<>();
+        JsonList armiesJsonList = jsonObject.getList("Armies");
+        if (armiesJsonList != null) {
+            for (Object armyObject : armiesJsonList.getValues()) {
+                armies.add(new Army((JsonObject) armyObject));
+            }
+        }
+        JsonList eventsJsonList = jsonObject.getList("Events");
+        EventFactory eventFactory = new EventFactory();
+        if (eventsJsonList != null) {
+            for (Object eventObject : eventsJsonList.getValues()) {
+                events.add(eventFactory.createEvent(EventType.valueOf((String) ((JsonObject) eventObject).get("Type"))));
+            }
+        }
     }
 }

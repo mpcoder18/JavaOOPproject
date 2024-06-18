@@ -10,7 +10,7 @@ import java.util.Map;
  */
 @NoArgsConstructor
 public class JsonObject {
-    private Map<String, Object> values = new HashMap<>();
+    private final Map<String, Object> values = new HashMap<>();
 
     public JsonObject(String jsonString) {
         assert jsonString.startsWith("{") && jsonString.endsWith("}");
@@ -43,6 +43,13 @@ public class JsonObject {
         return values.get(key);
     }
 
+    public JsonList getList(String key) {
+        if (!values.containsKey(key)) {
+            return null;
+        }
+        return (JsonList) values.get(key);
+    }
+
     public boolean containsKey(String key) {
         return values.containsKey(key);
     }
@@ -68,13 +75,38 @@ public class JsonObject {
      *
      * @return the JSON string representation of the JsonObject
      */
-    public String toJsonString(int indent) { // TODO: remove trailing comma
+    public String toJsonString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{");
         for (Map.Entry<String, Object> entry : values.entrySet()) {
-            stringBuilder.append("\n");
-            stringBuilder.append("  ".repeat(Math.max(0, indent)));
             stringBuilder.append("\"").append(entry.getKey()).append("\": ");
+            Object value = entry.getValue();
+            if (value instanceof JsonObject) {
+                stringBuilder.append(((JsonObject) value).toJsonString());
+            } else if (value instanceof JsonList) {
+                stringBuilder.append(((JsonList) value).toJsonString());
+            } else if (value instanceof String) {
+                stringBuilder.append("\"").append(value).append("\"");
+            } else {
+                stringBuilder.append(value);
+            }
+            stringBuilder.append(", ");
+        }
+        if (stringBuilder.charAt(stringBuilder.length() - 2) == ',') {
+            stringBuilder.deleteCharAt(stringBuilder.length() - 2);
+        }
+        stringBuilder.append("}");
+        return stringBuilder.toString();
+    }
+
+    public String toJsonString(int indent) {
+        if (values.isEmpty()) {
+            return "{}";
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("{\n");
+        for (Map.Entry<String, Object> entry : values.entrySet()) {
+            stringBuilder.append("  ".repeat(indent)).append("\"").append(entry.getKey()).append("\": ");
             Object value = entry.getValue();
             if (value instanceof JsonObject) {
                 stringBuilder.append(((JsonObject) value).toJsonString(indent + 1));
@@ -85,11 +117,12 @@ public class JsonObject {
             } else {
                 stringBuilder.append(value);
             }
-            stringBuilder.append(",");
+            stringBuilder.append(",\n");
         }
-        stringBuilder.append("\n");
-        stringBuilder.append("  ".repeat(Math.max(0, indent - 1)));
-        stringBuilder.append("}");
+        if (stringBuilder.charAt(stringBuilder.length() - 2) == ',') {
+            stringBuilder.deleteCharAt(stringBuilder.length() - 2);
+        }
+        stringBuilder.append("  ".repeat(indent - 1)).append("}");
         return stringBuilder.toString();
     }
 }

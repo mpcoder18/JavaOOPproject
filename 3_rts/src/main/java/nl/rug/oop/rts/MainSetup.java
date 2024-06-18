@@ -8,15 +8,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Main class of the application.
  */
 public class MainSetup {
+    List<JFrame> frames = new ArrayList<>();
     /**
      * Main method of the application.
      */
     public MainSetup() {
+        GraphController graphController = new GraphController(this);
+        createComponents(graphController);
+    }
+
+    public void createComponents(GraphController graphController) { // TODO: Avoid recreating new windows, instead just replace model
+        System.out.println(graphController.getModel().getSimulationStep());
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("RTS");
@@ -24,7 +33,6 @@ public class MainSetup {
         frame.setPreferredSize(frame.getSize());
         frame.setLocationRelativeTo(null);
 
-        GraphController graphController = new GraphController();
         frame.add(graphController.getView());
 
         JToolBar toolBar = new JToolBar();
@@ -47,6 +55,12 @@ public class MainSetup {
                 graphController.getModel().notifyAllObservers();
             }
         });
+
+        // Close all other frames
+        for (JFrame f : frames) {
+            f.dispose();
+        }
+        frames.add(frame);
 
         frame.pack();
         frame.setVisible(true);

@@ -17,6 +17,12 @@ public class Unit {
     private int health;
     private String name;
 
+    public Unit(JsonObject jsonObject) {
+        this.strength = (int) jsonObject.get("Strength");
+        this.health = (int) jsonObject.get("Health");
+        this.name = (String) jsonObject.get("Name");
+    }
+
     /**
      * Attack another unit.
      *

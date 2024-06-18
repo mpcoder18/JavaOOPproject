@@ -138,6 +138,7 @@ public class GraphView extends JPanel implements Observer {
      * @param g    Graphics object
      * @param node Node to draw the armies on
      */
+    // TODO: Draw icon for each type of army
     public void drawArmy(Graphics g, Node node) {
         int radius = controller.getNodeSize() / 2;
         int centerX = node.getX() + radius;

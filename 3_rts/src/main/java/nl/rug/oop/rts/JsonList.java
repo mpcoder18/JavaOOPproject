@@ -1,5 +1,8 @@
 package nl.rug.oop.rts;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class JsonList {
     private Object[] values;
 
@@ -52,11 +55,36 @@ public class JsonList {
         return values.length;
     }
 
-    public String toJsonString(int indent) { // TODO: remove trailing comma
+    public String toJsonString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("[");
+        for (Object value : values) {
+            if (value instanceof JsonObject) {
+                stringBuilder.append(((JsonObject) value).toJsonString());
+            } else if (value instanceof JsonList) {
+                stringBuilder.append(((JsonList) value).toJsonString());
+            } else if (value instanceof String) {
+                stringBuilder.append("\"").append(value).append("\"");
+            } else {
+                stringBuilder.append(value);
+            }
+            stringBuilder.append(",");
+        }
+        if (stringBuilder.charAt(stringBuilder.length() - 1) == ',') {
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        }
+        stringBuilder.append("]");
+        return stringBuilder.toString();
+    }
+
+    public String toJsonString(int indent) {
+        if (values.length == 0) {
+            return "[]";
+        }
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("[\n");
         for (Object value : values) {
-            stringBuilder.append("  ".repeat(Math.max(0, indent)));
+            stringBuilder.append("  ".repeat(indent));
             if (value instanceof JsonObject) {
                 stringBuilder.append(((JsonObject) value).toJsonString(indent + 1));
             } else if (value instanceof JsonList) {
@@ -68,11 +96,17 @@ public class JsonList {
             }
             stringBuilder.append(",\n");
         }
-        if (values.length > 0) {
+        if (stringBuilder.charAt(stringBuilder.length() - 2) == ',') {
             stringBuilder.deleteCharAt(stringBuilder.length() - 2);
         }
-        stringBuilder.append("  ".repeat(Math.max(0, indent - 1)));
-        stringBuilder.append("]");
+        stringBuilder.append("  ".repeat(indent - 1)).append("]");
         return stringBuilder.toString();
+    }
+
+    public List<Object> getValues() {
+        if (values == null) {
+            return new ArrayList<>();
+        }
+        return List.of(values);
     }
 }

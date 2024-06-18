@@ -2,6 +2,7 @@ package nl.rug.oop.rts.objects;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.rts.FactionUtil;
 import nl.rug.oop.rts.JsonList;
 import nl.rug.oop.rts.JsonObject;
 import nl.rug.oop.rts.graph.Node;
@@ -33,6 +34,16 @@ public class Army {
         this.units.addAll(units);
         this.faction = faction;
         this.team = faction.getTeam();
+    }
+
+    public Army(JsonObject jsonObject) {
+        this.team = Team.valueOf((String) jsonObject.get("Team"));
+        FactionUtil factionUtil = new FactionUtil();
+        this.faction = factionUtil.getFaction((String) jsonObject.get("Faction"));
+        JsonList unitsJsonList = (JsonList) jsonObject.getList("Units");
+        for (Object unitObject : unitsJsonList.getValues()) {
+            units.add(new Unit((JsonObject) unitObject));
+        }
     }
 
     /**
