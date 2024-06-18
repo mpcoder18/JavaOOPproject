@@ -10,6 +10,7 @@ import nl.rug.oop.rts.util.TextureLoader;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -56,6 +57,45 @@ public class GraphView extends JPanel implements Observer {
                 controller.handleMouseDragged(e.getX(), e.getY());
             }
         });
+
+        // On Q press, add a node
+        getInputMap().put(KeyStroke.getKeyStroke("Q"), "addNode");
+        getActionMap().put("addNode", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.addNode(controller.getNodes().size() + 1,
+                        "Node " + (controller.getNodes().size() + 1),
+                        controller.getMousePosition().x - controller.getNodeSize() / 2,
+                        controller.getMousePosition().y - controller.getNodeSize() / 2);
+            }
+        });
+        getInputMap().put(KeyStroke.getKeyStroke("E"), "addEdge");
+        getActionMap().put("addEdge", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (controller.getSelected() instanceof Node) {
+                    if (controller.getStartNode() == null) {
+                        controller.setStartNode((Node) controller.getSelected());
+                    }
+                }
+            }
+        });
+        // Delete selected node or edge
+        getInputMap().put(KeyStroke.getKeyStroke("DELETE"), "removeNode");
+        getActionMap().put("removeNode", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (controller.getSelected() instanceof Node) {
+                    controller.removeNode((Node) controller.getSelected());
+                    controller.deselect();
+                } else if (controller.getSelected() instanceof Edge edge) {
+                    edge.getStartNode().removeEdge(edge);
+                    edge.getEndNode().removeEdge(edge);
+                    controller.deselect();
+                    controller.removeEdge(edge);
+                }
+            }
+        });
     }
 
     @Override
@@ -74,7 +114,7 @@ public class GraphView extends JPanel implements Observer {
     }
 
     private void drawEdges(Graphics g) {
-        ((Graphics2D) g).setStroke(new BasicStroke((float) (controller.getNodeSize() * 3) /80, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
+        ((Graphics2D) g).setStroke(new BasicStroke((float) (controller.getNodeSize() * 3) / 80, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
                 (float) (controller.getNodeSize() * 10) / 80, new float[]{(float) (controller.getNodeSize() * 10) / 80, (float) (controller.getNodeSize() * 10) / 80}, 0));
         g.setFont(new Font("Dialog", Font.PLAIN, controller.getNodeSize() * 15 / 80));
 
@@ -93,7 +133,7 @@ public class GraphView extends JPanel implements Observer {
     private void drawNode(Graphics g, Node node) {
         if (node.isSelected()) {
             g.drawImage(nodeImageSelected, node.getX(), node.getY(), controller.getNodeSize(), controller.getNodeSize(),
-                     this);
+                    this);
         } else {
             g.drawImage(nodeImage, node.getX(), node.getY(), controller.getNodeSize(), controller.getNodeSize(),
                     this);
@@ -215,13 +255,12 @@ public class GraphView extends JPanel implements Observer {
     /**
      * Draw the preview of the edge.
      *
-     * @param g            Graphics object
+     * @param g             Graphics object
      * @param mousePosition Position of the mouse
      */
     public void drawEdgePreview(Graphics g, Point mousePosition) {
-        ((Graphics2D) g).setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
-                10.0f, new float[]{10, 10}, 0));
-        g.setFont(new Font("Dialog", Font.PLAIN, 15));
+        ((Graphics2D) g).setStroke(new BasicStroke((float) (controller.getNodeSize() * 3) / 80, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
+                (float) (controller.getNodeSize() * 10) / 80, new float[]{(float) (controller.getNodeSize() * 10) / 80, (float) (controller.getNodeSize() * 10) / 80}, 0));
 
         if (controller.getStartNode() != null) {
             g.setColor(Color.GRAY);

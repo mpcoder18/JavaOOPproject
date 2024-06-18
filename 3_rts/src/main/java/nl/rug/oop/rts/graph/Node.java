@@ -6,7 +6,6 @@ import nl.rug.oop.rts.JsonList;
 import nl.rug.oop.rts.JsonObject;
 import nl.rug.oop.rts.graph.events.Event;
 import nl.rug.oop.rts.graph.events.EventFactory;
-import nl.rug.oop.rts.graph.events.EventRecord;
 import nl.rug.oop.rts.graph.events.EventType;
 import nl.rug.oop.rts.objects.Army;
 

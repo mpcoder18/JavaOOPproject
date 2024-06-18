@@ -45,12 +45,10 @@ public class ToolsTopbar extends JPanel {
     }
 
     private JButton createAddNodeButton(GraphController graphController) {
-        JButton button = new JButton("Add Node");
-        button.addActionListener(e -> {
-            graphController.addNode(graphController.getNodes().size() + 1,
-                    "Node " + (graphController.getNodes().size() + 1),
-                    0, 0);
-        });
+        JButton button = new JButton("Add Node (Q)");
+        button.addActionListener(e -> graphController.addNode(graphController.getNodes().size() + 1,
+                "Node " + (graphController.getNodes().size() + 1),
+                0, 0));
         return button;
     }
 
@@ -66,7 +64,7 @@ public class ToolsTopbar extends JPanel {
     }
 
     private JButton createAddEdgeButton(GraphController graphController) {
-        JButton button = new JButton("Add Edge");
+        JButton button = new JButton("Add Edge (E)");
         button.addActionListener(e -> {
             if (graphController.getSelected() instanceof Node) {
                 if (graphController.getStartNode() == null) {
@@ -92,9 +90,7 @@ public class ToolsTopbar extends JPanel {
 
     private JButton createSimulateStepButton(GraphController graphController) {
         JButton button = new JButton("▶ (Step 0)");
-        button.addActionListener(e -> {
-            graphController.getSimulation().step();
-        });
+        button.addActionListener(e -> graphController.getSimulation().step());
         return button;
     }
 
@@ -179,17 +175,13 @@ public class ToolsTopbar extends JPanel {
 
     private JButton createZoomInButton(GraphController graphController) {
         JButton button = new JButton("+");
-        button.addActionListener(e -> {
-            graphController.zoomIn();
-        });
+        button.addActionListener(e -> graphController.zoomIn());
         return button;
     }
 
     private JButton createZoomOutButton(GraphController graphController) {
         JButton button = new JButton("-");
-        button.addActionListener(e -> {
-            graphController.zoomOut();
-        });
+        button.addActionListener(e -> graphController.zoomOut());
         return button;
     }
 

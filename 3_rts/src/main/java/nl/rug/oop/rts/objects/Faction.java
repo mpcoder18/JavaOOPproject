@@ -18,9 +18,9 @@ public enum Faction {
     MORDOR("Mordor", Team.TEAM_B, List.of("Orc Warrior", "Orc Pikeman", "Haradrim Archer")),
     ISENGARD("Isengard", Team.TEAM_B, List.of("Uruk-hai", "Uruk Crossbowman", "Warg Rider"));
 
-    private String name;
-    private Team team;
-    private List<String> unitNames;
+    private final String name;
+    private final Team team;
+    private final List<String> unitNames;
 
     @Override
     public String toString() {

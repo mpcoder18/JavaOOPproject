@@ -32,8 +32,6 @@ public class SaveManager {
             JsonParser parser = new JsonParser();
             String jsonString = new String(Files.readAllBytes(Paths.get(filePath)));
             JsonObject json = (JsonObject) parser.parse(jsonString);
-//            System.out.println(jsonString);
-//            System.out.println(json.toJsonString(1));
             return new GraphModel(json.get("NodeSize"), json.get("SimulationStep"), (JsonList) json.get("Edges"), (JsonList) json.get("Nodes"), (JsonList) json.get("EventRecords"));
         } catch (IOException e) {
             throw new RuntimeException(e);

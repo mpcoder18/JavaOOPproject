@@ -22,7 +22,6 @@ public class EventFactory {
             case SABOTAGE -> new SabotageEvent();
             case TRAINING -> new TrainingEvent();
             case SOUP -> new SoupEvent();
-            default -> null;
         };
     }
 }

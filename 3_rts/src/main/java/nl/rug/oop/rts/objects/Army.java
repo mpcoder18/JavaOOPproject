@@ -40,7 +40,7 @@ public class Army {
         this.team = Team.valueOf((String) jsonObject.get("Team"));
         FactionUtil factionUtil = new FactionUtil();
         this.faction = factionUtil.getFaction((String) jsonObject.get("Faction"));
-        JsonList unitsJsonList = (JsonList) jsonObject.getList("Units");
+        JsonList unitsJsonList = jsonObject.getList("Units");
         for (Object unitObject : unitsJsonList.getValues()) {
             units.add(new Unit((JsonObject) unitObject));
         }

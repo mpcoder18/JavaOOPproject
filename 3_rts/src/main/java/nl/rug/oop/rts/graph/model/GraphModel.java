@@ -93,7 +93,7 @@ public class GraphModel implements Observable {
         eventFactory = new EventFactory();
         this.SimulationStep = (int) simulationStep;
         this.eventRecords = new ArrayList<>();
-        for (Object eventRecord : ((JsonList) eventRecords).getValues()) {
+        for (Object eventRecord : eventRecords.getValues()) {
             EventRecord newEventRecord = new EventRecord((JsonObject) eventRecord);
             if (((JsonObject) eventRecord).get("TargetType").equals("Node")) {
                 for (Node node : this.nodes) {

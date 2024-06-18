@@ -1,8 +1,6 @@
 package nl.rug.oop.rts.graph.controller;
 
 import lombok.Getter;
-import lombok.Setter;
-import nl.rug.oop.rts.Main;
 import nl.rug.oop.rts.MainSetup;
 import nl.rug.oop.rts.SaveManager;
 import nl.rug.oop.rts.graph.Edge;
@@ -28,7 +26,7 @@ import java.util.List;
 public class GraphController {
     private GraphModel model;
     private GraphView view;
-    private MainSetup mainSetup;
+    private final MainSetup mainSetup;
 
     /**
      * Create a new GraphController.

@@ -65,9 +65,7 @@ public class OptionsPanel extends JPanel implements Observer {
             armyPanel.setLayout(new BoxLayout(armyPanel, BoxLayout.X_AXIS));
             JLabel armyLabel = new JLabel(army.getFaction().toString() + " (" + army.getUnits().size() + " units)");
             JButton removeArmy = new JButton("x");
-            removeArmy.addActionListener(e -> {
-                graphController.removeArmy(army);
-            });
+            removeArmy.addActionListener(e -> graphController.removeArmy(army));
             armyPanel.add(armyLabel);
             armyPanel.add(removeArmy);
             armiesPanel.add(armyPanel);
@@ -87,9 +85,7 @@ public class OptionsPanel extends JPanel implements Observer {
             eventPanel.setLayout(new BoxLayout(eventPanel, BoxLayout.X_AXIS));
             JLabel eventLabel = new JLabel(event.getType().getFormattedName());
             JButton removeEvent = new JButton("x");
-            removeEvent.addActionListener(e -> {
-                graphController.removeEvent(event);
-            });
+            removeEvent.addActionListener(e -> graphController.removeEvent(event));
             eventPanel.add(eventLabel);
             eventPanel.add(removeEvent);
             eventsPanel.add(eventPanel);
