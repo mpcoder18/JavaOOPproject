@@ -246,8 +246,4 @@ public class GraphController {
     public boolean canRedo() {
         return model.canRedo();
     }
-
-    public void saveGameChooser() {
-//        model.saveGameChooser();
-    }
 }

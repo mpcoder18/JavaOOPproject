@@ -15,14 +15,14 @@ public class AddNodeCommand implements Command {
     @Override
     public void execute() {
         SoundPlayer soundPlayer = new SoundPlayer();
-        soundPlayer.playSound("src/main/resources/addNoise.wav");
+        soundPlayer.playSound("addNoise.wav");
         model.getNodes().add(node);
     }
 
     @Override
     public void undo() {
         SoundPlayer soundPlayer = new SoundPlayer();
-        soundPlayer.playSound("src/main/resources/removeNoise.wav");
+        soundPlayer.playSound("removeNoise.wav");
         model.getNodes().remove(node);
     }
 }

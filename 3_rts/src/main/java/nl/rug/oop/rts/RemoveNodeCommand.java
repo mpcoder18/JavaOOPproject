@@ -27,7 +27,7 @@ public class RemoveNodeCommand implements Command {
         }
         model.getNodes().remove(node);
         SoundPlayer soundPlayer = new SoundPlayer();
-        soundPlayer.playSound("src/main/resources/delete.wav");
+        soundPlayer.playSound("delete.wav");
     }
 
     @Override
@@ -39,6 +39,6 @@ public class RemoveNodeCommand implements Command {
             edge.getEndNode().getEdgeList().add(edge);
         }
         SoundPlayer soundPlayer = new SoundPlayer();
-        soundPlayer.playSound("src/main/resources/undoDelete.wav");
+        soundPlayer.playSound("undoDelete.wav");
     }
 }

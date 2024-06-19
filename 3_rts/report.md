@@ -4,9 +4,13 @@ Niels de Boer (s4611896) & Foo Bar (s2345678)
 
 ## Introduction
 
-> *Very briefly describe what your program does.*
- 
->Expected length: ~100 words
+This program is a real-time strategy game (RTS) where the user can
+simulate battles between two teams of factions. The user can freely
+manipulate the map to create new nodes and edges, and place armies on
+nodes. The armies move randomly between nodes and events can occur,
+having random effects on the armies. They also fight each other when
+they meet. The user can save and load states of the game from files,
+and sound effects are played in response to certain actions.
 
 ## Program design
 
@@ -36,8 +40,16 @@ Please answer the following questions:
 
 ___
 
-Answer:
+Answer: In the MVC pattern, the model is responsible for the data and the logic of the program.
+The view is responsible for the user interface and the controller is responsible for the interaction
+between the model and the view. In the assignment, the model is represented by the `GraphModel` class,
+which contains data about the nodes and edges of the graph, which in turn contain data about the armies
+and events. The view is represented by the `GraphView` class, which contains the user interface components
+and the controller is represented by the `GraphController` class, which contains methods to interact with
+the model and the view.
 
+The constraints of the MVC pattern are that the model, view and controller should not depend on each other,
+and fulfill their roles independently, allowing us to change one component without affecting the others.
 ___
 
 2. The Swing library provides the ability to create nested user interface components. In this assignment, you created multiple JPanel components on the user interface. These contain other user interface components to build-up a tree of user interface components.
@@ -60,9 +72,15 @@ ___
 
 ## Process evaluation
 
-> *Describe shortly the process that led to the final code and the report. What was easy, what was difficult? Did you make interesting mistakes? What have you learned from this assignment?*
+We first wrote a single class that would act as a controller and model for the graph, as well as a bit of the view,
+event if there was another class for that. That means that once we realized that it wasn't proper MVC, we had to
+rewrite a lot of the code when we were at the simulation step. We still managed to rewrite the code in time, but it
+was a bit of a hassle. We should have thought more about the design of the program beforehand, as well as some parts
+of our current design definitely could have been improved for a better MVC pattern implementation. We also focused
+on clean UX design, which we think we did well, but it took a lot of debugging to get it right. By the end of the
+deadline, we thought about adding more features (additional sounds, better UI, user money and versus computer mode),
+but we decided to focus on rewriting parts of the code to make it cleaner.
 
-> Expected length: ~150 words
 
 ## Conclusions
 

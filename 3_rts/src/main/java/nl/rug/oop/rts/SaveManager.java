@@ -3,6 +3,8 @@ package nl.rug.oop.rts;
 import lombok.NoArgsConstructor;
 import nl.rug.oop.rts.graph.model.GraphModel;
 
+import javax.swing.*;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -51,5 +53,75 @@ public class SaveManager {
         }
     }
 
-//    public void saveGameChooser()
+    public void saveGameChooser(GraphModel model, JFrame parentFrame) {
+        boolean validName = false;
+        while (!validName) {
+            JFileChooser fileChooser = getjFileChooser();
+            int userSelection = fileChooser.showSaveDialog(parentFrame);
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+                String filePath = fileToSave.getAbsolutePath();
+                if (!filePath.endsWith(".json")) {
+                    filePath += ".json";
+                }
+                if (new File(filePath).exists()) {
+                    int response = JOptionPane.showConfirmDialog(null, "Do you want to replace the existing file?",
+                            "Confirm Overwrite", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (response == JOptionPane.YES_OPTION) {
+                        validName = true;
+                        System.out.println("Saving to " + filePath);
+                        saveGame(model, filePath);
+                    }
+                } else {
+                    validName = true;
+                    System.out.println("Saving to " + filePath);
+                    saveGame(model, filePath);
+                }
+            } else {
+                validName = true; // User cancelled the file chooser, exit the loop
+            }
+        }
+    }
+
+    public GraphModel loadGameChooser(JFrame parentFrame) {
+        boolean validName = false;
+        while (!validName) {
+            JFileChooser fileChooser = getjFileChooser();
+            int userSelection = fileChooser.showOpenDialog(parentFrame);
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToLoad = fileChooser.getSelectedFile();
+                String filePath = fileToLoad.getAbsolutePath();
+                if (filePath.endsWith(".json")) {
+                    validName = true;
+                    System.out.println("Loading from " + filePath);
+                    return loadGame(filePath);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please select a JSON file", "Invalid file",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                validName = true; // User cancelled the file chooser, exit the loop
+            }
+        }
+        return null;
+    }
+
+    private JFileChooser getjFileChooser() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save graph");
+        fileChooser.setSelectedFile(new File("graph.json"));
+
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.getName().toLowerCase().endsWith(".json") || f.isDirectory();
+            }
+
+            @Override
+            public String getDescription() {
+                return "JSON files";
+            }
+        });
+        return fileChooser;
+    }
 }

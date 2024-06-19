@@ -119,6 +119,7 @@ public class Edge implements Selectable {
             eventsJsonList.add(event.toJson());
         }
         jsonObject.put("Events", eventsJsonList);
+
         return jsonObject;
     }
 }

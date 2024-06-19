@@ -214,7 +214,7 @@ public class GraphModel implements Observable {
     public void removeArmy(Army army, Selectable selectable) {
         selectable.getArmies().remove(army);
         SoundPlayer soundPlayer = new SoundPlayer();
-        soundPlayer.playSound("src/main/resources/armyDeath.wav");
+        soundPlayer.playSound("armyDeath.wav");
         notifyAllObservers();
     }
 

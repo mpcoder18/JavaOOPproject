@@ -18,7 +18,7 @@ public class AddEdgeCommand implements Command {
         edge.getStartNode().getEdgeList().add(edge);
         edge.getEndNode().getEdgeList().add(edge);
         SoundPlayer soundPlayer = new SoundPlayer();
-        soundPlayer.playSound("src/main/resources/addEdge" + (int) (Math.random() * 3 + 1) + ".wav");
+        soundPlayer.playSound("addEdge" + (int) (Math.random() * 3 + 1) + ".wav");
     }
 
     @Override
@@ -27,6 +27,6 @@ public class AddEdgeCommand implements Command {
         edge.getEndNode().getEdgeList().remove(edge);
         model.getEdges().remove(edge);
         SoundPlayer soundPlayer = new SoundPlayer();
-        soundPlayer.playSound("src/main/resources/removeEdge" + (int) (Math.random() * 3 + 1) + ".wav");
+        soundPlayer.playSound("removeEdge" + (int) (Math.random() * 3 + 1) + ".wav");
     }
 }
