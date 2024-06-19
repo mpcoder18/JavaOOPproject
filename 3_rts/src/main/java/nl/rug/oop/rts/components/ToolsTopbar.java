@@ -102,6 +102,7 @@ public class ToolsTopbar extends JPanel {
 
     private JButton createSaveButton(GraphController graphController) {
         JButton button = new JButton("Save");
+        button.setToolTipText("Save (Ctrl+S)");
         button.addActionListener(e -> {
             JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
             graphController.getSaveManager().saveGameChooser(graphController.getModel(), parentFrame);
@@ -110,6 +111,7 @@ public class ToolsTopbar extends JPanel {
     }
     private JButton createLoadButton(GraphController graphController) {
         JButton button = new JButton("Load");
+        button.setToolTipText("Load (Ctrl+O)");
         button.addActionListener(e -> {
             JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
             GraphModel loadedModel = graphController.getSaveManager().loadGameChooser(parentFrame);

@@ -3,6 +3,7 @@ package nl.rug.oop.rts.graph.view;
 import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.Node;
 import nl.rug.oop.rts.graph.controller.GraphController;
+import nl.rug.oop.rts.graph.model.GraphModel;
 import nl.rug.oop.rts.objects.Army;
 import nl.rug.oop.rts.objects.Team;
 import nl.rug.oop.rts.observable.Observer;
@@ -119,14 +120,19 @@ public class GraphView extends JPanel implements Observer {
         getActionMap().put("save", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.saveGameChooser();
+                JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(GraphView.this);
+                controller.getSaveManager().saveGameChooser(controller.getModel(), parentFrame);
             }
         });
-        getInputMap().put(KeyStroke.getKeyStroke("control L"), "load");
+        getInputMap().put(KeyStroke.getKeyStroke("control O"), "load");
         getActionMap().put("load", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                controller.loadGameChooser();
+                JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(GraphView.this);
+                GraphModel loadedModel = controller.getSaveManager().loadGameChooser(parentFrame);
+                if (loadedModel != null) {
+                    controller.setModel(loadedModel);
+                }
             }
         });
     }
