@@ -105,6 +105,7 @@ public class GraphModel implements Observable {
                 for (Node node : this.nodes) {
                     if (node.getID() == (int) ((JsonObject) edge).get("StartNode")) {
                         newEdge.setStartNode(node);
+                        node.addEdge(newEdge);
                         break;
                     }
                 }
@@ -112,6 +113,7 @@ public class GraphModel implements Observable {
                 for (Node node : this.nodes) {
                     if (node.getID() == (int) ((JsonObject) edge).get("EndNode")) {
                         newEdge.setEndNode(node);
+                        node.addEdge(newEdge);
                         break;
                     }
                 }
@@ -162,15 +164,7 @@ public class GraphModel implements Observable {
      * @param node The node to remove
      */
     public void removeNode(Node node) {
-        List<Edge> edgesToRemove = new ArrayList<>();
-        for (Edge edge : edges) {
-            if (edge.getStartNode() == node || edge.getEndNode() == node) {
-                edgesToRemove.add(edge);
-            }
-        }
-        for (Edge edge : edgesToRemove) {
-            removeEdge(edge);
-        }
+
         Command removeNodeCommand = new RemoveNodeCommand(this, node);
         removeNodeCommand.execute();
         undoStack.push(removeNodeCommand);
@@ -179,16 +173,18 @@ public class GraphModel implements Observable {
     }
 
     public void addEdge(Edge edge) {
-        edges.add(edge);
+        Command addEdgeCommand = new AddEdgeCommand(this, edge);
+        addEdgeCommand.execute();
+        undoStack.push(addEdgeCommand);
+        redoStack.clear();
         notifyAllObservers();
     }
 
     public void removeEdge(Edge edge) {
-        Node startNode = edge.getStartNode();
-        Node endNode = edge.getEndNode();
-        startNode.removeEdge(edge);
-        endNode.removeEdge(edge);
-        edges.remove(edge);
+        Command removeEdgeCommand = new RemoveEdgeCommand(this, edge);
+        removeEdgeCommand.execute();
+        undoStack.push(removeEdgeCommand);
+        redoStack.clear();
         notifyAllObservers();
     }
 

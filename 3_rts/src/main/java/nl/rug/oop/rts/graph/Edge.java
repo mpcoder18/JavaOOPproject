@@ -44,8 +44,8 @@ public class Edge implements Selectable {
         this.name = name;
         this.startNode = startNode;
         this.endNode = endNode;
-        startNode.addEdge(this);
-        endNode.addEdge(this);
+//        startNode.addEdge(this);
+//        endNode.addEdge(this);
         this.selected = false;
         this.armies = new ArrayList<>();
         this.events = new ArrayList<>();

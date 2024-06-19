@@ -53,6 +53,16 @@ public class OptionsPanel extends JPanel implements Observer {
         optionsPanel.add(nameField);
         optionsPanel.add(createAddArmyButton());
         optionsPanel.add(createAddEventButton());
+
+        // If node, list connected edges
+        if (graphController.getSelected() instanceof Node) {
+            Node node = (Node) graphController.getSelected();
+            for (Edge edge : node.getEdgeList()) {
+                JLabel edgeLabel = new JLabel("Connected to " + edge.getName());
+                optionsPanel.add(edgeLabel);
+            }
+        }
+
         add(optionsPanel);
     }
 
