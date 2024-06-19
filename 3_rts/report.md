@@ -57,7 +57,11 @@ Which design pattern does Swing implement to create a hierarchy of user interfac
 
 ___
 
-Answer:
+Answer: Java Swing uses the composite pattern. Here the JComponent class serves as the abstract base class for all UI components, making it the Component in the Composite Pattern. Here's how the pattern maps to Swing:
+Firstly you have the superclass JComponent for all components, leafs and composites. 
+It provides a common set of methods that all components share. Then comes the  classes Composite  Classes like JPanel, JFrame, JScrollPane, etc., act as composite nodes. These components can contain other JComponent objects. For example, a JPanel can contain other JPanel objects, as well as leafs.
+ The leafs consists of Concrete classes like JButton, JLabel, JTextField, etc. these act as the leaf nodes. They represent the actual UI elements that don't contain other components.
+
 
 ___
 
