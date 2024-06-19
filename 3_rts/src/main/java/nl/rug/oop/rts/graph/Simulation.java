@@ -60,17 +60,17 @@ public class Simulation {
     private void resolveBattles() {
         for (Node node : graphController.getNodes()) {
             if (shouldBattle(node)) {
-                resolveBattle(node.getArmies());
+                resolveBattle(node.getArmies(), node);
             }
         }
         for (Edge edge : graphController.getEdges()) {
             if (shouldBattle(edge)) {
-                resolveBattle(edge.getArmies());
+                resolveBattle(edge.getArmies(), edge);
             }
         }
     }
 
-    private void resolveBattle(List<Army> armies) {
+    private void resolveBattle(List<Army> armies, Selectable selectable) {
         List<Army> armiesTeamA = new ArrayList<>();
         List<Army> armiesTeamB = new ArrayList<>();
         for (Army army : armies) {
@@ -91,10 +91,10 @@ public class Simulation {
             // Remove armies with no units
             if (armyA.getUnits().isEmpty()) {
                 armiesTeamA.remove(armyA);
-                armies.remove(armyA);
+                graphController.removeArmy(armyA, selectable);
             } else {
                 armiesTeamB.remove(armyB);
-                armies.remove(armyB);
+                graphController.removeArmy(armyB, selectable);
             }
         }
         graphController.getModel().notifyAllObservers();

@@ -73,8 +73,8 @@ public class GraphController {
         model.addArmy(faction);
     }
 
-    public void removeArmy(Army army) {
-        model.removeArmy(army);
+    public void removeArmy(Army army, Selectable selectable) {
+        model.removeArmy(army, selectable);
     }
 
     /**
