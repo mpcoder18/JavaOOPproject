@@ -82,8 +82,8 @@ rewrite a lot of the code when we were at the simulation step. We still managed 
 was a bit of a hassle. We should have thought more about the design of the program beforehand, as well as some parts
 of our current design definitely could have been improved for a better MVC pattern implementation. We also focused
 on clean UX design, which we think we did well, but it took a lot of debugging to get it right. By the end of the
-deadline, we thought about adding more features (additional sounds, better UI, user money and versus computer mode),
-but we decided to focus on rewriting parts of the code to make it cleaner.
+deadline, we thought about adding more features (additional sounds, better UI, user money and versus computer mode,
+balanced random events, etc.) but we decided to focus on rewriting parts of the code to make it cleaner.
 
 
 ## Conclusions

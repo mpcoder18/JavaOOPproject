@@ -53,6 +53,12 @@ public class SaveManager {
         }
     }
 
+    /**
+     * Open a file chooser to save a game.
+     *
+     * @param model the state of the game
+     * @param parentFrame the parent frame
+     */
     public void saveGameChooser(GraphModel model, JFrame parentFrame) {
         boolean validName = false;
         while (!validName) {
@@ -83,6 +89,12 @@ public class SaveManager {
         }
     }
 
+    /**
+     * Open a file chooser to load a game.
+     *
+     * @param parentFrame the parent frame
+     * @return the loaded game
+     */
     public GraphModel loadGameChooser(JFrame parentFrame) {
         boolean validName = false;
         while (!validName) {

@@ -116,7 +116,7 @@ public class ToolsTopbar extends JPanel {
             JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
             GraphModel loadedModel = graphController.getSaveManager().loadGameChooser(parentFrame);
             if (loadedModel != null) {
-                graphController.setModel(loadedModel);
+                graphController.replaceModel(loadedModel);
             }
         });
         return button;

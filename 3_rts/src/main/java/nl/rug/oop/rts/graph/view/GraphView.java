@@ -66,6 +66,16 @@ public class GraphView extends JPanel implements Observer {
     }
 
     private void setupKeyBindings() {
+        setupAddNodeAction();
+        setupAddEdgeAction();
+        setupRemoveNodeAction();
+        setupUndoAction();
+        setupRedoAction();
+        setupSaveAction();
+        setupLoadAction();
+    }
+
+    private void setupAddNodeAction() {
         getInputMap().put(KeyStroke.getKeyStroke("Q"), "addNode");
         getActionMap().put("addNode", new AbstractAction() {
             @Override
@@ -76,6 +86,9 @@ public class GraphView extends JPanel implements Observer {
                         controller.getMousePosition().y - controller.getNodeSize() / 2);
             }
         });
+    }
+
+    private void setupAddEdgeAction() {
         getInputMap().put(KeyStroke.getKeyStroke("E"), "addEdge");
         getActionMap().put("addEdge", new AbstractAction() {
             @Override
@@ -87,6 +100,9 @@ public class GraphView extends JPanel implements Observer {
                 }
             }
         });
+    }
+
+    private void setupRemoveNodeAction() {
         getInputMap().put(KeyStroke.getKeyStroke("DELETE"), "removeNode");
         getActionMap().put("removeNode", new AbstractAction() {
             @Override
@@ -102,6 +118,9 @@ public class GraphView extends JPanel implements Observer {
                 }
             }
         });
+    }
+
+    private void setupUndoAction() {
         getInputMap().put(KeyStroke.getKeyStroke("control Z"), "undo");
         getActionMap().put("undo", new AbstractAction() {
             @Override
@@ -109,6 +128,9 @@ public class GraphView extends JPanel implements Observer {
                 controller.undo();
             }
         });
+    }
+
+    private void setupRedoAction() {
         getInputMap().put(KeyStroke.getKeyStroke("control Y"), "redo");
         getActionMap().put("redo", new AbstractAction() {
             @Override
@@ -116,6 +138,9 @@ public class GraphView extends JPanel implements Observer {
                 controller.redo();
             }
         });
+    }
+
+    private void setupSaveAction() {
         getInputMap().put(KeyStroke.getKeyStroke("control S"), "save");
         getActionMap().put("save", new AbstractAction() {
             @Override
@@ -124,6 +149,9 @@ public class GraphView extends JPanel implements Observer {
                 controller.getSaveManager().saveGameChooser(controller.getModel(), parentFrame);
             }
         });
+    }
+
+    private void setupLoadAction() {
         getInputMap().put(KeyStroke.getKeyStroke("control O"), "load");
         getActionMap().put("load", new AbstractAction() {
             @Override
@@ -131,7 +159,7 @@ public class GraphView extends JPanel implements Observer {
                 JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(GraphView.this);
                 GraphModel loadedModel = controller.getSaveManager().loadGameChooser(parentFrame);
                 if (loadedModel != null) {
-                    controller.setModel(loadedModel);
+                    controller.replaceModel(loadedModel);
                 }
             }
         });

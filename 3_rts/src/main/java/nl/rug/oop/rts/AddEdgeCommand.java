@@ -3,6 +3,9 @@ package nl.rug.oop.rts;
 import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.model.GraphModel;
 
+/**
+ * Command to add an edge to the graph.
+ */
 public class AddEdgeCommand implements Command {
     private final GraphModel model;
     private final Edge edge;

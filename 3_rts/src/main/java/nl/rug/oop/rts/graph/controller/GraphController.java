@@ -17,6 +17,7 @@ import nl.rug.oop.rts.objects.Faction;
 import nl.rug.oop.rts.observable.Observer;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -207,22 +208,6 @@ public class GraphController {
         return model.getSaveManager();
     }
 
-    /**
-     * Swap the model and view.
-     *
-     * @param model - The model.
-     */
-    public void setModel(GraphModel model) {
-        this.model = model;
-        this.model.setSimulation(new Simulation(this));
-        this.view = new GraphView(this);
-        model.addObserver(view);
-        System.out.println("Setting model");
-        System.out.println(model.getSimulationStep());
-
-        mainSetup.createComponents(this);
-    }
-
     public void zoomIn() {
         model.zoomIn();
     }
@@ -245,5 +230,23 @@ public class GraphController {
 
     public boolean canRedo() {
         return model.canRedo();
+    }
+
+    /**
+     * Replace the model with a new model.
+     *
+     * @param model - The new model.
+     */
+    public void replaceModel(GraphModel model) {
+        List<Observer> oldObservers = new ArrayList<>(this.model.getObservers());
+        for (Observer observer : oldObservers) {
+            this.model.removeObserver(observer);
+        }
+        this.model = model;
+        this.model.setSimulation(new Simulation(this));
+        for (Observer observer : oldObservers) {
+            this.model.addObserver(observer);
+        }
+        this.model.notifyAllObservers();
     }
 }

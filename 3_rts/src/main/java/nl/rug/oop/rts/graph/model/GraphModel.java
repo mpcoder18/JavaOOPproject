@@ -29,26 +29,25 @@ import java.util.Stack;
 @Getter
 public class GraphModel implements Observable {
     private final List<Observer> observers;
-    private int nodeSize = 80;
     private final EventFactory eventFactory;
     private final List<Node> nodes;
     private final List<Edge> edges;
+    private final List<EventRecord> eventRecords;
+    private final SaveManager saveManager;
+    private final Stack<Command> undoStack = new Stack<>();
+    private final Stack<Command> redoStack = new Stack<>();
+    private int nodeSize = 80;
     private Node startNode;
     private Selectable selected;
     @Setter
     private Simulation simulation;
     @Setter
     private int SimulationStep = 0;
-    private final List<EventRecord> eventRecords;
     @Setter
     private int offsetX;
     @Setter
     private int offsetY;
     private Point mousePosition;
-    private final SaveManager saveManager;
-    private final Stack<Command> undoStack = new Stack<>();
-    private final Stack<Command> redoStack = new Stack<>();
-
 
     /**
      * Create a new GraphModel.
@@ -149,6 +148,14 @@ public class GraphModel implements Observable {
         return eventRecordList;
     }
 
+    /**
+     * Add a node to the graph.
+     *
+     * @param ID ID of the node
+     * @param name Name of the node
+     * @param x X coordinate of the node
+     * @param y Y coordinate of the node
+     */
     public void addNode(int ID, String name, int x, int y) {
         Node node = new Node(ID, name, x, y);
         Command addNodeCommand = new AddNodeCommand(this, node);
@@ -172,6 +179,11 @@ public class GraphModel implements Observable {
         notifyAllObservers();
     }
 
+    /**
+     * Add an edge to the graph.
+     *
+     * @param edge The edge to add
+     */
     public void addEdge(Edge edge) {
         Command addEdgeCommand = new AddEdgeCommand(this, edge);
         addEdgeCommand.execute();
@@ -180,6 +192,11 @@ public class GraphModel implements Observable {
         notifyAllObservers();
     }
 
+    /**
+     * Remove an edge from the graph.
+     *
+     * @param edge The edge to remove
+     */
     public void removeEdge(Edge edge) {
         Command removeEdgeCommand = new RemoveEdgeCommand(this, edge);
         removeEdgeCommand.execute();
@@ -191,6 +208,11 @@ public class GraphModel implements Observable {
     @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
     }
 
     /**
@@ -211,6 +233,12 @@ public class GraphModel implements Observable {
         notifyAllObservers();
     }
 
+    /**
+     * Remove an army from the selected node.
+     *
+     * @param army       The army to remove
+     * @param selectable The node to remove the army from
+     */
     public void removeArmy(Army army, Selectable selectable) {
         selectable.getArmies().remove(army);
         SoundPlayer soundPlayer = new SoundPlayer();
@@ -350,8 +378,8 @@ public class GraphModel implements Observable {
             int x2 = edge.getEndNode().getX() + nodeSize / 2;
             int y2 = edge.getEndNode().getY() + nodeSize / 2;
 
-            boolean isApproxHorizontal = Math.abs(y2 - y1) <= 2*padding;
-            boolean isApproxVertical = Math.abs(x2 - x1) <= 2*padding;
+            boolean isApproxHorizontal = Math.abs(y2 - y1) <= 2 * padding;
+            boolean isApproxVertical = Math.abs(x2 - x1) <= 2 * padding;
 
             if (isApproxHorizontal) {
                 if (Math.abs(y1 - y0) <= padding && Math.min(x1, x2) <= x0 && x0 <= Math.max(x1, x2)) {
@@ -396,6 +424,9 @@ public class GraphModel implements Observable {
         }
     }
 
+    /**
+     * Undo the last command.
+     */
     public void undo() {
         if (!undoStack.isEmpty()) {
             Command command = undoStack.pop();
@@ -405,6 +436,9 @@ public class GraphModel implements Observable {
         }
     }
 
+    /**
+     * Redo the last undone command.
+     */
     public void redo() {
         if (!redoStack.isEmpty()) {
             Command command = redoStack.pop();

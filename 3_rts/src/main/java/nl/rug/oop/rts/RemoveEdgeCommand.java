@@ -3,6 +3,9 @@ package nl.rug.oop.rts;
 import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.model.GraphModel;
 
+/**
+ * Command to remove an edge from the graph.
+ */
 public class RemoveEdgeCommand implements Command {
     private final GraphModel model;
     private final Edge edge;

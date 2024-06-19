@@ -2,11 +2,21 @@ package nl.rug.oop.rts;
 
 import javax.sound.sampled.*;
 import java.io.File;
+import java.io.IOException;
 
+/**
+ * Class to play sounds.
+ */
 public class SoundPlayer {
+    /**
+     * Play a sound from the 'sounds' folder.
+     *
+     * @param soundFileName Name of the sound file
+     */
     public void playSound(String soundFileName) {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/main/resources/sounds/" + soundFileName).getAbsoluteFile());
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+                    new File("src/main/resources/sounds/" + soundFileName).getAbsoluteFile());
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();
@@ -20,10 +30,9 @@ public class SoundPlayer {
                 }
             });
 
-        } catch (Exception e) {
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             System.out.println("Error with playing sound.");
             e.printStackTrace();
         }
-
     }
 }

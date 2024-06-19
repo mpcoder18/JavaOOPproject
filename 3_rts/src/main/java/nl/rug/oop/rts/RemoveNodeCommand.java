@@ -7,11 +7,20 @@ import nl.rug.oop.rts.graph.model.GraphModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Command to remove a node from the graph.
+ */
 public class RemoveNodeCommand implements Command {
     private final GraphModel model;
     private final Node node;
     private final List<Edge> connectedEdges;
 
+    /**
+     * Create a new command to remove a node from the graph.
+     *
+     * @param model GraphModel to change
+     * @param node  Node to remove
+     */
     public RemoveNodeCommand(GraphModel model, Node node) {
         this.model = model;
         this.node = node;

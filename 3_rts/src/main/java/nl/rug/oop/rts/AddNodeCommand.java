@@ -3,6 +3,9 @@ package nl.rug.oop.rts;
 import nl.rug.oop.rts.graph.Node;
 import nl.rug.oop.rts.graph.model.GraphModel;
 
+/**
+ * Command to add a node to the graph.
+ */
 public class AddNodeCommand implements Command {
     private final GraphModel model;
     private final Node node;

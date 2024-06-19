@@ -12,6 +12,7 @@ import nl.rug.oop.rts.observable.Observer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 /**
  * Panel to display options for selected node or edge.
@@ -131,9 +132,18 @@ public class OptionsPanel extends JPanel implements Observer {
         JButton addArmyButton = new JButton("Add army");
         addArmyButton.setToolTipText("Add an army to the selected node");
         addArmyButton.addActionListener(e -> {
+            Random random = new Random();
+            // Select a random team and faction
+            int team = random.nextInt(1, 3); // 50% chance of team 1, 50% chance of team 2
+            int faction;
+            if (team == 1) {
+                faction = random.nextInt(3);
+            } else {
+                faction = random.nextInt(2) + 3;
+            }
             int option = JOptionPane.showOptionDialog(this, "Select a faction", "Add army",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-                    Faction.values(), Faction.values()[0]);
+                    Faction.values(), Faction.values()[faction]);
             if (option != JOptionPane.CLOSED_OPTION) {
                 graphController.addArmy(Faction.values()[option]);
             }
