@@ -199,13 +199,15 @@ public class ToolsTopbar extends JPanel {
     }
 
     private JButton createUndoButton(GraphController graphController) {
-        JButton button = new JButton("Undo");
+        JButton button = new JButton("↩");
+        button.setToolTipText("Undo (Ctrl+Z)");
         button.addActionListener(e -> graphController.undo());
         return button;
     }
 
     private JButton createRedoButton(GraphController graphController) {
-        JButton button = new JButton("Redo");
+        JButton button = new JButton("↪");
+        button.setToolTipText("Redo (Ctrl+Y)");
         button.addActionListener(e -> graphController.redo());
         return button;
     }
