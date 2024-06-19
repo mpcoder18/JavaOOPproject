@@ -1,5 +1,6 @@
 package nl.rug.oop.rts.components;
 
+import nl.rug.oop.rts.components.buttons.AddNodeButton;
 import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.Node;
 import nl.rug.oop.rts.graph.controller.GraphController;
@@ -29,7 +30,7 @@ public class ToolsTopbar extends JPanel {
      * @param controller GraphController to control the graph
      */
     public ToolsTopbar(GraphController controller) {
-        addNodeButton = createAddNodeButton(controller);
+        addNodeButton = new AddNodeButton(controller);
         removeNodeButton = createRemoveNodeButton(controller);
         addEdgeButton = createAddEdgeButton(controller);
         removeEdgeButton = createRemoveEdgeButton(controller);

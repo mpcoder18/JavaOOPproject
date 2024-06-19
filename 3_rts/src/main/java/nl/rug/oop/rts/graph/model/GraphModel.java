@@ -34,7 +34,6 @@ public class GraphModel implements Observable {
     private final EventFactory eventFactory;
     private final List<Node> nodes;
     private final List<Edge> edges;
-    @Setter
     private Node startNode;
     private Selectable selected;
     @Setter
@@ -65,27 +64,31 @@ public class GraphModel implements Observable {
 
     public GraphModel(Object nodeSize, Object simulationStep, JsonList edges, JsonList nodes, JsonList eventRecords) {
         this.nodes = new ArrayList<>();
-        for (Object node : nodes.getValues()) {
-            this.nodes.add(new Node((JsonObject) node));
+        if (nodes != null) {
+            for (Object node : nodes.getValues()) {
+                this.nodes.add(new Node((JsonObject) node));
+            }
         }
         this.edges = new ArrayList<>();
-        for (Object edge : edges.getValues()) {
-            Edge newEdge = new Edge((JsonObject) edge);
-            // set the start node to the node with id (int) ((JsonObject) edge).get("StartNode"))
-            for (Node node : this.nodes) {
-                if (node.getID() == (int) ((JsonObject) edge).get("StartNode")) {
-                    newEdge.setStartNode(node);
-                    break;
+        if (edges != null) {
+            for (Object edge : edges.getValues()) {
+                Edge newEdge = new Edge((JsonObject) edge);
+                // set the start node to the node with id (int) ((JsonObject) edge).get("StartNode"))
+                for (Node node : this.nodes) {
+                    if (node.getID() == (int) ((JsonObject) edge).get("StartNode")) {
+                        newEdge.setStartNode(node);
+                        break;
+                    }
                 }
-            }
-            // set the end node to the node with id (int) ((JsonObject) edge).get("EndNode"))
-            for (Node node : this.nodes) {
-                if (node.getID() == (int) ((JsonObject) edge).get("EndNode")) {
-                    newEdge.setEndNode(node);
-                    break;
+                // set the end node to the node with id (int) ((JsonObject) edge).get("EndNode"))
+                for (Node node : this.nodes) {
+                    if (node.getID() == (int) ((JsonObject) edge).get("EndNode")) {
+                        newEdge.setEndNode(node);
+                        break;
+                    }
                 }
+                this.edges.add(newEdge);
             }
-            this.edges.add(newEdge);
         }
         this.observers = new ArrayList<>();
         startNode = null;
@@ -93,25 +96,27 @@ public class GraphModel implements Observable {
         eventFactory = new EventFactory();
         this.SimulationStep = (int) simulationStep;
         this.eventRecords = new ArrayList<>();
-        for (Object eventRecord : eventRecords.getValues()) {
-            EventRecord newEventRecord = new EventRecord((JsonObject) eventRecord);
-            if (((JsonObject) eventRecord).get("TargetType").equals("Node")) {
-                for (Node node : this.nodes) {
-                    if (node.getID() == Integer.parseInt((String) ((JsonObject) eventRecord).get("TargetId"))) {
-                        newEventRecord.setTarget(node);
-                        break;
+        if (eventRecords != null) {
+            for (Object eventRecord : eventRecords.getValues()) {
+                EventRecord newEventRecord = new EventRecord((JsonObject) eventRecord);
+                if (((JsonObject) eventRecord).get("TargetType").equals("Node")) {
+                    for (Node node : this.nodes) {
+                        if (node.getID() == Integer.parseInt((String) ((JsonObject) eventRecord).get("TargetId"))) {
+                            newEventRecord.setTarget(node);
+                            break;
+                        }
                     }
-                }
-            } else {
-                for (Edge edge : this.edges) {
-                    if (edge.getID() == Integer.parseInt((String) ((JsonObject) eventRecord).get("TargetId"))) {
-                        newEventRecord.setTarget(edge);
-                        break;
+                } else {
+                    for (Edge edge : this.edges) {
+                        if (edge.getID() == Integer.parseInt((String) ((JsonObject) eventRecord).get("TargetId"))) {
+                            newEventRecord.setTarget(edge);
+                            break;
+                        }
                     }
+                    System.out.println("Could not find target edge with ID " + ((JsonObject) eventRecord).get("TargetId"));
                 }
-                System.out.println("Could not find target edge with ID " + ((JsonObject) eventRecord).get("TargetId"));
+                this.eventRecords.add(newEventRecord);
             }
-            this.eventRecords.add(newEventRecord);
         }
         this.nodeSize = (int) nodeSize;
         saveManager = new SaveManager();
@@ -214,6 +219,11 @@ public class GraphModel implements Observable {
         }
     }
 
+    public void setStartNode(Node startNode) {
+        this.startNode = startNode;
+        notifyAllObservers();
+    }
+
     /**
      * Create a new edge between the start node and the end node.
      *
@@ -282,14 +292,28 @@ public class GraphModel implements Observable {
             int y1 = edge.getStartNode().getY() + nodeSize / 2;
             int x2 = edge.getEndNode().getX() + nodeSize / 2;
             int y2 = edge.getEndNode().getY() + nodeSize / 2;
-            Point topLeft = new Point(Math.min(x1, x2), Math.min(y1, y2));
-            Point bottomRight = new Point(Math.max(x1, x2), Math.max(y1, y2));
-            Rectangle edgeBounds = new Rectangle(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
-            if (edgeBounds.contains(point)) {
-                int d = Math.abs((x2 - x1) * (y1 - y0) - (x1 - x0) * (y2 - y1))
-                        / (int) Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-                if (d <= padding) {
+
+            boolean isApproxHorizontal = Math.abs(y2 - y1) <= 2*padding;
+            boolean isApproxVertical = Math.abs(x2 - x1) <= 2*padding;
+
+            if (isApproxHorizontal) {
+                if (Math.abs(y1 - y0) <= padding && Math.min(x1, x2) <= x0 && x0 <= Math.max(x1, x2)) {
                     return edge;
+                }
+            } else if (isApproxVertical) {
+                if (Math.abs(x1 - x0) <= padding && Math.min(y1, y2) <= y0 && y0 <= Math.max(y1, y2)) {
+                    return edge;
+                }
+            } else {
+                Point topLeft = new Point(Math.min(x1, x2), Math.min(y1, y2));
+                Point bottomRight = new Point(Math.max(x1, x2), Math.max(y1, y2));
+                Rectangle edgeBounds = new Rectangle(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+                if (edgeBounds.contains(point)) {
+                    int d = Math.abs((x2 - x1) * (y1 - y0) - (x1 - x0) * (y2 - y1))
+                            / (int) Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                    if (d <= padding) {
+                        return edge;
+                    }
                 }
             }
         }
