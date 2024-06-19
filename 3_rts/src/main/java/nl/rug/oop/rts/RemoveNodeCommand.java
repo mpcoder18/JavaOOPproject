@@ -20,23 +20,25 @@ public class RemoveNodeCommand implements Command {
 
     @Override
     public void execute() {
-        List<Edge> edgesToRemove = new ArrayList<>();
-        for (Edge edge : model.getEdges()) {
-            if (edge.getStartNode() == node || edge.getEndNode() == node) {
-                edgesToRemove.add(edge);
-            }
-        }
-        for (Edge edge : edgesToRemove) {
-            model.removeEdge(edge);
+        for (Edge edge : connectedEdges) {
+            model.getEdges().remove(edge);
+            edge.getStartNode().getEdgeList().remove(edge);
+            edge.getEndNode().getEdgeList().remove(edge);
         }
         model.getNodes().remove(node);
+        SoundPlayer soundPlayer = new SoundPlayer();
+        soundPlayer.playSound("src/main/resources/delete.wav");
     }
 
     @Override
     public void undo() {
         model.getNodes().add(node);
         for (Edge edge : connectedEdges) {
-            model.addEdge(edge);
+            model.getEdges().add(edge);
+            edge.getStartNode().getEdgeList().add(edge);
+            edge.getEndNode().getEdgeList().add(edge);
         }
+        SoundPlayer soundPlayer = new SoundPlayer();
+        soundPlayer.playSound("src/main/resources/undoDelete.wav");
     }
 }

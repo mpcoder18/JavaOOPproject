@@ -17,6 +17,8 @@ public class RemoveEdgeCommand implements Command {
         model.getEdges().remove(edge);
         edge.getStartNode().getEdgeList().remove(edge);
         edge.getEndNode().getEdgeList().remove(edge);
+        SoundPlayer soundPlayer = new SoundPlayer();
+        soundPlayer.playSound("src/main/resources/delete.wav");
     }
 
     @Override
@@ -24,5 +26,7 @@ public class RemoveEdgeCommand implements Command {
         model.getEdges().add(edge);
         edge.getStartNode().getEdgeList().add(edge);
         edge.getEndNode().getEdgeList().add(edge);
+        SoundPlayer soundPlayer = new SoundPlayer();
+        soundPlayer.playSound("src/main/resources/undoDelete.wav");
     }
 }

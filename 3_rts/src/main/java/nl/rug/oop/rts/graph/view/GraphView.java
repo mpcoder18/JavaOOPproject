@@ -115,6 +115,20 @@ public class GraphView extends JPanel implements Observer {
                 controller.redo();
             }
         });
+        getInputMap().put(KeyStroke.getKeyStroke("control S"), "save");
+        getActionMap().put("save", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.saveGameChooser();
+            }
+        });
+        getInputMap().put(KeyStroke.getKeyStroke("control L"), "load");
+        getActionMap().put("load", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                controller.loadGameChooser();
+            }
+        });
     }
 
     @Override

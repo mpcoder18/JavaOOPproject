@@ -1,8 +1,6 @@
 package nl.rug.oop.rts;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import javax.sound.sampled.*;
 import java.io.File;
 
 public class SoundPlayer {
@@ -12,9 +10,20 @@ public class SoundPlayer {
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();
+
+            // Add a LineListener to the Clip
+            clip.addLineListener(new LineListener() {
+                public void update(LineEvent evt) {
+                    if (evt.getType() == LineEvent.Type.STOP) {
+                        evt.getLine().close();
+                    }
+                }
+            });
+
         } catch (Exception e) {
             System.out.println("Error with playing sound.");
             e.printStackTrace();
         }
+
     }
 }
