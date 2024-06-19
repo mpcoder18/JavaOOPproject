@@ -17,17 +17,27 @@ public class EventRecord {
     private Selectable target;
     private final int step;
 
+    /**
+     * Create a new EventRecord from a JSON object.
+     *
+     * @param jsonObject - the JSON object
+     */
+    public EventRecord(JsonObject jsonObject) {
+        EventFactory eventFactory = new EventFactory();
+        this.event = eventFactory.createEvent(EventType.valueOf((String) jsonObject.get("Event")));
+        this.step = Integer.parseInt((String) jsonObject.get("Step"));
+    }
+
+    /**
+     * Convert the EventRecord to a JsonObject.
+     *
+     * @return the JsonObject representation of the EventRecord
+     */
     public JsonObject toJson() {
         return new JsonObject()
                 .put("Event", event.getType().toString())
                 .put("Step", step)
                 .put("TargetId", target.toJson().get("Id"))
                 .put("TargetType", target.toJson().get("Type"));
-    }
-
-    public EventRecord(JsonObject jsonObject) {
-        EventFactory eventFactory = new EventFactory();
-        this.event = eventFactory.createEvent(EventType.valueOf((String) jsonObject.get("Event")));
-        this.step = Integer.parseInt((String) jsonObject.get("Step"));
     }
 }

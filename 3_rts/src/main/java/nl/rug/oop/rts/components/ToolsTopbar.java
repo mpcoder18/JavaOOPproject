@@ -23,6 +23,8 @@ public class ToolsTopbar extends JPanel {
     private final JButton loadButton;
     private final JButton zoomInButton;
     private final JButton zoomOutButton;
+    private final JButton undoButton;
+    private final JButton redoButton;
 
     /**
      * Create a new tools topbar.
@@ -39,9 +41,11 @@ public class ToolsTopbar extends JPanel {
         loadButton = createLoadButton(controller);
         zoomInButton = createZoomInButton(controller);
         zoomOutButton = createZoomOutButton(controller);
+        undoButton = createUndoButton(controller);
+        redoButton = createRedoButton(controller);
 
         ButtonObserver btnObs = new ButtonObserver(controller, removeNodeButton, addEdgeButton,
-                removeEdgeButton, simulateStepButton);
+                removeEdgeButton, simulateStepButton, undoButton, redoButton);
         controller.addObserver(btnObs);
     }
 
@@ -98,35 +102,39 @@ public class ToolsTopbar extends JPanel {
     private JButton createSaveButton(GraphController graphController) {
         JButton button = new JButton("Save");
         button.addActionListener(e -> {
-            boolean validName = false;
-            while (!validName) {
-                JFileChooser fileChooser = getjFileChooser();
-                int userSelection = fileChooser.showSaveDialog(null);
-                if (userSelection == JFileChooser.APPROVE_OPTION) {
-                    File fileToSave = fileChooser.getSelectedFile();
-                    String filePath = fileToSave.getAbsolutePath();
-                    if (!filePath.endsWith(".json")) {
-                        filePath += ".json";
-                    }
-                    if (new File(filePath).exists()) {
-                        int response = JOptionPane.showConfirmDialog(null, "Do you want to replace the existing file?",
-                                "Confirm Overwrite", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                        if (response == JOptionPane.YES_OPTION) {
-                            validName = true;
-                            System.out.println("Saving to " + filePath);
-                            graphController.getSaveManager().saveGame(graphController.getModel(), filePath);
-                        }
-                    } else {
+            saveGameChooser(graphController);
+        });
+        return button;
+    }
+
+    private void saveGameChooser(GraphController graphController) {
+        boolean validName = false;
+        while (!validName) {
+            JFileChooser fileChooser = getjFileChooser();
+            int userSelection = fileChooser.showSaveDialog(null);
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+                String filePath = fileToSave.getAbsolutePath();
+                if (!filePath.endsWith(".json")) {
+                    filePath += ".json";
+                }
+                if (new File(filePath).exists()) {
+                    int response = JOptionPane.showConfirmDialog(null, "Do you want to replace the existing file?",
+                            "Confirm Overwrite", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (response == JOptionPane.YES_OPTION) {
                         validName = true;
                         System.out.println("Saving to " + filePath);
                         graphController.getSaveManager().saveGame(graphController.getModel(), filePath);
                     }
                 } else {
-                    validName = true; // User cancelled the file chooser, exit the loop
+                    validName = true;
+                    System.out.println("Saving to " + filePath);
+                    graphController.getSaveManager().saveGame(graphController.getModel(), filePath);
                 }
+            } else {
+                validName = true; // User cancelled the file chooser, exit the loop
             }
-        });
-        return button;
+        }
     }
 
     private JFileChooser getjFileChooser() {
@@ -151,27 +159,31 @@ public class ToolsTopbar extends JPanel {
     private JButton createLoadButton(GraphController graphController) {
         JButton button = new JButton("Load");
         button.addActionListener(e -> {
-            boolean validName = false;
-            while (!validName) {
-                JFileChooser fileChooser = getjFileChooser();
-                int userSelection = fileChooser.showOpenDialog(null);
-                if (userSelection == JFileChooser.APPROVE_OPTION) {
-                    File fileToLoad = fileChooser.getSelectedFile();
-                    String filePath = fileToLoad.getAbsolutePath();
-                    if (filePath.endsWith(".json")) {
-                        validName = true;
-                        System.out.println("Loading from " + filePath);
-                        graphController.setModel(graphController.getSaveManager().loadGame(filePath));
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Please select a JSON file", "Invalid file",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                } else {
-                    validName = true; // User cancelled the file chooser, exit the loop
-                }
-            }
+            loadGameChooser(graphController);
         });
         return button;
+    }
+
+    private void loadGameChooser(GraphController graphController) {
+        boolean validName = false;
+        while (!validName) {
+            JFileChooser fileChooser = getjFileChooser();
+            int userSelection = fileChooser.showOpenDialog(null);
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToLoad = fileChooser.getSelectedFile();
+                String filePath = fileToLoad.getAbsolutePath();
+                if (filePath.endsWith(".json")) {
+                    validName = true;
+                    System.out.println("Loading from " + filePath);
+                    graphController.setModel(graphController.getSaveManager().loadGame(filePath));
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please select a JSON file", "Invalid file",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                validName = true; // User cancelled the file chooser, exit the loop
+            }
+        }
     }
 
     private JButton createZoomInButton(GraphController graphController) {
@@ -183,6 +195,18 @@ public class ToolsTopbar extends JPanel {
     private JButton createZoomOutButton(GraphController graphController) {
         JButton button = new JButton("-");
         button.addActionListener(e -> graphController.zoomOut());
+        return button;
+    }
+
+    private JButton createUndoButton(GraphController graphController) {
+        JButton button = new JButton("Undo");
+        button.addActionListener(e -> graphController.undo());
+        return button;
+    }
+
+    private JButton createRedoButton(GraphController graphController) {
+        JButton button = new JButton("Redo");
+        button.addActionListener(e -> graphController.redo());
         return button;
     }
 
@@ -208,5 +232,9 @@ public class ToolsTopbar extends JPanel {
         toolBar.add(zoomLabel);
         toolBar.add(zoomInButton);
         toolBar.add(zoomOutButton);
+
+        toolBar.addSeparator(new Dimension(20, 20));
+        toolBar.add(undoButton);
+        toolBar.add(redoButton);
     }
 }

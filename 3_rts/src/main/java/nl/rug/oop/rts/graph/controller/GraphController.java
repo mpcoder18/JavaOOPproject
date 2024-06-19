@@ -30,6 +30,8 @@ public class GraphController {
 
     /**
      * Create a new GraphController.
+     *
+     * @param mainSetup - The main setup of the application.
      */
     public GraphController(MainSetup mainSetup) {
         this.model = new GraphModel();
@@ -205,6 +207,11 @@ public class GraphController {
         return model.getSaveManager();
     }
 
+    /**
+     * Swap the model and view.
+     *
+     * @param model - The model.
+     */
     public void setModel(GraphModel model) {
         this.model = model;
         this.model.setSimulation(new Simulation(this));
@@ -222,5 +229,21 @@ public class GraphController {
 
     public void zoomOut() {
         model.zoomOut();
+    }
+
+    public void undo() {
+        model.undo();
+    }
+
+    public void redo() {
+        model.redo();
+    }
+
+    public boolean canUndo() {
+        return model.canUndo();
+    }
+
+    public boolean canRedo() {
+        return model.canRedo();
     }
 }

@@ -39,6 +39,11 @@ public class GraphView extends JPanel implements Observer {
         nodeImage = textureLoader.getTexture("node4", controller.getNodeSize(), controller.getNodeSize());
         nodeImageSelected = textureLoader.getTexture("node3", controller.getNodeSize(), controller.getNodeSize());
 
+        setupMouseListeners();
+        setupKeyBindings();
+    }
+
+    private void setupMouseListeners() {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -57,8 +62,9 @@ public class GraphView extends JPanel implements Observer {
                 controller.handleMouseDragged(e.getX(), e.getY());
             }
         });
+    }
 
-        // On Q press, add a node
+    private void setupKeyBindings() {
         getInputMap().put(KeyStroke.getKeyStroke("Q"), "addNode");
         getActionMap().put("addNode", new AbstractAction() {
             @Override
@@ -80,7 +86,6 @@ public class GraphView extends JPanel implements Observer {
                 }
             }
         });
-        // Delete selected node or edge
         getInputMap().put(KeyStroke.getKeyStroke("DELETE"), "removeNode");
         getActionMap().put("removeNode", new AbstractAction() {
             @Override
@@ -114,8 +119,10 @@ public class GraphView extends JPanel implements Observer {
     }
 
     private void drawEdges(Graphics g) {
-        ((Graphics2D) g).setStroke(new BasicStroke((float) (controller.getNodeSize() * 3) / 80, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
-                (float) (controller.getNodeSize() * 10) / 80, new float[]{(float) (controller.getNodeSize() * 10) / 80, (float) (controller.getNodeSize() * 10) / 80}, 0));
+        ((Graphics2D) g).setStroke(new BasicStroke((float) (controller.getNodeSize() * 3) / 80,
+                BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, (float) (controller.getNodeSize() * 10) / 80,
+                new float[]{(float) (controller.getNodeSize() * 10) / 80,
+                            (float) (controller.getNodeSize() * 10) / 80}, 0));
         g.setFont(new Font("Dialog", Font.PLAIN, controller.getNodeSize() * 15 / 80));
 
         for (Edge edge : controller.getEdges()) {
@@ -259,10 +266,12 @@ public class GraphView extends JPanel implements Observer {
      * @param mousePosition Position of the mouse
      */
     public void drawEdgePreview(Graphics g, Point mousePosition) {
-        ((Graphics2D) g).setStroke(new BasicStroke((float) (controller.getNodeSize() * 3) / 80, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
-                (float) (controller.getNodeSize() * 10) / 80, new float[]{(float) (controller.getNodeSize() * 10) / 80, (float) (controller.getNodeSize() * 10) / 80}, 0));
+        ((Graphics2D) g).setStroke(new BasicStroke((float) (controller.getNodeSize() * 3) / 80,
+                BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, (float) (controller.getNodeSize() * 10) / 80,
+                new float[]{(float) (controller.getNodeSize() * 10) / 80,
+                            (float) (controller.getNodeSize() * 10) / 80}, 0));
 
-        if (controller.getStartNode() != null) {
+        if (controller.getStartNode() != null && mousePosition != null) {
             g.setColor(Color.GRAY);
             g.drawLine(controller.getStartNode().getX() + controller.getNodeSize() / 2,
                     controller.getStartNode().getY() + controller.getNodeSize() / 2,

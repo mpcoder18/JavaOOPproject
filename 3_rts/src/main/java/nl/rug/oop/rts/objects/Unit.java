@@ -17,6 +17,11 @@ public class Unit {
     private int health;
     private String name;
 
+    /**
+     * Create a new unit from a JSON object.
+     *
+     * @param jsonObject - the JSON object
+     */
     public Unit(JsonObject jsonObject) {
         this.strength = (int) jsonObject.get("Strength");
         this.health = (int) jsonObject.get("Health");

@@ -3,6 +3,9 @@ package nl.rug.oop.rts;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to represent a JSON list.
+ */
 public class JsonList {
     private Object[] values;
 
@@ -10,6 +13,11 @@ public class JsonList {
         this.values = values;
     }
 
+    /**
+     * Create a new JsonList from a JSON string.
+     *
+     * @param jsonString the JSON string
+     */
     public JsonList(String jsonString) {
         assert jsonString.startsWith("[") && jsonString.endsWith("]");
         jsonString = jsonString.substring(1, jsonString.length() - 1);
@@ -33,10 +41,11 @@ public class JsonList {
         return values[index];
     }
 
-    public void set(int index, Object value) {
-        values[index] = value;
-    }
-
+    /**
+     * Add a value to the JsonList.
+     *
+     * @param value the value to add
+     */
     public void add(Object value) {
         Object[] newValues = new Object[values.length + 1];
         System.arraycopy(values, 0, newValues, 0, values.length);
@@ -44,39 +53,16 @@ public class JsonList {
         values = newValues;
     }
 
-    public void remove(int index) {
-        Object[] newValues = new Object[values.length - 1];
-        System.arraycopy(values, 0, newValues, 0, index);
-        System.arraycopy(values, index + 1, newValues, index, values.length - index - 1);
-        values = newValues;
-    }
-
     public int size() {
         return values.length;
     }
 
-    public String toJsonString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("[");
-        for (Object value : values) {
-            if (value instanceof JsonObject) {
-                stringBuilder.append(((JsonObject) value).toJsonString());
-            } else if (value instanceof JsonList) {
-                stringBuilder.append(((JsonList) value).toJsonString());
-            } else if (value instanceof String) {
-                stringBuilder.append("\"").append(value).append("\"");
-            } else {
-                stringBuilder.append(value);
-            }
-            stringBuilder.append(",");
-        }
-        if (stringBuilder.charAt(stringBuilder.length() - 1) == ',') {
-            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-        }
-        stringBuilder.append("]");
-        return stringBuilder.toString();
-    }
-
+    /**
+     * Convert the JsonList to a JSON string with indentation.
+     *
+     * @param indent the number of spaces to indent
+     * @return the JSON string
+     */
     public String toJsonString(int indent) {
         if (values.length == 0) {
             return "[]";
@@ -103,6 +89,11 @@ public class JsonList {
         return stringBuilder.toString();
     }
 
+    /**
+     * Get the values of the JsonList.
+     *
+     * @return the values of the JsonList
+     */
     public List<Object> getValues() {
         if (values == null) {
             return new ArrayList<>();

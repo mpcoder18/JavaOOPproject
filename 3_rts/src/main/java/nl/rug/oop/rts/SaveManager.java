@@ -14,6 +14,12 @@ import java.nio.file.Paths;
 @NoArgsConstructor
 public class SaveManager {
 
+    /**
+     * Save a game to a file.
+     *
+     * @param model    the game to save
+     * @param filePath the file path
+     */
     public void saveGame(GraphModel model, String filePath) {
         JsonObject json = model.toJson();
         String jsonString = json.toJsonString(1);
@@ -27,12 +33,19 @@ public class SaveManager {
         }
     }
 
+    /**
+     * Load a game from a file.
+     *
+     * @param filePath the file path
+     * @return the loaded game
+     */
     public GraphModel loadGame(String filePath) {
         try {
             JsonParser parser = new JsonParser();
             String jsonString = new String(Files.readAllBytes(Paths.get(filePath)));
             JsonObject json = (JsonObject) parser.parse(jsonString);
-            return new GraphModel(json.get("NodeSize"), json.get("SimulationStep"), (JsonList) json.get("Edges"), (JsonList) json.get("Nodes"), (JsonList) json.get("EventRecords"));
+            return new GraphModel(json.get("NodeSize"), json.get("SimulationStep"),
+                    (JsonList) json.get("Edges"), (JsonList) json.get("Nodes"), (JsonList) json.get("EventRecords"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

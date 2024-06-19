@@ -3,7 +3,16 @@ package nl.rug.oop.rts;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to parse JSON strings.
+ */
 public class JsonParser {
+    /**
+     * Constructor for the JSON parser.
+     *
+     * @param jsonString the JSON string to parse
+     * @return the parsed JSON object
+     */
     public Object parse(String jsonString) {
         jsonString = jsonString.trim();
         if (jsonString.startsWith("{")) {
@@ -14,7 +23,6 @@ public class JsonParser {
             throw new IllegalArgumentException("Invalid JSON string");
         }
     }
-
 
     private JsonList parseArray(String jsonString, Integer indent) {
         JsonList jsonArray = new JsonList(new Object[0]);
@@ -75,24 +83,31 @@ public class JsonParser {
                 }
                 jsonObject.put(key, parseArray(array.toString().trim(), indent + 2));
             } else if (pair.contains("]")) {
+                continue;
             } else {
-                String[] keyValue = pair.split(":");
-                String key = keyValue[0].trim();
-                key = key.substring(1, key.length() - 1);
-                String value = keyValue[1].trim();
-                if (value.endsWith(",")) {
-                    value = value.substring(0, value.length() - 1);
-                }
-                if (value.startsWith("\"") && value.endsWith("\"")) {
-                    value = value.substring(1, value.length() - 1);
-                }
-                if (key.equals("NodeSize") || key.equals("X") || key.equals("Y") || key.equals("Id") || key.equals("Health") || key.equals("Strength") || key.equals("SimulationStep") || key.equals("StartNode") || key.equals("EndNode")) {
-                    jsonObject.put(key, Integer.parseInt(value));
-                } else {
-                    jsonObject.put(key, value);
-                }
+                processSimplePair(pair, jsonObject);
             }
         }
         return jsonObject;
+    }
+
+    private void processSimplePair(String pair, JsonObject jsonObject) {
+        String[] keyValue = pair.split(":");
+        String key = keyValue[0].trim();
+        key = key.substring(1, key.length() - 1);
+        String value = keyValue[1].trim();
+        if (value.endsWith(",")) {
+            value = value.substring(0, value.length() - 1);
+        }
+        if (value.startsWith("\"") && value.endsWith("\"")) {
+            value = value.substring(1, value.length() - 1);
+        }
+        if (key.equals("NodeSize") || key.equals("X") || key.equals("Y") ||
+                key.equals("Id") || key.equals("Health") || key.equals("Strength") ||
+                key.equals("SimulationStep") || key.equals("StartNode") || key.equals("EndNode")) {
+            jsonObject.put(key, Integer.parseInt(value));
+        } else {
+            jsonObject.put(key, value);
+        }
     }
 }

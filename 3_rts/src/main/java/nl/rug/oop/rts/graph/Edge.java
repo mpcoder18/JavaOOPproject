@@ -51,6 +51,11 @@ public class Edge implements Selectable {
         this.events = new ArrayList<>();
     }
 
+    /**
+     * Create a new edge from a JSON object.
+     *
+     * @param jsonObject the JSON object
+     */
     public Edge(JsonObject jsonObject) {
         this.ID = (int) jsonObject.get("Id");
         this.name = (String) jsonObject.get("Name");
@@ -69,7 +74,8 @@ public class Edge implements Selectable {
         EventFactory eventFactory = new EventFactory();
         if (eventsJsonList != null) {
             for (Object eventObject : eventsJsonList.getValues()) {
-                events.add(eventFactory.createEvent(EventType.valueOf((String) ((JsonObject) eventObject).get("Type"))));
+                EventType eventType = EventType.valueOf((String) ((JsonObject) eventObject).get("Type"));
+                events.add(eventFactory.createEvent(eventType));
             }
         }
     }
@@ -90,6 +96,11 @@ public class Edge implements Selectable {
         }
     }
 
+    /**
+     * Convert the edge to a JsonObject.
+     *
+     * @return the JsonObject representation of the edge
+     */
     public JsonObject toJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.put("Id", ID);

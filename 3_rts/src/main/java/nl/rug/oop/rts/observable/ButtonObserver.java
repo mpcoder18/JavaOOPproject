@@ -17,6 +17,8 @@ public class ButtonObserver implements Observer {
     private final JButton addEdgeButton;
     private final JButton removeEdgeButton;
     private final JButton stepButton;
+    private final JButton undoButton;
+    private final JButton redoButton;
 
     @Override
     public void update() {
@@ -25,5 +27,7 @@ public class ButtonObserver implements Observer {
         removeEdgeButton.setEnabled(graphController.getSelected() instanceof Edge);
         // Set the text of the step button based on the current step
         stepButton.setText("▶ (Step " + graphController.getStep() + ")");
+        undoButton.setEnabled(graphController.canUndo());
+        redoButton.setEnabled(graphController.canRedo());
     }
 }

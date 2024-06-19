@@ -50,6 +50,36 @@ public class Node implements Selectable {
         this.events = new ArrayList<>();
     }
 
+    /**
+     * Create a new node from a JSON object.
+     *
+     * @param jsonObject the JSON object
+     */
+    public Node(JsonObject jsonObject) {
+        this.ID = (int) jsonObject.get("Id");
+        this.name = (String) jsonObject.get("Name");
+        this.x = (int) jsonObject.get("X");
+        this.y = (int) jsonObject.get("Y");
+        this.edgeList = new ArrayList<>();
+        this.selected = false;
+        this.armies = new ArrayList<>();
+        this.events = new ArrayList<>();
+        JsonList armiesJsonList = jsonObject.getList("Armies");
+        if (armiesJsonList != null) {
+            for (Object armyObject : armiesJsonList.getValues()) {
+                armies.add(new Army((JsonObject) armyObject));
+            }
+        }
+        JsonList eventsJsonList = jsonObject.getList("Events");
+        EventFactory eventFactory = new EventFactory();
+        if (eventsJsonList != null) {
+            for (Object eventObject : eventsJsonList.getValues()) {
+                EventType eventType = EventType.valueOf((String) ((JsonObject) eventObject).get("Type"));
+                events.add(eventFactory.createEvent(eventType));
+            }
+        }
+    }
+
     public void addEdge(Edge edge) {
         edgeList.add(edge);
     }
@@ -83,29 +113,5 @@ public class Node implements Selectable {
         jsonObject.put("Events", eventsJsonList);
 
         return jsonObject;
-    }
-
-    public Node(JsonObject jsonObject) {
-        this.ID = (int) jsonObject.get("Id");
-        this.name = (String) jsonObject.get("Name");
-        this.x = (int) jsonObject.get("X");
-        this.y = (int) jsonObject.get("Y");
-        this.edgeList = new ArrayList<>();
-        this.selected = false;
-        this.armies = new ArrayList<>();
-        this.events = new ArrayList<>();
-        JsonList armiesJsonList = jsonObject.getList("Armies");
-        if (armiesJsonList != null) {
-            for (Object armyObject : armiesJsonList.getValues()) {
-                armies.add(new Army((JsonObject) armyObject));
-            }
-        }
-        JsonList eventsJsonList = jsonObject.getList("Events");
-        EventFactory eventFactory = new EventFactory();
-        if (eventsJsonList != null) {
-            for (Object eventObject : eventsJsonList.getValues()) {
-                events.add(eventFactory.createEvent(EventType.valueOf((String) ((JsonObject) eventObject).get("Type"))));
-            }
-        }
     }
 }

@@ -2,9 +2,7 @@ package nl.rug.oop.rts.graph.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.rts.JsonList;
-import nl.rug.oop.rts.JsonObject;
-import nl.rug.oop.rts.SaveManager;
+import nl.rug.oop.rts.*;
 import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.Node;
 import nl.rug.oop.rts.graph.Selectable;
@@ -23,6 +21,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Stack;
 
 /**
  * Model for the graph.
@@ -47,6 +46,9 @@ public class GraphModel implements Observable {
     private int offsetY;
     private Point mousePosition;
     private final SaveManager saveManager;
+    private final Stack<Command> undoStack = new Stack<>();
+    private final Stack<Command> redoStack = new Stack<>();
+
 
     /**
      * Create a new GraphModel.
@@ -62,14 +64,40 @@ public class GraphModel implements Observable {
         saveManager = new SaveManager();
     }
 
+    /**
+     * Create a new GraphModel from JsonObjects and JsonLists.
+     *
+     * @param nodeSize       The size of the nodes
+     * @param simulationStep The current simulation step
+     * @param edges          The edges in the graph
+     * @param nodes          The nodes in the graph
+     * @param eventRecords   The event records in the graph
+     */
     public GraphModel(Object nodeSize, Object simulationStep, JsonList edges, JsonList nodes, JsonList eventRecords) {
-        this.nodes = new ArrayList<>();
+        this.nodes = initializeNodes(nodes);
+        this.edges = initializeEdges(edges);
+        this.observers = new ArrayList<>();
+        startNode = null;
+        selected = null;
+        eventFactory = new EventFactory();
+        this.SimulationStep = (int) simulationStep;
+        this.eventRecords = initializeEventRecords(eventRecords);
+        this.nodeSize = (int) nodeSize;
+        saveManager = new SaveManager();
+    }
+
+    private List<Node> initializeNodes(JsonList nodes) {
+        List<Node> nodeList = new ArrayList<>();
         if (nodes != null) {
             for (Object node : nodes.getValues()) {
-                this.nodes.add(new Node((JsonObject) node));
+                nodeList.add(new Node((JsonObject) node));
             }
         }
-        this.edges = new ArrayList<>();
+        return nodeList;
+    }
+
+    private List<Edge> initializeEdges(JsonList edges) {
+        List<Edge> edgeList = new ArrayList<>();
         if (edges != null) {
             for (Object edge : edges.getValues()) {
                 Edge newEdge = new Edge((JsonObject) edge);
@@ -87,15 +115,14 @@ public class GraphModel implements Observable {
                         break;
                     }
                 }
-                this.edges.add(newEdge);
+                edgeList.add(newEdge);
             }
         }
-        this.observers = new ArrayList<>();
-        startNode = null;
-        selected = null;
-        eventFactory = new EventFactory();
-        this.SimulationStep = (int) simulationStep;
-        this.eventRecords = new ArrayList<>();
+        return edgeList;
+    }
+
+    private List<EventRecord> initializeEventRecords(JsonList eventRecords) {
+        List<EventRecord> eventRecordList = new ArrayList<>();
         if (eventRecords != null) {
             for (Object eventRecord : eventRecords.getValues()) {
                 EventRecord newEventRecord = new EventRecord((JsonObject) eventRecord);
@@ -113,17 +140,19 @@ public class GraphModel implements Observable {
                             break;
                         }
                     }
-                    System.out.println("Could not find target edge with ID " + ((JsonObject) eventRecord).get("TargetId"));
                 }
-                this.eventRecords.add(newEventRecord);
+                eventRecordList.add(newEventRecord);
             }
         }
-        this.nodeSize = (int) nodeSize;
-        saveManager = new SaveManager();
+        return eventRecordList;
     }
 
     public void addNode(int ID, String name, int x, int y) {
-        nodes.add(new Node(ID, name, x, y));
+        Node node = new Node(ID, name, x, y);
+        Command addNodeCommand = new AddNodeCommand(this, node);
+        addNodeCommand.execute();
+        undoStack.push(addNodeCommand);
+        redoStack.clear();
         notifyAllObservers();
     }
 
@@ -133,10 +162,19 @@ public class GraphModel implements Observable {
      * @param node The node to remove
      */
     public void removeNode(Node node) {
-        for (Edge edge : node.getEdgeList()) {
-            edges.remove(edge);
+        List<Edge> edgesToRemove = new ArrayList<>();
+        for (Edge edge : edges) {
+            if (edge.getStartNode() == node || edge.getEndNode() == node) {
+                edgesToRemove.add(edge);
+            }
         }
-        nodes.remove(node);
+        for (Edge edge : edgesToRemove) {
+            removeEdge(edge);
+        }
+        Command removeNodeCommand = new RemoveNodeCommand(this, node);
+        removeNodeCommand.execute();
+        undoStack.push(removeNodeCommand);
+        redoStack.clear();
         notifyAllObservers();
     }
 
@@ -146,6 +184,10 @@ public class GraphModel implements Observable {
     }
 
     public void removeEdge(Edge edge) {
+        Node startNode = edge.getStartNode();
+        Node endNode = edge.getEndNode();
+        startNode.removeEdge(edge);
+        endNode.removeEdge(edge);
         edges.remove(edge);
         notifyAllObservers();
     }
@@ -249,6 +291,11 @@ public class GraphModel implements Observable {
         notifyAllObservers();
     }
 
+    /**
+     * Convert the current state of the graph to a JSON object.
+     *
+     * @return The JSON object representing the graph
+     */
     public JsonObject toJson() {
         JsonObject json = new JsonObject()
                 .put("NodeSize", nodeSize)
@@ -271,6 +318,12 @@ public class GraphModel implements Observable {
         return json;
     }
 
+    /**
+     * Find a node at a given point.
+     *
+     * @param point The point to check
+     * @return The node at the point
+     */
     public Node findNodeAt(Point point) {
         for (int i = nodes.size() - 1; i >= 0; i--) {
             Node node = nodes.get(i);
@@ -282,6 +335,12 @@ public class GraphModel implements Observable {
         return null;
     }
 
+    /**
+     * Find an edge at a given point.
+     *
+     * @param point The point to check
+     * @return The edge at the point
+     */
     public Edge findEdgeAt(Point point) {
         int padding = 20;
         for (int i = edges.size() - 1; i >= 0; i--) {
@@ -307,7 +366,8 @@ public class GraphModel implements Observable {
             } else {
                 Point topLeft = new Point(Math.min(x1, x2), Math.min(y1, y2));
                 Point bottomRight = new Point(Math.max(x1, x2), Math.max(y1, y2));
-                Rectangle edgeBounds = new Rectangle(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+                Rectangle edgeBounds = new Rectangle(topLeft.x, topLeft.y,
+                        bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
                 if (edgeBounds.contains(point)) {
                     int d = Math.abs((x2 - x1) * (y1 - y0) - (x1 - x0) * (y2 - y1))
                             / (int) Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
@@ -320,15 +380,47 @@ public class GraphModel implements Observable {
         return null;
     }
 
+    /**
+     * Zoom in the graph.
+     */
     public void zoomIn() {
         nodeSize += 10;
         notifyAllObservers();
     }
 
+    /**
+     * Zoom out the graph.
+     */
     public void zoomOut() {
         if (nodeSize > 40) {
             nodeSize -= 10;
             notifyAllObservers();
         }
+    }
+
+    public void undo() {
+        if (!undoStack.isEmpty()) {
+            Command command = undoStack.pop();
+            command.undo();
+            redoStack.push(command);
+            notifyAllObservers();
+        }
+    }
+
+    public void redo() {
+        if (!redoStack.isEmpty()) {
+            Command command = redoStack.pop();
+            command.execute();
+            undoStack.push(command);
+            notifyAllObservers();
+        }
+    }
+
+    public boolean canUndo() {
+        return !undoStack.isEmpty();
+    }
+
+    public boolean canRedo() {
+        return !redoStack.isEmpty();
     }
 }

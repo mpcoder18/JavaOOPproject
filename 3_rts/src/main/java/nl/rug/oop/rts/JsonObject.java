@@ -12,6 +12,11 @@ import java.util.Map;
 public class JsonObject {
     private final Map<String, Object> values = new HashMap<>();
 
+    /**
+     * Create a new JsonObject from a JSON string.
+     *
+     * @param jsonString the JSON string
+     */
     public JsonObject(String jsonString) {
         assert jsonString.startsWith("{") && jsonString.endsWith("}");
         jsonString = jsonString.substring(1, jsonString.length() - 1);
@@ -43,6 +48,12 @@ public class JsonObject {
         return values.get(key);
     }
 
+    /**
+     * Get the JsonList associated with a key.
+     *
+     * @param key the key
+     * @return the JsonList
+     */
     public JsonList getList(String key) {
         if (!values.containsKey(key)) {
             return null;
@@ -71,34 +82,11 @@ public class JsonObject {
     }
 
     /**
-     * Convert the JsonObject to a JSON string.
+     * Convert the JsonObject to a JSON string with indentation.
      *
-     * @return the JSON string representation of the JsonObject
+     * @param indent the number of spaces to indent
+     * @return the JSON string
      */
-    public String toJsonString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("{");
-        for (Map.Entry<String, Object> entry : values.entrySet()) {
-            stringBuilder.append("\"").append(entry.getKey()).append("\": ");
-            Object value = entry.getValue();
-            if (value instanceof JsonObject) {
-                stringBuilder.append(((JsonObject) value).toJsonString());
-            } else if (value instanceof JsonList) {
-                stringBuilder.append(((JsonList) value).toJsonString());
-            } else if (value instanceof String) {
-                stringBuilder.append("\"").append(value).append("\"");
-            } else {
-                stringBuilder.append(value);
-            }
-            stringBuilder.append(", ");
-        }
-        if (stringBuilder.charAt(stringBuilder.length() - 2) == ',') {
-            stringBuilder.deleteCharAt(stringBuilder.length() - 2);
-        }
-        stringBuilder.append("}");
-        return stringBuilder.toString();
-    }
-
     public String toJsonString(int indent) {
         if (values.isEmpty()) {
             return "{}";

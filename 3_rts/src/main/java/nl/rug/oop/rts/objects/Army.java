@@ -36,6 +36,11 @@ public class Army {
         this.team = faction.getTeam();
     }
 
+    /**
+     * Create a new army from a JSON object.
+     *
+     * @param jsonObject - the JSON object
+     */
     public Army(JsonObject jsonObject) {
         this.team = Team.valueOf((String) jsonObject.get("Team"));
         FactionUtil factionUtil = new FactionUtil();
