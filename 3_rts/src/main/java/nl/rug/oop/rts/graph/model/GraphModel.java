@@ -410,8 +410,10 @@ public class GraphModel implements Observable {
      * Zoom in the graph.
      */
     public void zoomIn() {
-        nodeSize += 10;
-        notifyAllObservers();
+        if (nodeSize < 200) {
+            nodeSize += 10;
+            notifyAllObservers();
+        }
     }
 
     /**
@@ -454,5 +456,23 @@ public class GraphModel implements Observable {
 
     public boolean canRedo() {
         return !redoStack.isEmpty();
+    }
+
+    public void setSelectedName(String name) {
+        selected.setName(name);
+        notifyAllObservers();
+    }
+
+    /**
+     * Step the simulation.
+     */
+    public void stepSimulation() {
+        simulation.step();
+        SimulationStep++;
+        notifyAllObservers();
+    }
+
+    public int getZoom() {
+        return (int) ((double) nodeSize / 80 * 100);
     }
 }

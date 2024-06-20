@@ -19,6 +19,7 @@ public class ButtonObserver implements Observer {
     private final JButton stepButton;
     private final JButton undoButton;
     private final JButton redoButton;
+    private final JLabel zoomLabel;
 
     @Override
     public void update() {
@@ -29,5 +30,6 @@ public class ButtonObserver implements Observer {
         stepButton.setText("▶ (Step " + graphController.getStep() + ")");
         undoButton.setEnabled(graphController.canUndo());
         redoButton.setEnabled(graphController.canRedo());
+        zoomLabel.setText("Zoom (" + graphController.getZoom() + "%)");
     }
 }

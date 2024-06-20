@@ -48,16 +48,14 @@ public class OptionsPanel extends JPanel implements Observer {
         JTextField nameField = new JTextField(graphController.getSelected().getName());
         nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, nameField.getPreferredSize().height));
         nameField.addActionListener(e -> {
-            graphController.getSelected().setName(nameField.getText());
-            graphController.getModel().notifyAllObservers();
+            graphController.setSelectedName(nameField.getText());
         });
         optionsPanel.add(nameField);
         optionsPanel.add(createAddArmyButton());
         optionsPanel.add(createAddEventButton());
 
         // If node, list connected edges
-        if (graphController.getSelected() instanceof Node) {
-            Node node = (Node) graphController.getSelected();
+        if (graphController.getSelected() instanceof Node node) {
             for (Edge edge : node.getEdgeList()) {
                 JLabel edgeLabel = new JLabel("Connected to " + edge.getName());
                 optionsPanel.add(edgeLabel);
@@ -67,7 +65,6 @@ public class OptionsPanel extends JPanel implements Observer {
         add(optionsPanel);
     }
 
-    // TODO: Extract these methods to separate classes
     private void createArmiesList() {
         JPanel armiesPanel = new JPanel();
         armiesPanel.setLayout(new BoxLayout(armiesPanel, BoxLayout.Y_AXIS));
@@ -179,7 +176,7 @@ public class OptionsPanel extends JPanel implements Observer {
     private String[] getEventTypeNames(EventType[] eventTypes) {
         String[] eventTypeNames = new String[eventTypes.length];
         for (int i = 0; i < eventTypes.length; i++) {
-            eventTypeNames[i] = eventTypes[i].getFormattedName() + " (" + eventTypes[i].getDescription() + ")";
+            eventTypeNames[i] = eventTypes[i].getNameAndDescription();
         }
         return eventTypeNames;
     }

@@ -12,7 +12,8 @@ public class AddNodeButton extends Button {
      * @param controller - The graph controller.
      */
     public AddNodeButton(GraphController controller) {
-        super("Add Node (Q)");
+        super("Add Node");
+        setToolTipText("Add a new node to the graph\n\nShortcut: Q");
         addActionListener(e -> controller.addNode(controller.getNodes().size() + 1,
                 "Node " + (controller.getNodes().size() + 1),
                 0, 0));

@@ -53,7 +53,6 @@ public class Simulation {
         resolveBattles();
         encounterRandomEvents();
         resetState();
-        graphController.setSimulationStep(graphController.getSimulationStep() + 1);
         graphController.getModel().notifyAllObservers();
     }
 

@@ -73,6 +73,7 @@ public class GraphView extends JPanel implements Observer {
         setupRedoAction();
         setupSaveAction();
         setupLoadAction();
+        setupZoomAction();
     }
 
     private void setupAddNodeAction() {
@@ -161,6 +162,24 @@ public class GraphView extends JPanel implements Observer {
                 if (loadedModel != null) {
                     controller.replaceModel(loadedModel);
                 }
+            }
+        });
+    }
+
+    private void setupZoomAction() {
+        getInputMap().put(KeyStroke.getKeyStroke("control EQUALS"), "zoomIn");
+        getActionMap().put("zoomIn", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.zoomIn();
+            }
+        });
+
+        getInputMap().put(KeyStroke.getKeyStroke("control MINUS"), "zoomOut");
+        getActionMap().put("zoomOut", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.zoomOut();
             }
         });
     }

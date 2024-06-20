@@ -32,4 +32,13 @@ public enum EventType {
         }
         return String.join(" ", words);
     }
+
+    /**
+     * Get the name + description of the event type.
+     *
+     * @return The name + description.
+     */
+    public String getNameAndDescription() {
+        return getFormattedName() + ": " + description;
+    }
 }

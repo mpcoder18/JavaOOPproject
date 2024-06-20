@@ -127,6 +127,10 @@ public class GraphController {
         return model.getSelected();
     }
 
+    public void setSelectedName(String name) {
+        model.setSelectedName(name);
+    }
+
     public void addObserver(Observer observer) {
         model.addObserver(observer);
     }
@@ -145,6 +149,10 @@ public class GraphController {
 
     public Simulation getSimulation() {
         return model.getSimulation();
+    }
+
+    public void stepSimulation() {
+        model.stepSimulation();
     }
 
     public int getSimulationStep() {
@@ -248,5 +256,9 @@ public class GraphController {
             this.model.addObserver(observer);
         }
         this.model.notifyAllObservers();
+    }
+
+    public int getZoom() {
+        return model.getZoom();
     }
 }
