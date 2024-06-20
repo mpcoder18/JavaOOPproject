@@ -22,11 +22,9 @@ public class SoundPlayer {
             clip.start();
 
             // Add a LineListener to the Clip
-            clip.addLineListener(new LineListener() {
-                public void update(LineEvent evt) {
-                    if (evt.getType() == LineEvent.Type.STOP) {
-                        evt.getLine().close();
-                    }
+            clip.addLineListener(evt -> {
+                if (evt.getType() == LineEvent.Type.STOP) {
+                    evt.getLine().close();
                 }
             });
 

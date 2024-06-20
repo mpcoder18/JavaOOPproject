@@ -65,6 +65,7 @@ public class GraphModel implements Observable {
         eventFactory = new EventFactory();
         eventRecords = new ArrayList<>();
         saveManager = new SaveManager();
+        mousePosition = new Point(0, 0);
     }
 
     /**
@@ -155,10 +156,10 @@ public class GraphModel implements Observable {
     /**
      * Add a node to the graph.
      *
-     * @param ID ID of the node
+     * @param ID   ID of the node
      * @param name Name of the node
-     * @param x X coordinate of the node
-     * @param y Y coordinate of the node
+     * @param x    X coordinate of the node
+     * @param y    Y coordinate of the node
      */
     public void addNode(int ID, String name, int x, int y) {
         Node node = new Node(ID, name, x, y);
@@ -327,13 +328,12 @@ public class GraphModel implements Observable {
      * @return The JSON object representing the graph
      */
     public JsonObject toJson() {
-        JsonObject json = new JsonObject()
+        return new JsonObject()
                 .put("NodeSize", nodeSize)
                 .put("SimulationStep", SimulationStep)
                 .putList("Nodes", nodes)
                 .putList("Edges", edges)
                 .putList("EventRecords", eventRecords);
-        return json;
     }
 
     /**
@@ -466,5 +466,36 @@ public class GraphModel implements Observable {
 
     public int getZoom() {
         return (int) ((double) nodeSize / 80 * 100);
+    }
+
+    public void createNode() {
+        int offset = nodeSize / 2;
+        addNode(nodes.size(), "Node " + nodes.size(), mousePosition.x - offset, mousePosition.y - offset);
+    }
+
+    /**
+     * Create an edge by setting the start node.
+     */
+    public void createEdge() {
+        if (selected instanceof Node) {
+            if (startNode == null) {
+                startNode = (Node) selected;
+            }
+        }
+    }
+
+    /**
+     * Remove the selected node or edge.
+     */
+    public void removeSelected() {
+        if (selected instanceof Node node) {
+            removeNode(node);
+            deselect();
+        } else if (selected instanceof Edge edge) {
+            edge.getStartNode().removeEdge(edge);
+            edge.getEndNode().removeEdge(edge);
+            deselect();
+            removeEdge(edge);
+        }
     }
 }

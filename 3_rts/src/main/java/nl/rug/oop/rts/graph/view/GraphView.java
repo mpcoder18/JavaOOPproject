@@ -2,8 +2,8 @@ package nl.rug.oop.rts.graph.view;
 
 import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.Node;
+import nl.rug.oop.rts.graph.Selectable;
 import nl.rug.oop.rts.graph.controller.GraphController;
-import nl.rug.oop.rts.graph.model.GraphModel;
 import nl.rug.oop.rts.objects.Army;
 import nl.rug.oop.rts.objects.Team;
 import nl.rug.oop.rts.observable.Observer;
@@ -11,10 +11,7 @@ import nl.rug.oop.rts.util.TextureLoader;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,9 +63,9 @@ public class GraphView extends JPanel implements Observer {
     }
 
     private void setupKeyBindings() {
-        setupAddNodeAction();
-        setupAddEdgeAction();
-        setupRemoveNodeAction();
+        setupCreateNodeAction();
+        setupCreateEdgeAction();
+        setupDeleteAction();
         setupUndoAction();
         setupRedoAction();
         setupSaveAction();
@@ -76,47 +73,32 @@ public class GraphView extends JPanel implements Observer {
         setupZoomAction();
     }
 
-    private void setupAddNodeAction() {
-        getInputMap().put(KeyStroke.getKeyStroke("Q"), "addNode");
-        getActionMap().put("addNode", new AbstractAction() {
+    private void setupCreateNodeAction() {
+        getInputMap().put(KeyStroke.getKeyStroke("Q"), "createNode");
+        getActionMap().put("createNode", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.addNode(controller.getNodes().size() + 1,
-                        "Node " + (controller.getNodes().size() + 1),
-                        controller.getMousePosition().x - controller.getNodeSize() / 2,
-                        controller.getMousePosition().y - controller.getNodeSize() / 2);
+                controller.createNode();
             }
         });
     }
 
-    private void setupAddEdgeAction() {
-        getInputMap().put(KeyStroke.getKeyStroke("E"), "addEdge");
-        getActionMap().put("addEdge", new AbstractAction() {
+    private void setupCreateEdgeAction() {
+        getInputMap().put(KeyStroke.getKeyStroke("E"), "createEdge");
+        getActionMap().put("createEdge", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (controller.getSelected() instanceof Node) {
-                    if (controller.getStartNode() == null) {
-                        controller.setStartNode((Node) controller.getSelected());
-                    }
-                }
+                controller.createEdge();
             }
         });
     }
 
-    private void setupRemoveNodeAction() {
-        getInputMap().put(KeyStroke.getKeyStroke("DELETE"), "removeNode");
-        getActionMap().put("removeNode", new AbstractAction() {
+    private void setupDeleteAction() {
+        getInputMap().put(KeyStroke.getKeyStroke("DELETE"), "delete");
+        getActionMap().put("delete", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (controller.getSelected() instanceof Node) {
-                    controller.removeNode((Node) controller.getSelected());
-                    controller.deselect();
-                } else if (controller.getSelected() instanceof Edge edge) {
-                    edge.getStartNode().removeEdge(edge);
-                    edge.getEndNode().removeEdge(edge);
-                    controller.deselect();
-                    controller.removeEdge(edge);
-                }
+                controller.removeSelected();
             }
         });
     }
@@ -147,7 +129,7 @@ public class GraphView extends JPanel implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(GraphView.this);
-                controller.getSaveManager().saveGameChooser(controller.getModel(), parentFrame);
+                controller.saveGameChooser(parentFrame);
             }
         });
     }
@@ -158,10 +140,7 @@ public class GraphView extends JPanel implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(GraphView.this);
-                GraphModel loadedModel = controller.getSaveManager().loadGameChooser(parentFrame);
-                if (loadedModel != null) {
-                    controller.replaceModel(loadedModel);
-                }
+                controller.loadGameChooser(parentFrame);
             }
         });
     }
@@ -208,7 +187,7 @@ public class GraphView extends JPanel implements Observer {
 
         for (Edge edge : controller.getEdges()) {
             drawEdge(g, edge);
-            drawArmyEdge(g, edge);
+            drawArmy(g, edge);
         }
 
         drawEdgePreview(g, getMousePosition());
@@ -264,21 +243,29 @@ public class GraphView extends JPanel implements Observer {
     }
 
     /**
-     * Draw the armies on the node.
+     * Draw the armies on the node or edge.
      *
-     * @param g    Graphics object
-     * @param node Node to draw the armies on
+     * @param g          Graphics object
+     * @param selectable Selectable object
      */
-    // TODO: Draw icon for each type of army
-    public void drawArmy(Graphics g, Node node) {
+    private void drawArmy(Graphics g, Selectable selectable) {
         int radius = controller.getNodeSize() / 2;
-        int centerX = node.getX() + radius;
-        int centerY = node.getY() + radius;
+        int centerX;
+        int centerY;
+        if (selectable instanceof Node node) {
+            centerX = node.getX() + radius;
+            centerY = node.getY() + radius;
+        } else if (selectable instanceof Edge edge) {
+            centerX = (edge.getStartNode().getX() + edge.getEndNode().getX()) / 2 + radius;
+            centerY = (edge.getStartNode().getY() + edge.getEndNode().getY()) / 2 + radius;
+        } else {
+            return;
+        }
 
         java.util.List<Army> teamA = new ArrayList<>();
         java.util.List<Army> teamB = new ArrayList<>();
 
-        for (Army army : node.getArmies()) {
+        for (Army army : selectable.getArmies()) {
             if (army.getFaction().getTeam() == Team.TEAM_A) {
                 teamA.add(army);
             } else {
@@ -286,54 +273,14 @@ public class GraphView extends JPanel implements Observer {
             }
         }
 
-        // Draw Team A on the left side
-        for (int i = 0; i < teamA.size(); i++) {
-            g.setColor(teamA.get(i).getFaction().getColor());
-            double angle = Math.PI / 2 + Math.PI * (double) i / teamA.size();
-            int x = centerX + (int) (radius * Math.cos(angle));
-            int y = centerY + (int) (radius * Math.sin(angle));
-            g.fillOval(x - 10, y - 10, 20, 20); // Adjusted to center the circle on the node
-        }
-
-        // Draw Team B on the right side
-        for (int i = 0; i < teamB.size(); i++) {
-            g.setColor(teamB.get(i).getFaction().getColor());
-            double angle = 3 * Math.PI / 2 + Math.PI * (double) i / teamB.size();
-            int x = centerX + (int) (radius * Math.cos(angle));
-            int y = centerY + (int) (radius * Math.sin(angle));
-            g.fillOval(x - 10, y - 10, 20, 20); // Adjusted to center the circle on the node
-        }
+        drawTeam(g, teamA, centerX, centerY, radius, 0);
+        drawTeam(g, teamB, centerX, centerY, radius, Math.PI);
     }
 
-    private void drawArmyEdge(Graphics g, Edge edge) {
-        int radius = controller.getNodeSize() / 2;
-        int centerX = (edge.getStartNode().getX() + edge.getEndNode().getX()) / 2 + radius;
-        int centerY = (edge.getStartNode().getY() + edge.getEndNode().getY()) / 2 + radius;
-
-        java.util.List<Army> teamA = new ArrayList<>();
-        List<Army> teamB = new ArrayList<>();
-
-        for (Army army : edge.getArmies()) {
-            if (army.getFaction().getTeam() == Team.TEAM_A) {
-                teamA.add(army);
-            } else {
-                teamB.add(army);
-            }
-        }
-
-        // Draw Team A on the left side
-        for (int i = 0; i < teamA.size(); i++) {
-            g.setColor(teamA.get(i).getFaction().getColor());
-            double angle = Math.PI / 2 + Math.PI * (double) i / teamA.size();
-            int x = centerX + (int) (radius * Math.cos(angle));
-            int y = centerY + (int) (radius * Math.sin(angle));
-            g.fillOval(x - 10, y - 10, 20, 20); // Adjusted to center the circle on the node
-        }
-
-        // Draw Team B on the right side
-        for (int i = 0; i < teamB.size(); i++) {
-            g.setColor(teamB.get(i).getFaction().getColor());
-            double angle = 3 * Math.PI / 2 + Math.PI * (double) i / teamB.size();
+    private void drawTeam(Graphics g, List<Army> team, int centerX, int centerY, int radius, double startAngle) {
+        for (int i = 0; i < team.size(); i++) {
+            g.setColor(team.get(i).getFaction().getColor());
+            double angle = Math.PI / 2 + Math.PI * (double) i / team.size() + startAngle;
             int x = centerX + (int) (radius * Math.cos(angle));
             int y = centerY + (int) (radius * Math.sin(angle));
             g.fillOval(x - 10, y - 10, 20, 20); // Adjusted to center the circle on the node

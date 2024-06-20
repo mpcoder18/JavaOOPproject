@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Class to represent a JSON list.
  */
-public class JsonList {
+public class JsonList implements Jsonable {
     private Object[] values;
 
     public JsonList(Object[] values) {
@@ -71,16 +71,7 @@ public class JsonList {
         stringBuilder.append("[\n");
         for (Object value : values) {
             stringBuilder.append("  ".repeat(indent));
-            if (value instanceof JsonObject) {
-                stringBuilder.append(((JsonObject) value).toJsonString(indent + 1));
-            } else if (value instanceof JsonList) {
-                stringBuilder.append(((JsonList) value).toJsonString(indent + 1));
-            } else if (value instanceof String) {
-                stringBuilder.append("\"").append(value).append("\"");
-            } else {
-                stringBuilder.append(value);
-            }
-            stringBuilder.append(",\n");
+            appendJsonString(value, stringBuilder, indent);
         }
         if (stringBuilder.charAt(stringBuilder.length() - 2) == ',') {
             stringBuilder.deleteCharAt(stringBuilder.length() - 2);

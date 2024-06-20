@@ -38,7 +38,9 @@ public class OptionsPanel extends JPanel implements Observer {
 
     private void displayNodeOptions() {
         createSidePanelOptions();
+        add(new JLabel("Armies:"));
         createArmiesList();
+        add(new JLabel("Events:"));
         createEventsList();
     }
 
@@ -47,20 +49,10 @@ public class OptionsPanel extends JPanel implements Observer {
         optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.Y_AXIS));
         JTextField nameField = new JTextField(graphController.getSelected().getName());
         nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, nameField.getPreferredSize().height));
-        nameField.addActionListener(e -> {
-            graphController.setSelectedName(nameField.getText());
-        });
+        nameField.addActionListener(e -> graphController.setSelectedName(nameField.getText()));
         optionsPanel.add(nameField);
         optionsPanel.add(createAddArmyButton());
         optionsPanel.add(createAddEventButton());
-
-        // If node, list connected edges
-        if (graphController.getSelected() instanceof Node node) {
-            for (Edge edge : node.getEdgeList()) {
-                JLabel edgeLabel = new JLabel("Connected to " + edge.getName());
-                optionsPanel.add(edgeLabel);
-            }
-        }
 
         add(optionsPanel);
     }
@@ -194,10 +186,12 @@ public class OptionsPanel extends JPanel implements Observer {
         JLabel startNodeLabel = new JLabel("Start node: " + edge.getStartNode().getName());
         JLabel endNodeLabel = new JLabel("End node: " + edge.getEndNode().getName());
         add(nameField);
+        add(createAddEventButton());
         add(startNodeLabel);
         add(endNodeLabel);
-        add(createAddEventButton());
+        add(new JLabel("Armies:"));
         createArmiesList();
+        add(new JLabel("Events:"));
         createEventsList();
     }
 

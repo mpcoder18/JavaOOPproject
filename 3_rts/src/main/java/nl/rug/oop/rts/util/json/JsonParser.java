@@ -26,7 +26,6 @@ public class JsonParser {
 
     private JsonList parseArray(String jsonString, Integer indent) {
         JsonList jsonArray = new JsonList(new Object[0]);
-        List<Object> values = new ArrayList<>();
         jsonString = jsonString.substring(1);
         String[] lines = jsonString.split("\n");
         StringBuilder indentString = new StringBuilder();
@@ -43,7 +42,7 @@ public class JsonParser {
                 int objectStart = objectIdx.get(i);
                 int objectEnd = objectIdx.get(i + 1);
                 StringBuilder object = new StringBuilder(lines[objectStart]);
-                for (int j = objectStart + 1; j < objectEnd + 1; j++) {
+                for (int j = objectStart + 1; j < objectEnd +1; j++) {
                     object.append("\n").append(lines[j]);
                 }
                 jsonArray.add(parseObject(object.toString(), indent + 2));
@@ -78,7 +77,7 @@ public class JsonParser {
                 String key = pair.substring(0, pair.indexOf(":")).trim();
                 key = key.substring(1, key.length() - 1);
                 StringBuilder array = new StringBuilder(pair.substring(pair.indexOf(":") + 1));
-                for (int j = pairStart + 1; j < arrayEnd + 1; j++) {
+                for (int j = pairStart +1; j < arrayEnd+1; j++) {
                     array.append("\n").append(lines[j]);
                 }
                 jsonObject.put(key, parseArray(array.toString().trim(), indent + 2));

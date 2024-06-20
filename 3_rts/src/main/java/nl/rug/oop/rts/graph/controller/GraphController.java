@@ -15,9 +15,12 @@ import nl.rug.oop.rts.objects.Army;
 import nl.rug.oop.rts.objects.Faction;
 import nl.rug.oop.rts.observable.Observer;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controller for the graph.
@@ -25,7 +28,8 @@ import java.util.List;
 @Getter
 public class GraphController {
     private GraphModel model;
-    private GraphView view;
+    private final GraphView view;
+    private final Map<String, Runnable> inputMappings = new HashMap<>();
 
     /**
      * Create a new GraphController.
@@ -37,8 +41,8 @@ public class GraphController {
         model.addObserver(view);
     }
 
-    public void addNode(int ID, String name, int x, int y) {
-        model.addNode(ID, name, x, y);
+    public void createNode() {
+        model.createNode();
     }
 
     public void removeNode(Node node) {
@@ -49,8 +53,8 @@ public class GraphController {
         return model.getNodes();
     }
 
-    public void addEdge(Edge edge) {
-        model.addEdge(edge);
+    public void createEdge() {
+        model.createEdge();
     }
 
     public void removeEdge(Edge edge) {
@@ -80,7 +84,6 @@ public class GraphController {
      * @param y - The y coordinate of the mouse.
      */
     public void handleMousePressed(int x, int y) {
-        int padding = 10;
         Node node = model.findNodeAt(new Point(x, y));
         Edge edge = model.findEdgeAt(new Point(x, y));
         if (node != null) {
@@ -142,10 +145,6 @@ public class GraphController {
         model.setStartNode(node);
     }
 
-    public Simulation getSimulation() {
-        return model.getSimulation();
-    }
-
     public void stepSimulation() {
         model.stepSimulation();
     }
@@ -154,16 +153,8 @@ public class GraphController {
         return model.getSimulationStep();
     }
 
-    public void setSimulationStep(int step) {
-        model.setSimulationStep(step);
-    }
-
     public void createStartNodeEdge(Node endNode) {
         model.createStartNodeEdge(endNode);
-    }
-
-    public Point getMousePosition() {
-        return model.getMousePosition();
     }
 
     public void handleMouseMoved(int x, int y) {
@@ -255,5 +246,25 @@ public class GraphController {
 
     public int getZoom() {
         return model.getZoom();
+    }
+
+    public void removeSelected() {
+        model.removeSelected();
+    }
+
+    public void saveGameChooser(JFrame parentFrame) {
+        model.getSaveManager().saveGameChooser(model, parentFrame);
+    }
+
+    /**
+     * Load a game from a file.
+     *
+     * @param parentFrame the parent frame
+     */
+    public void loadGameChooser(JFrame parentFrame) {
+        GraphModel newModel = model.getSaveManager().loadGameChooser(parentFrame);
+        if (newModel != null) {
+            replaceModel(newModel);
+        }
     }
 }

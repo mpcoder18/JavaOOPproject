@@ -59,7 +59,7 @@ public class SaveManager {
     /**
      * Open a file chooser to save a game.
      *
-     * @param model       the state of the game
+     * @param model the state of the game
      * @param parentFrame the parent frame
      */
     public void saveGameChooser(GraphModel model, JFrame parentFrame) {
@@ -107,7 +107,6 @@ public class SaveManager {
                 File fileToLoad = fileChooser.getSelectedFile();
                 String filePath = fileToLoad.getAbsolutePath();
                 if (filePath.endsWith(".json")) {
-                    validName = true;
                     System.out.println("Loading from " + filePath);
                     return loadGame(filePath);
                 } else {

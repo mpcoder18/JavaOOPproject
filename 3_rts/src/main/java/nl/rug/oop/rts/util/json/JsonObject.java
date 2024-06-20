@@ -16,7 +16,7 @@ import java.util.Map;
  * Class to represent a JSON object.
  */
 @NoArgsConstructor
-public class JsonObject {
+public class JsonObject implements Jsonable {
     private final Map<String, Object> values = new HashMap<>();
 
     /**
@@ -103,20 +103,8 @@ public class JsonObject {
         return (JsonList) values.get(key);
     }
 
-    public boolean containsKey(String key) {
-        return values.containsKey(key);
-    }
-
-    public boolean containsValue(Object value) {
-        return values.containsValue(value);
-    }
-
     public void remove(String key) {
         values.remove(key);
-    }
-
-    public void clear() {
-        values.clear();
     }
 
     public int size() {
@@ -138,16 +126,7 @@ public class JsonObject {
         for (Map.Entry<String, Object> entry : values.entrySet()) {
             stringBuilder.append("  ".repeat(indent)).append("\"").append(entry.getKey()).append("\": ");
             Object value = entry.getValue();
-            if (value instanceof JsonObject) {
-                stringBuilder.append(((JsonObject) value).toJsonString(indent + 1));
-            } else if (value instanceof JsonList) {
-                stringBuilder.append(((JsonList) value).toJsonString(indent + 1));
-            } else if (value instanceof String) {
-                stringBuilder.append("\"").append(value).append("\"");
-            } else {
-                stringBuilder.append(value);
-            }
-            stringBuilder.append(",\n");
+            appendJsonString(value, stringBuilder, indent);
         }
         if (stringBuilder.charAt(stringBuilder.length() - 2) == ',') {
             stringBuilder.deleteCharAt(stringBuilder.length() - 2);
