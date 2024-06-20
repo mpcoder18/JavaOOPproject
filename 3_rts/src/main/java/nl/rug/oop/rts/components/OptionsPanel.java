@@ -131,44 +131,57 @@ public class OptionsPanel extends JPanel implements Observer {
     private JButton createAddArmyButton() {
         JButton addArmyButton = new JButton("Add army");
         addArmyButton.setToolTipText("Add an army to the selected node");
-        addArmyButton.addActionListener(e -> {
-            Random random = new Random();
-            // Select a random team and faction
-            int team = random.nextInt(1, 3); // 50% chance of team 1, 50% chance of team 2
-            int faction;
-            if (team == 1) {
-                faction = random.nextInt(3);
-            } else {
-                faction = random.nextInt(2) + 3;
-            }
-            int option = JOptionPane.showOptionDialog(this, "Select a faction", "Add army",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-                    Faction.values(), Faction.values()[faction]);
-            if (option != JOptionPane.CLOSED_OPTION) {
-                graphController.addArmy(Faction.values()[option]);
-            }
-        });
+        addArmyButton.addActionListener(e -> handleAddArmyButtonAction());
         return addArmyButton;
+    }
+
+    private void handleAddArmyButtonAction() {
+        Random random = new Random();
+        // Select a random team and faction
+        int team = random.nextInt(1, 3); // 50% chance of team 1, 50% chance of team 2
+        int faction;
+        if (team == 1) {
+            faction = random.nextInt(3);
+        } else {
+            faction = random.nextInt(2) + 3;
+        }
+        int option = JOptionPane.showOptionDialog(this, "Select a faction", "Add army",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                Faction.values(), Faction.values()[faction]);
+        if (option != JOptionPane.CLOSED_OPTION) {
+            graphController.addArmy(Faction.values()[option]);
+        }
     }
 
     private JButton createAddEventButton() {
         JButton addEventButton = new JButton("Add event");
         addEventButton.setToolTipText("Add an event to the selected node/edge");
-        addEventButton.addActionListener(e -> {
-            EventType[] eventTypes = EventType.values();
-            String[] eventTypeNames = new String[eventTypes.length];
-            for (int i = 0; i < eventTypes.length; i++) {
-                eventTypeNames[i] = eventTypes[i].getFormattedName();
-            }
-            int option = JOptionPane.showOptionDialog(this, "Select an event", "Add event",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-                    eventTypeNames, eventTypeNames[0]);
-            if (option != JOptionPane.CLOSED_OPTION) {
-                EventType selectedEventType = eventTypes[option];
-                graphController.addEvent(selectedEventType);
-            }
-        });
+        addEventButton.addActionListener(e -> handleAddEventButtonAction());
         return addEventButton;
+    }
+
+    private void handleAddEventButtonAction() {
+        EventType[] eventTypes = EventType.values();
+        String[] eventTypeNames = getEventTypeNames(eventTypes);
+        Random random = new Random();
+        int randomIndex = random.nextInt(eventTypes.length);
+
+        JComboBox<String> eventComboBox = new JComboBox<>(eventTypeNames);
+        eventComboBox.setSelectedIndex(randomIndex);
+
+        int option = JOptionPane.showOptionDialog(this, eventComboBox, "Add event",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+        if (option == JOptionPane.OK_OPTION) {
+            graphController.addEvent(eventTypes[eventComboBox.getSelectedIndex()]);
+        }
+    }
+
+    private String[] getEventTypeNames(EventType[] eventTypes) {
+        String[] eventTypeNames = new String[eventTypes.length];
+        for (int i = 0; i < eventTypes.length; i++) {
+            eventTypeNames[i] = eventTypes[i].getFormattedName() + " (" + eventTypes[i].getDescription() + ")";
+        }
+        return eventTypeNames;
     }
 
     private void displayEdgeOptions() {

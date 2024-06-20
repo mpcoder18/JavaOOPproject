@@ -9,7 +9,6 @@ import nl.rug.oop.rts.observable.ButtonObserver;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 
 /**
  * Topbar with buttons to add and remove nodes and edges, simulate a step, and save and load the graph.
@@ -109,6 +108,7 @@ public class ToolsTopbar extends JPanel {
         });
         return button;
     }
+
     private JButton createLoadButton(GraphController graphController) {
         JButton button = new JButton("Load");
         button.setToolTipText("Load (Ctrl+O)");
