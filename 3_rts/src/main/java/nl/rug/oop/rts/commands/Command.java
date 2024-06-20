@@ -1,4 +1,4 @@
-package nl.rug.oop.rts;
+package nl.rug.oop.rts.commands;
 
 /**
  * Interface for commands.

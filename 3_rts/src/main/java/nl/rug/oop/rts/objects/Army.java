@@ -2,9 +2,9 @@ package nl.rug.oop.rts.objects;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.rts.FactionUtil;
-import nl.rug.oop.rts.JsonList;
-import nl.rug.oop.rts.JsonObject;
+import nl.rug.oop.rts.util.FactionUtil;
+import nl.rug.oop.rts.util.json.JsonList;
+import nl.rug.oop.rts.util.json.JsonObject;
 import nl.rug.oop.rts.graph.Node;
 
 import java.util.ArrayList;
@@ -103,24 +103,17 @@ public class Army {
         }
     }
 
-    // TODO: implement an interface for toJson and fromJson ?
     /**
      * Convert the army to a JSON object.
      *
      * @return the JSON object
      */
     public JsonObject toJson() {
-        JsonObject jsonObject = new JsonObject()
+
+        return new JsonObject()
                 .put("Name", faction.getName())
                 .put("Faction", faction.getName())
-                .put("Team", team.toString());
-
-        JsonList unitsJsonList = new JsonList(new Object[0]);
-        for (Unit unit : units) {
-            unitsJsonList.add(unit.toJson());
-        }
-        jsonObject.put("Units", unitsJsonList);
-
-        return jsonObject;
+                .put("Team", team.toString())
+                .putList("Units", units);
     }
 }

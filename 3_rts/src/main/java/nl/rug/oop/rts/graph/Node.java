@@ -2,12 +2,12 @@ package nl.rug.oop.rts.graph;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.rts.JsonList;
-import nl.rug.oop.rts.JsonObject;
 import nl.rug.oop.rts.graph.events.Event;
 import nl.rug.oop.rts.graph.events.EventFactory;
 import nl.rug.oop.rts.graph.events.EventType;
 import nl.rug.oop.rts.objects.Army;
+import nl.rug.oop.rts.util.json.JsonList;
+import nl.rug.oop.rts.util.json.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,7 @@ import java.util.List;
 public class Node implements Selectable {
     private final int ID;
     private final List<Edge> edgeList;
+    private final List<Army> armies;
     @Setter
     private String name;
     @Setter
@@ -27,7 +28,6 @@ public class Node implements Selectable {
     private int y;
     @Setter
     private boolean selected;
-    private final List<Army> armies;
     @Setter
     private List<Event> events;
 
@@ -94,24 +94,14 @@ public class Node implements Selectable {
      * @return JsonObject representation of the node
      */
     public JsonObject toJson() {
-        JsonObject jsonObject = new JsonObject()
+
+        return new JsonObject()
                 .put("Id", ID)
                 .put("Name", name)
                 .put("X", x)
                 .put("Y", y)
-                .put("Type", "Node");
-        JsonList armiesJsonList = new JsonList(new Object[0]);
-        for (Army army : armies) {
-            armiesJsonList.add(army.toJson());
-        }
-        jsonObject.put("Armies", armiesJsonList);
-
-        JsonList eventsJsonList = new JsonList(new Object[0]);
-        for (Event event : events) {
-            eventsJsonList.add(event.toJson());
-        }
-        jsonObject.put("Events", eventsJsonList);
-
-        return jsonObject;
+                .put("Type", "Node")
+                .putList("Armies", armies)
+                .putList("Events", events);
     }
 }

@@ -1,7 +1,10 @@
-package nl.rug.oop.rts;
+package nl.rug.oop.rts.util;
 
 import lombok.NoArgsConstructor;
 import nl.rug.oop.rts.graph.model.GraphModel;
+import nl.rug.oop.rts.util.json.JsonList;
+import nl.rug.oop.rts.util.json.JsonObject;
+import nl.rug.oop.rts.util.json.JsonParser;
 
 import javax.swing.*;
 import java.io.File;
@@ -56,7 +59,7 @@ public class SaveManager {
     /**
      * Open a file chooser to save a game.
      *
-     * @param model the state of the game
+     * @param model       the state of the game
      * @param parentFrame the parent frame
      */
     public void saveGameChooser(GraphModel model, JFrame parentFrame) {

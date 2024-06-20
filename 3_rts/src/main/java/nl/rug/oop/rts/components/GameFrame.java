@@ -1,7 +1,5 @@
-package nl.rug.oop.rts;
+package nl.rug.oop.rts.components;
 
-import nl.rug.oop.rts.components.OptionsPanel;
-import nl.rug.oop.rts.components.ToolsTopbar;
 import nl.rug.oop.rts.graph.controller.GraphController;
 
 import javax.swing.*;

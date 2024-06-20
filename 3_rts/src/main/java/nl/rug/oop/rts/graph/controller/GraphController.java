@@ -1,8 +1,7 @@
 package nl.rug.oop.rts.graph.controller;
 
 import lombok.Getter;
-import nl.rug.oop.rts.MainSetup;
-import nl.rug.oop.rts.SaveManager;
+import nl.rug.oop.rts.util.SaveManager;
 import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.Node;
 import nl.rug.oop.rts.graph.Selectable;
@@ -27,18 +26,14 @@ import java.util.List;
 public class GraphController {
     private GraphModel model;
     private GraphView view;
-    private final MainSetup mainSetup;
 
     /**
      * Create a new GraphController.
-     *
-     * @param mainSetup - The main setup of the application.
      */
-    public GraphController(MainSetup mainSetup) {
+    public GraphController() {
         this.model = new GraphModel();
         this.model.setSimulation(new Simulation(this));
         this.view = new GraphView(this);
-        this.mainSetup = mainSetup;
         model.addObserver(view);
     }
 

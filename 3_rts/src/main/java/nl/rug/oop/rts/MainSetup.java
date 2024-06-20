@@ -1,5 +1,6 @@
 package nl.rug.oop.rts;
 
+import nl.rug.oop.rts.components.GameFrame;
 import nl.rug.oop.rts.graph.controller.GraphController;
 
 /**
@@ -10,7 +11,6 @@ public class MainSetup {
      * Main method of the application.
      */
     public MainSetup() {
-        GraphController graphController = new GraphController(this);
-        new GameFrame(graphController);
+        new GameFrame(new GraphController());
     }
 }

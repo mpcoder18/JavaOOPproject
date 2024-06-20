@@ -2,7 +2,7 @@ package nl.rug.oop.rts.graph.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.rts.*;
+import nl.rug.oop.rts.commands.*;
 import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.Node;
 import nl.rug.oop.rts.graph.Selectable;
@@ -16,6 +16,10 @@ import nl.rug.oop.rts.objects.Faction;
 import nl.rug.oop.rts.objects.Unit;
 import nl.rug.oop.rts.observable.Observable;
 import nl.rug.oop.rts.observable.Observer;
+import nl.rug.oop.rts.util.SaveManager;
+import nl.rug.oop.rts.util.SoundPlayer;
+import nl.rug.oop.rts.util.json.JsonList;
+import nl.rug.oop.rts.util.json.JsonObject;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -325,22 +329,10 @@ public class GraphModel implements Observable {
     public JsonObject toJson() {
         JsonObject json = new JsonObject()
                 .put("NodeSize", nodeSize)
-                .put("SimulationStep", SimulationStep);
-        JsonList jsonNodes = new JsonList(new Object[0]);
-        for (Node node : nodes) {
-            jsonNodes.add(node.toJson());
-        }
-        json.put("Nodes", jsonNodes);
-        JsonList jsonEdges = new JsonList(new Object[0]);
-        for (Edge edge : edges) {
-            jsonEdges.add(edge.toJson());
-        }
-        json.put("Edges", jsonEdges);
-        JsonList jsonEventRecords = new JsonList(new Object[0]);
-        for (EventRecord eventRecord : eventRecords) {
-            jsonEventRecords.add(eventRecord.toJson());
-        }
-        json.put("EventRecords", jsonEventRecords);
+                .put("SimulationStep", SimulationStep)
+                .putList("Nodes", nodes)
+                .putList("Edges", edges)
+                .putList("EventRecords", eventRecords);
         return json;
     }
 

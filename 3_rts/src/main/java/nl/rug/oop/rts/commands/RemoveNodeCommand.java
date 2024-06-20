@@ -1,5 +1,6 @@
-package nl.rug.oop.rts;
+package nl.rug.oop.rts.commands;
 
+import nl.rug.oop.rts.util.SoundPlayer;
 import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.Node;
 import nl.rug.oop.rts.graph.model.GraphModel;

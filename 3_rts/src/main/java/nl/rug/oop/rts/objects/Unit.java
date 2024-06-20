@@ -3,7 +3,7 @@ package nl.rug.oop.rts.objects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.rts.JsonObject;
+import nl.rug.oop.rts.util.json.JsonObject;
 
 /**
  * A unit is a single entity that can move and attack.

@@ -1,6 +1,6 @@
 package nl.rug.oop.rts.graph;
 
-import nl.rug.oop.rts.JsonObject;
+import nl.rug.oop.rts.util.json.JsonObject;
 import nl.rug.oop.rts.graph.events.Event;
 import nl.rug.oop.rts.objects.Army;
 

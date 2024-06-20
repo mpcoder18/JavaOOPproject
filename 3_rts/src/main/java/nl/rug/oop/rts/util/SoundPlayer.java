@@ -1,4 +1,4 @@
-package nl.rug.oop.rts;
+package nl.rug.oop.rts.util;
 
 import javax.sound.sampled.*;
 import java.io.File;

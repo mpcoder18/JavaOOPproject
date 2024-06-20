@@ -2,12 +2,12 @@ package nl.rug.oop.rts.graph;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.rts.JsonList;
-import nl.rug.oop.rts.JsonObject;
 import nl.rug.oop.rts.graph.events.Event;
 import nl.rug.oop.rts.graph.events.EventFactory;
 import nl.rug.oop.rts.graph.events.EventType;
 import nl.rug.oop.rts.objects.Army;
+import nl.rug.oop.rts.util.json.JsonList;
+import nl.rug.oop.rts.util.json.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,24 +100,14 @@ public class Edge implements Selectable {
      * @return the JsonObject representation of the edge
      */
     public JsonObject toJson() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.put("Id", ID);
-        jsonObject.put("Name", name);
-        jsonObject.put("StartNode", startNode.getID());
-        jsonObject.put("EndNode", endNode.getID());
-        jsonObject.put("Type", "Edge");
-        JsonList armiesJsonList = new JsonList(new Object[0]);
-        for (Army army : armies) {
-            armiesJsonList.add(army.toJson());
-        }
-        jsonObject.put("Armies", armiesJsonList);
 
-        JsonList eventsJsonList = new JsonList(new Object[0]);
-        for (Event event : events) {
-            eventsJsonList.add(event.toJson());
-        }
-        jsonObject.put("Events", eventsJsonList);
-
-        return jsonObject;
+        return new JsonObject()
+                .put("Id", ID)
+                .put("Name", name)
+                .put("StartNode", startNode.getID())
+                .put("EndNode", endNode.getID())
+                .put("Type", "Edge")
+                .putList("Armies", armies)
+                .putList("Events", events);
     }
 }
