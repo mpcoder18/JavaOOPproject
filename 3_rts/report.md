@@ -1,6 +1,6 @@
 # Report
 
-Niels de Boer (s4611896) & Foo Bar (s2345678)
+Niels de Boer (s4611896) & Mardo Parlayan (s5578566)
 
 ## Introduction
 
