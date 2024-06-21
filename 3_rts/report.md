@@ -26,7 +26,7 @@ and sound effects are played in response to certain actions.
 
 According to the MVC pattern, we have 3 main classes in our program:
 - `GraphModel` which contains the data of the graph, such as the nodes and edges, and the armies and events on them. It also contains methods to manipulate the logic and data of the graph.
-- `GraphView` which contains 
+- `GraphView` which contains only the representation of the graph, such as the nodes, edges and armies. User interface components are in the `ToolsTopbar` and `OptionsPanel` classes.
 
 ## Evaluation of the program
 

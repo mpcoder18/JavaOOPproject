@@ -158,9 +158,7 @@ public class GraphController {
     }
 
     public void handleMouseMoved(int x, int y) {
-        if (model.getStartNode() != null || model.getSelected() == null) {
-            model.setMousePosition(new Point(x, y));
-        }
+        model.setMousePosition(new Point(x, y));
     }
 
     /**

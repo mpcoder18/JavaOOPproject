@@ -405,9 +405,16 @@ public class GraphModel implements Observable {
         notifyAllObservers();
     }
 
+    /**
+     * Set the mouse position.
+     *
+     * @param mousePosition The new mouse position
+     */
     public void setMousePosition(Point mousePosition) {
         this.mousePosition = mousePosition;
-        notifyAllObservers();
+        if (startNode != null) {
+            notifyAllObservers();
+        }
     }
 
     /**

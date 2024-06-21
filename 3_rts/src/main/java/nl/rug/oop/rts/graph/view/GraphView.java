@@ -1,5 +1,9 @@
 package nl.rug.oop.rts.graph.view;
 
+import nl.rug.oop.rts.KeyHandler;
+import nl.rug.oop.rts.MouseHandler;
+import nl.rug.oop.rts.components.OptionsPanel;
+import nl.rug.oop.rts.components.ToolsTopbar;
 import nl.rug.oop.rts.graph.Edge;
 import nl.rug.oop.rts.graph.Node;
 import nl.rug.oop.rts.graph.Selectable;
@@ -11,7 +15,8 @@ import nl.rug.oop.rts.util.TextureLoader;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +25,10 @@ import java.util.List;
  */
 public class GraphView extends JPanel implements Observer {
     private final GraphController controller;
-    private final Image backgroundImage;
-    private final Image nodeImage;
-    private final Image nodeImageSelected;
+    private Image backgroundImage;
+    private Image nodeImage;
+    private Image nodeImageSelected;
+    private JPanel graphPanel;
 
     /**
      * Constructor for the graph view.
@@ -32,143 +38,61 @@ public class GraphView extends JPanel implements Observer {
     public GraphView(GraphController controller) {
         this.controller = controller;
 
+        setupComponents();
+        setupImages();
+        setupHandlers();
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                update();
+            }
+        });
+    }
+
+    private void setupComponents() {
+        ToolsTopbar toolsTopbar = new ToolsTopbar(controller);
+        JToolBar toolBar = new JToolBar();
+        toolsTopbar.addToToolbar(toolBar);
+        OptionsPanel optionsPanel = new OptionsPanel(controller);
+
+        this.graphPanel = createGraphPanel();
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, optionsPanel, graphPanel);
+        splitPane.setOneTouchExpandable(true);
+        splitPane.setDividerLocation(200);
+        splitPane.setContinuousLayout(true);
+
+        this.setLayout(new BorderLayout());
+        this.add(toolBar, BorderLayout.NORTH);
+        this.add(splitPane, BorderLayout.CENTER);
+    }
+
+    private JPanel createGraphPanel() {
+        return new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                drawBackground(g);
+                drawEdges(g);
+                drawNodes(g);
+            }
+        };
+    }
+
+    private void setupImages() {
         TextureLoader textureLoader = TextureLoader.getInstance();
         backgroundImage = textureLoader.getTexture("mapTexture", 800, 600);
         nodeImage = textureLoader.getTexture("node4", controller.getNodeSize(), controller.getNodeSize());
         nodeImageSelected = textureLoader.getTexture("node3", controller.getNodeSize(), controller.getNodeSize());
-
-        setupMouseListeners();
-        setupKeyBindings();
     }
 
-    private void setupMouseListeners() {
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                controller.handleMousePressed(e.getX(), e.getY());
-            }
-        });
+    private void setupHandlers() {
+        MouseHandler mouseHandler = new MouseHandler(controller);
+        graphPanel.addMouseListener(mouseHandler.getMouseAdapter());
+        graphPanel.addMouseMotionListener(mouseHandler.getMouseMotionAdapter());
 
-        addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                controller.handleMouseMoved(e.getX(), e.getY());
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                controller.handleMouseDragged(e.getX(), e.getY());
-            }
-        });
-    }
-
-    private void setupKeyBindings() {
-        setupCreateNodeAction();
-        setupCreateEdgeAction();
-        setupDeleteAction();
-        setupUndoAction();
-        setupRedoAction();
-        setupSaveAction();
-        setupLoadAction();
-        setupZoomAction();
-    }
-
-    private void setupCreateNodeAction() {
-        getInputMap().put(KeyStroke.getKeyStroke("Q"), "createNode");
-        getActionMap().put("createNode", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.createNode();
-            }
-        });
-    }
-
-    private void setupCreateEdgeAction() {
-        getInputMap().put(KeyStroke.getKeyStroke("E"), "createEdge");
-        getActionMap().put("createEdge", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.createEdge();
-            }
-        });
-    }
-
-    private void setupDeleteAction() {
-        getInputMap().put(KeyStroke.getKeyStroke("DELETE"), "delete");
-        getActionMap().put("delete", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.removeSelected();
-            }
-        });
-    }
-
-    private void setupUndoAction() {
-        getInputMap().put(KeyStroke.getKeyStroke("control Z"), "undo");
-        getActionMap().put("undo", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.undo();
-            }
-        });
-    }
-
-    private void setupRedoAction() {
-        getInputMap().put(KeyStroke.getKeyStroke("control Y"), "redo");
-        getActionMap().put("redo", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.redo();
-            }
-        });
-    }
-
-    private void setupSaveAction() {
-        getInputMap().put(KeyStroke.getKeyStroke("control S"), "save");
-        getActionMap().put("save", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(GraphView.this);
-                controller.saveGameChooser(parentFrame);
-            }
-        });
-    }
-
-    private void setupLoadAction() {
-        getInputMap().put(KeyStroke.getKeyStroke("control O"), "load");
-        getActionMap().put("load", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(GraphView.this);
-                controller.loadGameChooser(parentFrame);
-            }
-        });
-    }
-
-    private void setupZoomAction() {
-        getInputMap().put(KeyStroke.getKeyStroke("control EQUALS"), "zoomIn");
-        getActionMap().put("zoomIn", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.zoomIn();
-            }
-        });
-
-        getInputMap().put(KeyStroke.getKeyStroke("control MINUS"), "zoomOut");
-        getActionMap().put("zoomOut", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.zoomOut();
-            }
-        });
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        drawBackground(g);
-        drawEdges(g);
-        drawNodes(g);
+        KeyHandler keyHandler = new KeyHandler(controller);
+        keyHandler.setupKeyBindings(this);
     }
 
     private void drawNodes(Graphics g) {
@@ -190,11 +114,11 @@ public class GraphView extends JPanel implements Observer {
             drawArmy(g, edge);
         }
 
-        drawEdgePreview(g, getMousePosition());
+        drawEdgePreview(g, graphPanel.getMousePosition());
     }
 
     private void drawBackground(Graphics g) {
-        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        g.drawImage(backgroundImage, 0, 0, graphPanel.getWidth(), graphPanel.getHeight(), this);
     }
 
     private void drawNode(Graphics g, Node node) {
@@ -309,7 +233,7 @@ public class GraphView extends JPanel implements Observer {
 
     @Override
     public void update() {
-        controller.checkBounds(getWidth(), getHeight());
+        controller.checkBounds(graphPanel.getWidth(), graphPanel.getHeight());
         repaint();
     }
 }
