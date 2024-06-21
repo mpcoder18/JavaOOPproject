@@ -14,28 +14,15 @@ and sound effects are played in response to certain actions.
 
 ## Program design
 
-> *Here you go over the structure of the program. Try not to go too in-depth here implementation-wise, but rather discuss the important components and relations between them. 
-> If you think it can help, feel free to add a simple diagram here. The design of the program should be clear to the reader. 
-> 
-> In particular, describe the model of the program. How is it structured? How did you make sure to separate the different aspects of the program?
-> How do the `model`, `view` and `controller` interact with each other?
-> Additionally, you should include some design decisions in here. There is no need to provide an explanation for every single thing, 
-> but there are often multiple ways of implementing a feature and in those cases it makes sense to state why you chose one over the other.*
-
-> Expected length: as much as you need to explain the above.
-
 According to the MVC pattern, we have 3 main classes in our program:
 - `GraphModel` which contains the data of the graph, such as the nodes and edges, and the armies and events on them. It also contains methods to manipulate the logic and data of the graph.
 - `GraphView` which contains the user interface components, such as the options menu and top bar, and the graph itself. It also contains methods to manipulate the user interface, under the classes `KeyHandler` and `MouseHandler`.
 - `GraphController` which contains methods to interact with the model and the view, such as the simulation loop and the mouse and keyboard input handling.
 
 The model, view and controller interact with each other by the observer pattern. The model is being observed by the view. The view, being interacted on, redirects the input to the controller, which then acts on the model. The model then notifies the view of any changes, which then prompts the view to redraw itself.
+We made use of instanceof to differentiate between nodes and edges, as both implement the `Selectable` interface. We also made use of the `Command` pattern to implement undo/redo functionality.
 
 ## Evaluation of the program
-
-> *Discuss the stability of your implementation. What works well? Are there any bugs? Is everything tested properly? Are there still features that have not been implemented? Also, if you had the time, what improvements would you make to your implementation? Are there things which you would have done completely differently?*
-
->Expected length: ~300-500 words
 
 The program is stable and works well. We have tested the program thoroughly and there are no known bugs. We have implemented a lot of features other than the required ones, such as sounds, undo/redo, keyboard shortcuts, loading files, zooming in and out, etc.
 We tried to make all current features as user-friendly as possible, and we think we succeeded in that. The selection of nodes/edges for example should not have any edge cases where it doesn't work as expected, the user is also able to select anywhere on the edge to select it, as both the edge and the nodes have proper hitboxes.
