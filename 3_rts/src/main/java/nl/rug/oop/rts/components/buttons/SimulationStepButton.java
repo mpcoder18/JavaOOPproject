@@ -13,7 +13,7 @@ public class SimulationStepButton extends Button {
      */
     public SimulationStepButton(GraphController controller) {
         super("▶ (Step 0)");
-        setToolTipText("Step through the simulation");
+        setToolTipText("Step through the simulation\n\nShortcut: C");
         addActionListener(e -> controller.stepSimulation());
     }
 }

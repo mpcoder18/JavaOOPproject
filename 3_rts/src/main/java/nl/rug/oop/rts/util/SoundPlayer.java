@@ -29,8 +29,7 @@ public class SoundPlayer {
             });
 
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            System.out.println("Error with playing sound.");
-            e.printStackTrace();
+            System.out.println("Error with playing sound: " + e.getMessage());
         }
     }
 }

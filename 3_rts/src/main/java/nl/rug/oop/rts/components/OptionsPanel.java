@@ -34,6 +34,7 @@ public class OptionsPanel extends JPanel implements Observer {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(new Box.Filler(new Dimension(0, 0), new Dimension(0, 0),
                 new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE)));
+        update();
     }
 
     private void displayNodeOptions() {

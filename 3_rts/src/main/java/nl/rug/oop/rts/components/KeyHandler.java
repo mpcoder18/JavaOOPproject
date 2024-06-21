@@ -1,4 +1,4 @@
-package nl.rug.oop.rts;
+package nl.rug.oop.rts.components;
 
 import nl.rug.oop.rts.graph.controller.GraphController;
 
@@ -128,7 +128,7 @@ public class KeyHandler {
     }
 
     private void setupStepAction(JComponent component) {
-        component.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "step");
+        component.getInputMap().put(KeyStroke.getKeyStroke("C"), "step");
         component.getActionMap().put("step", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {

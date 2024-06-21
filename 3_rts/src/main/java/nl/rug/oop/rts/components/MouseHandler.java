@@ -1,4 +1,4 @@
-package nl.rug.oop.rts;
+package nl.rug.oop.rts.components;
 
 import nl.rug.oop.rts.graph.controller.GraphController;
 

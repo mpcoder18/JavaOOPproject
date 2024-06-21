@@ -26,13 +26,23 @@ and sound effects are played in response to certain actions.
 
 According to the MVC pattern, we have 3 main classes in our program:
 - `GraphModel` which contains the data of the graph, such as the nodes and edges, and the armies and events on them. It also contains methods to manipulate the logic and data of the graph.
-- `GraphView` which contains only the representation of the graph, such as the nodes, edges and armies. User interface components are in the `ToolsTopbar` and `OptionsPanel` classes.
+- `GraphView` which contains the user interface components, such as the options menu and top bar, and the graph itself. It also contains methods to manipulate the user interface, under the classes `KeyHandler` and `MouseHandler`.
+- `GraphController` which contains methods to interact with the model and the view, such as the simulation loop and the mouse and keyboard input handling.
+
+The model, view and controller interact with each other by the observer pattern. The model is being observed by the view. The view, being interacted on, redirects the input to the controller, which then acts on the model. The model then notifies the view of any changes, which then prompts the view to redraw itself.
 
 ## Evaluation of the program
 
 > *Discuss the stability of your implementation. What works well? Are there any bugs? Is everything tested properly? Are there still features that have not been implemented? Also, if you had the time, what improvements would you make to your implementation? Are there things which you would have done completely differently?*
 
 >Expected length: ~300-500 words
+
+The program is stable and works well. We have tested the program thoroughly and there are no known bugs. We have implemented a lot of features other than the required ones, such as sounds, undo/redo, keyboard shortcuts, loading files, zomming in and out, etc.
+If we had more time, we would have liked to add more features, such as user money, versus computer mode, balanced random events, etc.
+If we had done something differently, we would probably have thought more about the design of the program beforehand, as well as some parts of our current design definitely could have been improved for a better MVC pattern implementation.
+The main problem might have been organization/time: Since we first started with implementing the different required features without really understanding our implementation
+of the MVC pattern was incorrect done, we had to rewrite a lot of the code and move things around, which was a bit of a hassle due to the sheer amount of code we had written.
+We think our implementation is definitely better now, but we hope the code is still clean and understandable.
 
 ## Questions
 
@@ -74,7 +84,7 @@ Please provide an example from the assignment on how the Observer pattern suppor
 
 ___
 
-Answer:
+Answer: The Observer pattern is used to implement the MVC pattern by allowing the model to notify the view of any changes, which then prompts the view to redraw itself. In the assignment, the `GraphModel` class is being observed by the `GraphView` class. The `GraphModel` class notifies the `GraphView` class of any changes, which then prompts the `GraphView` class to redraw itself.
 
 ___
 
@@ -92,4 +102,6 @@ balanced random events, etc.) but we decided to focus on rewriting parts of the 
 
 ## Conclusions
 
-> *Add a very short summary/concluding remarks here*
+In conclusion, we have implemented all the required features of the assignment, and added some extra ones. We utilized
+the MVC pattern to structure our program, and the observer pattern to make the model and view interact with each other.
+We have tested the program thoroughly and there are no known bugs.

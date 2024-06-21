@@ -49,8 +49,13 @@ public class SaveManager {
             JsonParser parser = new JsonParser();
             String jsonString = new String(Files.readAllBytes(Paths.get(filePath)));
             JsonObject json = (JsonObject) parser.parse(jsonString);
-            return new GraphModel(json.get("NodeSize"), json.get("SimulationStep"),
-                    (JsonList) json.get("Edges"), (JsonList) json.get("Nodes"), (JsonList) json.get("EventRecords"));
+            try {
+                return new GraphModel(json.get("NodeSize"), json.get("SimulationStep"),
+                        (JsonList) json.get("Edges"), (JsonList) json.get("Nodes"), (JsonList) json.get("EventRecords"));
+            } catch (Exception e) {
+                System.out.println("Error loading game: " + e.getMessage());
+                return null;
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

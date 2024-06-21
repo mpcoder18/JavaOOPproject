@@ -45,6 +45,7 @@ public class ToolsTopbar extends JPanel {
         ButtonObserver btnObs = new ButtonObserver(controller, removeNodeButton, addEdgeButton,
                 removeEdgeButton, simulateStepButton, undoButton, redoButton, zoomLabel);
         controller.addObserver(btnObs);
+        btnObs.update();
     }
 
     /**

@@ -1,7 +1,7 @@
 package nl.rug.oop.rts.graph.view;
 
-import nl.rug.oop.rts.KeyHandler;
-import nl.rug.oop.rts.MouseHandler;
+import nl.rug.oop.rts.components.KeyHandler;
+import nl.rug.oop.rts.components.MouseHandler;
 import nl.rug.oop.rts.components.OptionsPanel;
 import nl.rug.oop.rts.components.ToolsTopbar;
 import nl.rug.oop.rts.graph.Edge;
