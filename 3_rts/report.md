@@ -38,6 +38,8 @@ The model, view and controller interact with each other by the observer pattern.
 >Expected length: ~300-500 words
 
 The program is stable and works well. We have tested the program thoroughly and there are no known bugs. We have implemented a lot of features other than the required ones, such as sounds, undo/redo, keyboard shortcuts, loading files, zomming in and out, etc.
+We tried to make all current features as user-friendly as possible, and we think we succeeded in that. The selection of nodes/edges for example should not have any edge cases where it doesn't work as expected, the user is also able to select anywhere on the edge to select it, as both the edge and the nodes have proper hitboxes.
+The user also can see via the options panel the list of recent events, can easily manipulate armies and events via their lists on nodes and edges. Also adding armies and events have a random default selection if the user doesn't want to choose a specific one.
 If we had more time, we would have liked to add more features, such as user money, versus computer mode, balanced random events, etc.
 If we had done something differently, we would probably have thought more about the design of the program beforehand, as well as some parts of our current design definitely could have been improved for a better MVC pattern implementation.
 The main problem might have been organization/time: Since we first started with implementing the different required features without really understanding our implementation
