@@ -184,6 +184,11 @@ public class GraphModel implements Observable {
         notifyAllObservers();
     }
 
+    public void createNode() {
+        int offset = nodeSize / 2;
+        addNode(nodes.size(), "Node " + nodes.size(), mousePosition.x - offset, mousePosition.y - offset);
+    }
+
     /**
      * Add an edge to the graph.
      *
@@ -210,60 +215,34 @@ public class GraphModel implements Observable {
         notifyAllObservers();
     }
 
-    @Override
-    public void addObserver(Observer observer) {
-        observers.add(observer);
-    }
-
-    @Override
-    public void removeObserver(Observer observer) {
-        observers.remove(observer);
-    }
-
     /**
-     * Add an army to the selected node.
-     *
-     * @param faction Faction of the army
+     * Create an edge by setting the start node.
      */
-    public void addArmy(Faction faction) {
-        Random rand = new Random();
-        int numUnits = rand.nextInt(41) + 10; // Random number between 10 and 50
-        List<Unit> units = new ArrayList<>();
-        for (int i = 0; i < numUnits; i++) {
-            units.add(new Unit(rand.nextInt(3) + 1, rand.nextInt(3) + 1,
-                    faction.getUnitNames().get(rand.nextInt(faction.getUnitNames().size()))));
+    public void createEdge() {
+        if (selected instanceof Node) {
+            if (startNode == null) {
+                startNode = (Node) selected;
+            }
         }
-        Army army = new Army(units, faction);
-        selected.getArmies().add(army);
-        notifyAllObservers();
     }
 
     /**
-     * Remove an army from the selected node.
-     *
-     * @param army       The army to remove
-     * @param selectable The node to remove the army from
+     * Remove the selected node or edge.
      */
-    public void removeArmy(Army army, Selectable selectable) {
-        selectable.getArmies().remove(army);
-        SoundPlayer soundPlayer = new SoundPlayer();
-        soundPlayer.playSound("armyDeath.wav");
-        notifyAllObservers();
+    public void removeSelected() {
+        if (selected instanceof Node node) {
+            removeNode(node);
+            deselect();
+        } else if (selected instanceof Edge edge) {
+            edge.getStartNode().removeEdge(edge);
+            edge.getEndNode().removeEdge(edge);
+            deselect();
+            removeEdge(edge);
+        }
     }
 
-    /**
-     * Add an event to the selected node.
-     *
-     * @param eventType Type of event to add
-     */
-    public void addEvent(EventType eventType) {
-        Event event = eventFactory.createEvent(eventType);
-        selected.getEvents().add(event);
-        notifyAllObservers();
-    }
-
-    public void removeEvent(Event event) {
-        selected.getEvents().remove(event);
+    public void setSelectedName(String name) {
+        selected.setName(name);
         notifyAllObservers();
     }
 
@@ -315,25 +294,6 @@ public class GraphModel implements Observable {
         addEdge(newEdge);
         setStartNode(null);
         deselect();
-    }
-
-    public void setMousePosition(Point mousePosition) {
-        this.mousePosition = mousePosition;
-        notifyAllObservers();
-    }
-
-    /**
-     * Convert the current state of the graph to a JSON object.
-     *
-     * @return The JSON object representing the graph
-     */
-    public JsonObject toJson() {
-        return new JsonObject()
-                .put("NodeSize", nodeSize)
-                .put("SimulationStep", SimulationStep)
-                .putList("Nodes", nodes)
-                .putList("Edges", edges)
-                .putList("EventRecords", eventRecords);
     }
 
     /**
@@ -399,6 +359,72 @@ public class GraphModel implements Observable {
     }
 
     /**
+     * Add an army to the selected node.
+     *
+     * @param faction Faction of the army
+     */
+    public void addArmy(Faction faction) {
+        Random rand = new Random();
+        int numUnits = rand.nextInt(41) + 10; // Random number between 10 and 50
+        List<Unit> units = new ArrayList<>();
+        for (int i = 0; i < numUnits; i++) {
+            units.add(new Unit(rand.nextInt(3) + 1, rand.nextInt(3) + 1,
+                    faction.getUnitNames().get(rand.nextInt(faction.getUnitNames().size()))));
+        }
+        Army army = new Army(units, faction);
+        selected.getArmies().add(army);
+        notifyAllObservers();
+    }
+
+    /**
+     * Remove an army from the selected node.
+     *
+     * @param army       The army to remove
+     * @param selectable The node to remove the army from
+     */
+    public void removeArmy(Army army, Selectable selectable) {
+        selectable.getArmies().remove(army);
+        SoundPlayer soundPlayer = new SoundPlayer();
+        soundPlayer.playSound("armyDeath.wav");
+        notifyAllObservers();
+    }
+
+    /**
+     * Add an event to the selected node.
+     *
+     * @param eventType Type of event to add
+     */
+    public void addEvent(EventType eventType) {
+        Event event = eventFactory.createEvent(eventType);
+        selected.getEvents().add(event);
+        notifyAllObservers();
+    }
+
+    public void removeEvent(Event event) {
+        selected.getEvents().remove(event);
+        notifyAllObservers();
+    }
+
+    public void setMousePosition(Point mousePosition) {
+        this.mousePosition = mousePosition;
+        notifyAllObservers();
+    }
+
+    /**
+     * Convert the current state of the graph to a JSON object.
+     *
+     * @return The JSON object representing the graph
+     */
+    public JsonObject toJson() {
+        return new JsonObject()
+                .put("NodeSize", nodeSize)
+                .put("SimulationStep", SimulationStep)
+                .putList("Nodes", nodes)
+                .putList("Edges", edges)
+                .putList("EventRecords", eventRecords);
+    }
+
+    /**
      * Zoom in the graph.
      */
     public void zoomIn() {
@@ -416,6 +442,10 @@ public class GraphModel implements Observable {
             nodeSize -= 10;
             notifyAllObservers();
         }
+    }
+
+    public int getZoom() {
+        return (int) ((double) nodeSize / 80 * 100);
     }
 
     /**
@@ -450,11 +480,6 @@ public class GraphModel implements Observable {
         return !redoStack.isEmpty();
     }
 
-    public void setSelectedName(String name) {
-        selected.setName(name);
-        notifyAllObservers();
-    }
-
     /**
      * Step the simulation.
      */
@@ -464,38 +489,13 @@ public class GraphModel implements Observable {
         notifyAllObservers();
     }
 
-    public int getZoom() {
-        return (int) ((double) nodeSize / 80 * 100);
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
     }
 
-    public void createNode() {
-        int offset = nodeSize / 2;
-        addNode(nodes.size(), "Node " + nodes.size(), mousePosition.x - offset, mousePosition.y - offset);
-    }
-
-    /**
-     * Create an edge by setting the start node.
-     */
-    public void createEdge() {
-        if (selected instanceof Node) {
-            if (startNode == null) {
-                startNode = (Node) selected;
-            }
-        }
-    }
-
-    /**
-     * Remove the selected node or edge.
-     */
-    public void removeSelected() {
-        if (selected instanceof Node node) {
-            removeNode(node);
-            deselect();
-        } else if (selected instanceof Edge edge) {
-            edge.getStartNode().removeEdge(edge);
-            edge.getEndNode().removeEdge(edge);
-            deselect();
-            removeEdge(edge);
-        }
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
     }
 }

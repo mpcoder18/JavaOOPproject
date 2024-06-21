@@ -24,6 +24,10 @@ and sound effects are played in response to certain actions.
 
 > Expected length: as much as you need to explain the above.
 
+According to the MVC pattern, we have 3 main classes in our program:
+- `GraphModel` which contains the data of the graph, such as the nodes and edges, and the armies and events on them. It also contains methods to manipulate the logic and data of the graph.
+- `GraphView` which contains 
+
 ## Evaluation of the program
 
 > *Discuss the stability of your implementation. What works well? Are there any bugs? Is everything tested properly? Are there still features that have not been implemented? Also, if you had the time, what improvements would you make to your implementation? Are there things which you would have done completely differently?*

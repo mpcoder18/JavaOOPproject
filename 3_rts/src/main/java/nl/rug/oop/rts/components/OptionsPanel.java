@@ -127,7 +127,7 @@ public class OptionsPanel extends JPanel implements Observer {
     private void handleAddArmyButtonAction() {
         Random random = new Random();
         // Select a random team and faction
-        int team = random.nextInt(1, 3); // 50% chance of team 1, 50% chance of team 2
+        int team = random.nextInt(1, 3);
         int faction;
         if (team == 1) {
             faction = random.nextInt(3);

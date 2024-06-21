@@ -33,6 +33,7 @@ public class GameFrame extends JFrame {
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, optionsPanel, graphController.getView());
         splitPane.setOneTouchExpandable(true);
         splitPane.setDividerLocation(200);
+        splitPane.setContinuousLayout(true);
         add(splitPane, BorderLayout.CENTER);
 
         addComponentListener(new ComponentAdapter() {
