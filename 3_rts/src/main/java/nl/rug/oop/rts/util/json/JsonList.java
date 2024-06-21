@@ -37,10 +37,6 @@ public class JsonList implements Jsonable {
         }
     }
 
-    public Object get(int index) {
-        return values[index];
-    }
-
     /**
      * Add a value to the JsonList.
      *
@@ -51,10 +47,6 @@ public class JsonList implements Jsonable {
         System.arraycopy(values, 0, newValues, 0, values.length);
         newValues[values.length] = value;
         values = newValues;
-    }
-
-    public int size() {
-        return values.length;
     }
 
     /**

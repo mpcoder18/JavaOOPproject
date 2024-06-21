@@ -103,14 +103,6 @@ public class JsonObject implements Jsonable {
         return (JsonList) values.get(key);
     }
 
-    public void remove(String key) {
-        values.remove(key);
-    }
-
-    public int size() {
-        return values.size();
-    }
-
     /**
      * Convert the JsonObject to a JSON string with indentation.
      *
