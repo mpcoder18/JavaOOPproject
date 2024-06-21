@@ -51,9 +51,10 @@ public class SaveManager {
             JsonObject json = (JsonObject) parser.parse(jsonString);
             try {
                 return new GraphModel(json.get("NodeSize"), json.get("SimulationStep"),
-                        (JsonList) json.get("Edges"), (JsonList) json.get("Nodes"), (JsonList) json.get("EventRecords"));
-            } catch (Exception e) {
-                System.out.println("Error loading game: " + e.getMessage());
+                        (JsonList) json.get("Edges"), (JsonList) json.get("Nodes"),
+                        (JsonList) json.get("EventRecords"));
+            } catch (ClassCastException | NullPointerException e) {
+                System.out.println("Error loading game, the file might not be a valid save file: " + e.getMessage());
                 return null;
             }
         } catch (IOException e) {
